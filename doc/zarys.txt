@@ -1,0 +1,125 @@
+Populacja
+Chromosom
+Genotyp
+Selekcja
+Krzy¿owanie
+Mutacja
+
+Klasy:
+- Ewolucja
+	* int LicznoscZywych; // maksymalna ilosc osobnikow w dowolnej chwili
+	* int LicznoscPokolenia; // ilosc osobnikow po selekcji
+	* float mutateRatio;
+	* Vector<Genotyp*> osobniki;
+	+ Ewolucja(){ stworzPokolenie(); } //genertuje populacje startowa
+	+ ~ Ewolucja();
+	- virtual stworzPokolenie(){ }; //brak domyslnego dzialania, nie wiadomo jakiego dokladnie typu beda osobniki (Genotypy)
+	- virtual generujPokolenie(){ //implementacja podstawowa - losowanie dwoch osobnikow i ich krzyzowanie (LicznoscZywych - LicznoscPokolenia) razy,\
+		 po czym mutacja losowego osobnika (mutateRatio*LicznoscZywych) razy }; 
+	- virtual wybierzZPokolenia(){ //implementacja podstawowa - posortuj genotypy wg. ich interfaceu (operator >,<,==) a potem przywrocLicznosc() };
+	- virtual przywrocLicznosc(){ //implementacja podstawowa - usun wszystkie elementy z wektora o indeksie wiekszym niz (LicznoscPokolenia - 1)};
+	- dodajOsobnika(Genotyp*){ //implementacja podstawowa - osobniki.push_back(); }
+	- usunOsobnika(index){ //implementacja podstawowa - osobniki.remove(index); } 
+	+ SzukajDoCelu(){ while(ocena<wartosc_funkcji_celu){ wybierzZPokolenia(); przywrocLiczebnosc(); if (getBestGenotype()->isTargetReached()) return getBestGenotype(); generujPokolenie(); } 
+			// czy musimy obowiazkowo skorzystac z generowania pelnego? nie mozna zostawic struktury w polowie dzialania by podj±æ dzia³ania z zewn±trz?
+	+ getIloscZywych();
+	+ getLicznoscPokolenia();
+	+ setIloscZywych(ile);
+	+ setLicznoscPokolenia(ile);
+	+ getMutateRatio();
+	+ setMutateRatio(value);
+	+ getBestGenotype( //domyslnie zwraca pierwszy element wektora);
+
+- Genotyp
+	* Map <Chromosom*> wlasciwosci;
+	+ virtual operator <, >, ==
+	+ operator <=, >=, != - definicja z >,<,==
+	+ virtual GenotypeChanged(); //interface eventu, jesli programista nie che nadpisywac wszystkich elementow;
+	+ virtual KrzyzujZ(){ //implementacja podstawowa - dopoki sa wlasciwosci: wez obecna wlasciwosc z osobnika random(A,B)\
+			 dodaj do nowego osobnika, przejdz do nstepnej wlasciwosci; w implementacji podstawowej klonowanie A i\
+			 zmiana losowych wartosci na te z B } //operator * (publiczny)
+	+ MutujChromosom(string nazwa){ wlasciwosci[nazwa].mutateSelf(); GenotypeChanged(); }
+	+ getChromosom(string nazwa){ return wlasciwosc[nazwa]; } //operator[]
+	+ virtual isTargetReached(); //czy cel zostal osiagniety
+
+- Abstract Chromosom
+	+ virtual Chromosom( ){ setRandomValue(); }
+	+ virtual Chromosom( const Chromosom& toCopy ){ }
+	+ virtual getValue()
+	+ virtual setValue()
+	+ mutateSelf(){ noop; //not virtual } ;
+	+ virtual setRandomValue();
+
+
+======================================================================================
+PRZYKLADOWA IMPLEMENTACJA KLAS POCHODNYCH
+ALGORYTM SZUKAJACY GENETYCZNIE CZLOWIEKA O BMI ODSTEPUJACEGO OD NORMY O PEWNA WARTOSC
+GDZIE CZLOWIEK TO MASA + WZROST
+======================================================================================
+
+
+
+Czlowiek: public Genotyp{
+	static double IDEAL = 23.75;
+	float ocena;
+	float dopuszczalne_odstepstwo;
+	Czlowiek(float do){ dopuszczalne_odstepstwo = do; }
+	GenotypeChanged(){
+		ocena = wlasciwosci["masa"]/(pow(wlasciwosci["wzrost"],2)/100);
+	}
+	operator < (Czlowiek toComp){
+		return mod(ocena-IDEAL) < mod(toComp.getOcena()-IDEAL);
+	}
+	operator > (Czlowiek toComp){
+		return mod(ocena-IDEAL) > mod(toComp.getOcena()-IDEAL);
+	}
+	opeartor == (Czlowiek toComp){
+		return mod(ocena-IDEAL) == mod(toComp.getOcena()-IDEAL);
+	}
+	Czlowiek(wzrost,waga){ wlasciwosci["wzorst"] = (new Wzrost(wzrost)); wlasciwosci["waga"] = (new Waga(waga)); }
+	Czlowiek(){ wlasciwosci["wzrost"] = new Wzrost(); wlasciwosci["waga"] = new Waga(); }
+	isTargetReached(){ return mod(ocena-IDEAL)<=dopusczalne_odstepstwo; }
+}
+
+Wzrost : public Chromosom{
+	int wzrost;
+	static int MAX_WZROST;
+	static int MIN_WZROST;
+	getValue(){}
+	setValue(){}
+	mutateSelf(){ wzrost+=random_int(-5,5); validate(); }
+	validate() //patrz WAGA
+}
+
+Waga : public Chromosom{
+	float masa;
+	static float MAX_MASA;
+	static float MIN_MASA;
+	getValue(){ return masa; }
+	setValue(float setValue){ masa = setValue; }
+	mutateSelf(){ masa+=random(-1,1); validate()}
+	//pomocnicza dla mutate
+	validate(){ if( masa > MAX_MASA ) masa = MAX_MASA; if (masa< MIN_MASA) masa = MIN_MASA; }
+	setRandomValue(){ masa = random(MIN_MASA, MAX_MASA); }
+	
+}
+
+ZnajdzNajlepszeBMI: public Ewolucja{
+	ZnajdzNalepszeBMI( float dopuszczalne_odsepstwo ){
+		stworzPokolenie(dopuszczalne_odstepstwo);
+	}
+	stworzPokolenie( float dopuszczalne_odstepstwo ){
+		for(int i = 0; i < LicznoscPokolenia; ++ i){
+			osobniki.push_back(Czlowiek(dopuszczalne_odstepstwo));
+		}
+	}
+};
+
+
+
+int main(){
+	ZnajdzNajlepszeBMI nasza = new ZnajdzNajlepszeBMI(0.1);
+	Czlowiek* superczlowiek = nasza.SzukajDoCelu();
+	cout << "Super czlowiek ma " <<  superczlowiek["wzrost"]->getValue() << "cm. wzrostu i wazy " << superczlowiek["waga"]->getValue() << "kg" << endl;
+
+}
