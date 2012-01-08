@@ -13,18 +13,22 @@
 class Subject
 {
     public:
+
     /**
      * Do the crossover of current subject with given one.
-     * @param shared_ptr<Subject> shared_ptr of Subject which dereferences to Subject to crossover with.
-     * @return shared_ptr<Subject> shared_ptr of Subject which represents product of crossover with Subject from argument, which is new Subject.
+     * @param  smart pointer to Subject which dereferences to Subject to crossover with.
+     * @return smart pointer to Subject which represents product of crossover with Subject from argument, which is new Subject.
      */
     shared_ptr<Subject> crossWith(shared_ptr<Subject> subject);
+
     /**
      * Do the mutation (self-modification) of subject.
-     * @return shared_ptr<Subject> reference as a product of mutation, which is new Subject.
+     * @return smart pointer reference as a product of mutation, which is new Subject.
      */
     shared_ptr<Subject> mutate();
+
     private:
+
     /**
      * Vector of Chromosomes as subject attributes.
      */
@@ -40,16 +44,17 @@ class Subject
 class Chromosome
 {
     public:
+
     /**
      * Do the crossover with given chromosome
-     * @param shared_ptr<Chromosome> shared_ptr of Chromosome which dereferences to Chromosome to crossover with.
-     * @return shared_ptr<Chromosome> shared_ptr of Chromosome which represents product of crossover current chromosome with chromosome from argument,
-     *                                which is new Chromosome.
+     * @param chromosome - smart pointer to Chromosome which dereferences to Chromosome to crossover with.
+     * @return smart pointer to Chromosome which represents product of crossover current chromosome with chromosome from argument, which is new Chromosome.
      */
     virtual shared_ptr<Chromosome> crossWith(shared_ptr<Chromosome> chromsome); 
+
     /**
      * Do the mutation (self-modification) of current Chromosome
-     * @return shared_ptr<Chromosome> shared_ptr of Chromosome which represents product of mutation, which is new Chromosome.
+     * @return smart pointer to Chromosome which represents product of mutation, which is new Chromosome.
      */
     virtual shared_ptr<Chromosome> mutate();
 };
