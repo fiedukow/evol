@@ -45,8 +45,8 @@ Klasy:
 - Abstract Chromosom
 	+ virtual Chromosom( ){ setRandomValue(); }
 	+ virtual Chromosom( const Chromosom& toCopy ){ }
-	+ virtual getValue()
-	+ virtual setValue()
+	+ getValue(){ throw JestesDebilemException("getValue zaimplementuj kutasie"); }
+	+ setValue(){ throw JestesDebilemException("setValue zaimplementuj kutasie"); }
 	+ mutateSelf(){ noop; //not virtual } ;
 	+ virtual setRandomValue();
 
@@ -60,10 +60,10 @@ GDZIE CZLOWIEK TO MASA + WZROST
 
 
 Czlowiek: public Genotyp{
-	static double IDEAL = 23.75;
+	static const double IDEAL = 23.75;
 	float ocena;
-	float dopuszczalne_odstepstwo;
-	Czlowiek(float do){ dopuszczalne_odstepstwo = do; }
+	static float dopuszczalne_odstepstwo = 0.1;
+	Czlowiek(){ }
 	GenotypeChanged(){
 		ocena = wlasciwosci["masa"]/(pow(wlasciwosci["wzrost"],2)/100);
 	}
@@ -109,8 +109,9 @@ ZnajdzNajlepszeBMI: public Ewolucja{
 		stworzPokolenie(dopuszczalne_odstepstwo);
 	}
 	stworzPokolenie( float dopuszczalne_odstepstwo ){
+		Czlowiek::dopuszczalne_odstepstwo = dopuszczalne_odstepstwo;
 		for(int i = 0; i < LicznoscPokolenia; ++ i){
-			osobniki.push_back(Czlowiek(dopuszczalne_odstepstwo));
+			osobniki.push_back(Czlowiek());
 		}
 	}
 };
@@ -121,5 +122,4 @@ int main(){
 	ZnajdzNajlepszeBMI nasza = new ZnajdzNajlepszeBMI(0.1);
 	Czlowiek* superczlowiek = nasza.SzukajDoCelu();
 	cout << "Super czlowiek ma " <<  superczlowiek["wzrost"]->getValue() << "cm. wzrostu i wazy " << superczlowiek["waga"]->getValue() << "kg" << endl;
-
 }
