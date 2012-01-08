@@ -10,7 +10,7 @@ Population::Population( const FitnessFunction &goal_,
                         : goal(goal_), populationSize(populationSize_),
                           subjectPrototype( prototype_->clone() )
 {
-//    this->subjectPrototype = prototype_->clone();
+    M("Obiekt klasy Population jest tworzony");
 }
 
 void Population::start() throw ( SubjectOutOfBoundException )
@@ -29,6 +29,8 @@ void Population::start() throw ( SubjectOutOfBoundException )
     while( goal > *currentBestFF )
     {
         T( "Obecna populacja", subjects );       
+        C( goal > *currentBestFF );
+        C( subjects.size() == populationSize );
         crossoverSubjects();
         mutateSubjects();
         selectSubjects();        
@@ -47,6 +49,7 @@ void Population::start() throw ( SubjectOutOfBoundException )
 
 void Population::pickStartGeneration()
 {
+    M("Losuje poczatkowa populacje");
     for( int i = 0; i < populationSize; ++i )
     {
         std::shared_ptr< Subject > currentSubject = subjectPrototype->clone();        
@@ -54,7 +57,4 @@ void Population::pickStartGeneration()
         subjects.push_back(currentSubject);        
     } 
 }
-
-
-
 }/*end of namespace*/
