@@ -7,8 +7,17 @@ namespace evol
 std::shared_ptr<Subject> Subject::crossWith(std::shared_ptr<Subject> &subject)
 {
     /* not tested yet */
-    for( std::shared_ptr<Chromosome> chromosome : this->chromosomes)
+    if(this->chromosomes.size() != subject.chromosomes.size())
     {
+        throw SubjectCrossException(this->chromosomes.size(),subject.chromosomes.size());
+    }
+    std::vector< std::shared_ptr<Chromosome> >::const_iterator endIterator = this->chromosomes.end();
+    for( std::vector< std::shared_ptr<Chromosome> >::const_iterator iter = this->chromosomes.begin(), std::vector< std::shared_ptr<Chromosome> >::const_iterator iter2 = subject.begin(); iter != endIterator; ++iter,++iter2)
+    {
+        if(typeid(*iter) != typeid(*iter2))
+        {
+            throw ChromosomeCrossException(typeid(*iter).name(),typeid(*iter2).name());
+        }
         /* @FIXME implement this */
     }
 }
@@ -50,6 +59,7 @@ void Subject::replaceChromosomes(std::vector< std::shared_ptr<Chromosome> > &chr
 std::shared_ptr<Subject> clone()
 {
     /* @FIXME implement this */
+    
 }
 
 } /* end of evol namespace */

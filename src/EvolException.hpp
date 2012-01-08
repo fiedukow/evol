@@ -14,6 +14,9 @@ namespace evol
  */
 class EvolException : std::exception
 {
+    public:
+    virtual ~EvolException();
+    virtual const char* what() const throw();
 };
 
 /*
@@ -36,12 +39,17 @@ class OutOfBoundException : EvolException
      * @param e reference to exception thrown by container
      */
     OutOfBoundException(const std::out_of_range &e);
+
+    /**
+     * Virtual destructor
+     */
+    virtual ~OutOfBoundException();
     
     /*
      * what() method calls container's out_of_range (stored) exception's what() method.
      * @return const char* string returned by stored exception's what() method
      */
-    const char* what() const throw();
+    virtual const char* what() const throw();
 };
 
 /*
@@ -89,12 +97,14 @@ class AllocationException : EvolException
      * @param e reference to exception thrown by container
      */
     AllocationException(const std::bad_alloc &e);
+    
+    virtual ~AllocationException();
 
     /*
      * what() method calls container's bad_alloc (stored) exception's what() method.
      * @return const char* string returned by stored exception's what() method
      */
-    const char* what() const throw();
+    virtual const char* what() const throw();
 };
 
 /* 
@@ -120,6 +130,60 @@ class SubjectAllocationException : AllocationException
     public:
     SubjectAllocationException(const std::bad_alloc &e);
 };
+
+/**
+ * Base class for cross exception
+ *
+ * @author Andrzej 'Yester' Fiedukowicz
+ * @author Maciej 'mac' Grzybek
+ */
+
+class CrossException : EvolException
+{
+    public:
+    virtual ~CrossException();
+};
+
+/**
+ * Exception for Subject crossWith()
+ * throws when collections of chromosomes from two subjects are different size
+ *
+ * @author Andrzej 'Yester' Fiedukowicz
+ * @author Maciej 'mac' Grzybek
+ */
+class SubjectCrossException : CrossException
+{
+    private:
+    unsigned int firstSize;
+    unsigned int secondSize;
+    public:
+    /**
+     * Constructor stores sizes of first and second subject's chromosomes collections
+     */
+    SubjectCrossException(unsigned int first, unsigned int second);
+};
+
+/**
+ * Exception for Chromosome crossWith()
+ * throws when pair of corresponding chromosomes are different types
+ *
+ * @author Andrzej 'Yester' Fiedukowicz
+ * @author Maciej 'mac' Grzybek
+ */
+class ChromosomeCrossException : CrossException
+{
+    private:
+    std::string &firstName;
+    std::second &secondName;
+    public:
+    /**
+     * Constructor stores name of first and second subject
+     */
+    ChromosomeCrossException(std::string &first, std::string &second);
+};
+
+
+
 
 } /* end of evol namespace */
 
