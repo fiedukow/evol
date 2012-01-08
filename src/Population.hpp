@@ -2,9 +2,14 @@
 #define _POPULATION_HPP_
 #include <vector>
 #include <memory>
+#include "Subject.hpp"
+#include "Observer.hpp"
 
 namespace evol
 {
+
+class FitnessFunction;
+
 
 /**
  * Population class.
@@ -24,22 +29,30 @@ class Population
     /*
      * Reference value to compare with.
      */
-    const std::shared_ptr< FitnessFunction > goal; 
-    const unsigned int bestId = 0;
+    const FitnessFunction &goal; 
+    const std::shared_ptr< Subject > subjectPrototype;
+    static const unsigned int bestId = 0;
+    unsigned int populationSize;
     std::vector< std::shared_ptr< Subject > > subjects;
 
     public:
     
     /**
-     * Create Population with goal given by argument
-     * @param goal - FitnessFunction smart pointer  beeing reference value to compre with
+     * Create Population with goal given by argument.
+     * @param goal - FitnessFunction object reference beeing reference value to compre with.
+     * @param prototype - Prototype of function which is used to create all subjects.
+     * @param populationSize - maximal populaion size after selection phase
      */
-    Population( shared_ptr<FitnessFunction> goal );
+   Population(const FitnessFunction &goal_, 
+              const std::shared_ptr< Subject > prototype_, 
+              unsigned int populationSize_ );
+
 
     /**
      * Do main algorithm loop
      */
-    virtual void start();
+    virtual void start() throw ( SubjectOutOfBoundException );
+
 
     /*
      * Register observer which will be notify at the begining of Selection phase
@@ -141,7 +154,7 @@ class FitnessFunction
      * @param toCompare - const reference to other FF value.
      * @return true if current FF is BETTER (whatever that means) then toCompare.
      */
-    virtual bool operator>( const FitnessFunction& toCompare );    
+    virtual bool operator>( const FitnessFunction& toCompare ) const;    
 
     /**
      * Prepare FF object to compare using Subject object which provides necessary informations. 
@@ -156,7 +169,7 @@ class FitnessFunction
      * 
      * @return smart pointer to deep copy of object
      */
-    virtual auto_ptr< FitnessFunction > clone(); 
+    virtual std::auto_ptr< FitnessFunction > clone() const; 
 };
 
 }/*end of namespace*/

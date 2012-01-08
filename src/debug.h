@@ -4,6 +4,7 @@
 #ifndef DEBUG_ITERATOR
 #define DEBUG_ITERATOR
 #include <assert.h>
+#include <iostream>
 int debug_iterator;
 #endif
 

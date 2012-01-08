@@ -1,26 +1,32 @@
 #include "Population.hpp"
 #include "debug.h"
 
-namespace
+namespace evol
 {
 
-Population::Population( const FitnessFunction &goal ) : goal(goal)
-{ /*nothing to be done*/ }
+Population::Population( const FitnessFunction &goal_, 
+                        const std::shared_ptr< Subject > prototype_, 
+                        unsigned int populationSize_ ) 
+                        : goal(goal_), populationSize(populationSize_),
+                          subjectPrototype( prototype_->clone() )
+{
+//    this->subjectPrototype = prototype_->clone();
+}
 
-virtual void Population::start() throw ( SubjectOutOfBoundException )
+void Population::start() throw ( SubjectOutOfBoundException )
 {
     pickStartGeneration();
-    auto_ptr<FitnessFunction> currentBestFF = goal.clone();
+    std::auto_ptr<FitnessFunction> currentBestFF = goal.clone();
     try
     {
-        currentBestFF.calculate( subject.get(bestId) );
+        currentBestFF->calculate( *subjects[bestId] );
     }
     catch( const std::out_of_range &e )
     {
         throw SubjectOutOfBoundException(e);
     }
         
-    while( *currentBestFF < *goal )
+    while( goal > *currentBestFF )
     {
         T( "Obecna populacja", subjects );       
         crossoverSubjects();
@@ -30,7 +36,7 @@ virtual void Population::start() throw ( SubjectOutOfBoundException )
         /*current best*/
         try
         {
-            currentBestFF.calculate( subject.get(bestId) );
+            currentBestFF->calculate( *subjects[bestId] );
         }
         catch( const std::out_of_range &e )
         {
@@ -39,9 +45,16 @@ virtual void Population::start() throw ( SubjectOutOfBoundException )
     }
 }
 
-virtual void pickStartGeneration()
+void Population::pickStartGeneration()
 {
-   
+    for( int i = 0; i < populationSize; ++i )
+    {
+        std::shared_ptr< Subject > currentSubject = subjectPrototype->clone();        
+        currentSubject->setInitialValue();
+        subjects.push_back(currentSubject);        
+    } 
 }
+
+
 
 }/*end of namespace*/
