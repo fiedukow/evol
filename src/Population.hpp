@@ -1,6 +1,9 @@
 #ifndef _POPULATION_HPP_
 #define _POPULATION_HPP_
 
+namespace evol
+{
+
 /**
  * Population class.
  * It's main class of evol library. It provides main loop of genetic algorithms and 
@@ -97,7 +100,7 @@ class Population
      * or observer system will not work as it was designed.
      */
     void notifyCrossover(); 
-}
+};
 
 /**
  * @interface FitnessFunction
@@ -131,6 +134,8 @@ class FitnessFunction
      * @param toCalculate - Subject we want to "calculate" FF value of.
      */
     virtual void calculate( const Subject& toCalculate );
-}
+};
+
+}/*end of namespace*/
 
 #endif
