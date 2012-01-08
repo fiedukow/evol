@@ -1,8 +1,37 @@
 #ifndef _SUBJECTS_HPP_
 #define _SUBJECTS_HPP_
 
+#include <vector>
+#include <memory>
+#include "Exceptions.hpp"
+
 namespace evol
 {
+
+
+/**
+ * Abstract class (interface) for Chromosome (Subject's attribute) representation
+ *
+ *  @author Andrzej 'Yester' Fieudkowicz
+ *  @author Maciej 'mac' Grzybek
+ */
+class Chromosome
+{
+    public:
+
+    /**
+     * Do the crossover with given chromosome
+     * @param chromosome - smart pointer to Chromosome which dereferences to Chromosome to crossover with.
+     * @return smart pointer to Chromosome which represents product of crossover current chromosome with chromosome from argument, which is new Chromosome.
+     */
+    virtual std::shared_ptr<Chromosome> crossWith(std::shared_ptr<Chromosome> chromsome); 
+
+    /**
+     * Do the mutation (self-modification) of current Chromosome
+     * @return smart pointer to Chromosome which represents product of mutation, which is new Chromosome.
+     */
+    virtual std::shared_ptr<Chromosome> mutate();
+};
 
 /**
  * Class represents Subject (person, individual etc.)
@@ -17,7 +46,7 @@ class Subject
 {
     private:
     /**
-     * Vector of Chromosomes as subject attributes.
+     * vector of Chromosomes as subject attributes.
      */
     std::vector< std::shared_ptr<Chromosome> > chromosomes;
 
@@ -39,15 +68,17 @@ class Subject
     /**
      * Add single chromosome to vector of subject's chromosomes.
      * @param chromosome smart pointer to chromosome to be added
+     * @throw ChromosomeAllocationException throws when allocation in chromosomes container failed
      */
-    void addChromosome(std::shared_ptr<Chromosome> &chromosome);
+    void addChromosome(std::shared_ptr<Chromosome> &chromosome) throw(ChromosomeAllocationException);
 
     /**
      * Get single chromosome by given id
      * @param id position of chromosome in Subject's chromosome vector
      * @return smart pointer to got chromosome
+     * @throw ChromosomeOutOfBoundException throws when asked for chromosome out of bound in chromosomes container
      */
-    std::shared_ptr<Chromosome> getChromosome(unsigned int id) throw ChromosomeOutOfBoundException;
+    std::shared_ptr<Chromosome> getChromosome(unsigned int id) throw(ChromosomeOutOfBoundException);
 
     /**
      * Replace whole vector of subject's chromosomes.
@@ -72,19 +103,10 @@ class Subject
 class Chromosome
 {
     public:
+=======
+    void replaceChromosomes(std::vector< std::shared_ptr<Chromosome> > &chromosomes);
+>>>>>>> Exceptions class appears:
 
-    /**
-     * Do the crossover with given chromosome
-     * @param chromosome - smart pointer to Chromosome which dereferences to Chromosome to crossover with.
-     * @return smart pointer to Chromosome which represents product of crossover current chromosome with chromosome from argument, which is new Chromosome.
-     */
-    virtual std::shared_ptr<Chromosome> crossWith(std::shared_ptr<Chromosome> chromsome); 
-
-    /**
-     * Do the mutation (self-modification) of current Chromosome
-     * @return smart pointer to Chromosome which represents product of mutation, which is new Chromosome.
-     */
-    virtual std::shared_ptr<Chromosome> mutate();
 };
 
 } /* end of namespace evol */
