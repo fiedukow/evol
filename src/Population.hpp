@@ -1,5 +1,7 @@
 #ifndef _POPULATION_HPP_
 #define _POPULATION_HPP_
+#include <vector>
+#include <memory>
 
 namespace evol
 {
@@ -18,7 +20,21 @@ namespace evol
  */
 class Population
 {
+    private:
+    /*
+     * Reference value to compare with.
+     */
+    const std::shared_ptr< FitnessFunction > goal; 
+    const unsigned int bestId = 0;
+    std::vector< std::shared_ptr< Subject > > subjects;
+
     public:
+    
+    /**
+     * Create Population with goal given by argument
+     * @param goal - FitnessFunction smart pointer  beeing reference value to compre with
+     */
+    Population( shared_ptr<FitnessFunction> goal );
 
     /**
      * Do main algorithm loop
@@ -26,35 +42,35 @@ class Population
     virtual void start();
 
     /*
-     * Register observer which will be notified at the beginning of Selection phase
+     * Register observer which will be notify at the begining of Selection phase
      *
-     * @param observer - observer object smart pointer to be registered.
+     * @param observer - observer object pointer to be register.
      */
     void registerObserver( std::shared_ptr<SelectionObserver> observer );
 
     /*
-     * Register observer which will be notified at the beginning of Mutate phase
+     * Register observer which will be notify at the begining of Mutate phase
      *
-     * @param observer - observer object smart pointer to be registered.
+     * @param observer - observer object pointer to be register.
      */
     void registerObserver( std::shared_ptr<MutateObserver> observer );
 
     /*
-     * Register observer which will be notified at the beginning of Crossover phase
+     * Register observer which will be notify at the begining of Crossover phase
      * 
-     * @param observer - observer object smart pointer to be registered.
+     * @param observer - observer object pointer to be register.
      */
     void registerObserver( std::shared_ptr<CrossoverObserver> observer);
    
     protected:
     
     /** 
-     * Pick first generation (in most cases random) 
+     * Pick first generation (generaly random) 
      */
     virtual void pickStartGeneration();
 
     /**
-     * Selection phase - choose only the best subjects
+     * Selection phase - leave only best
      */
     virtual void selectSubjects();
     
@@ -64,17 +80,17 @@ class Population
     virtual void reproductSubjects();
 
     /**
-     * Mutation phase - mutate Subjects
+     * Mutation phase - mutate some element which eachother 
      */
     virtual void mutateSubjects();
 
     /**
-     * Crossover phase - crossover Subjects with each other
+     * Crossover phase - each chromosome can be crossover 
      */
     virtual void crossoverSubjects();
     
     /**
-     * Check algorithm stop condition.
+     * Check if the algoritm should end because of goal achived.
      *
      * @return true if FitnessFunction condition is achived
      */
@@ -82,21 +98,21 @@ class Population
 
     /**
      * Notify all Selection observers that Selection Phase starts.
-     * It SHOULD be called at the beginnig of Selection Phase 
+     * It SHOULD be called at the beginig of Selection Phase 
      * or observer system will not work as it was designed.
      */
     void notifySelection();
 
     /**
      * Notify all Mutate observers that Mutate Phase starts.
-     * It SHOULD be called at the beginnig of Mutate Phase 
+     * It SHOULD be called at the beginig of Mutate Phase 
      * or observer system will not work as it was desinged.
      */
     void notifyMutate();
 
     /**
      * Notify all Crossover observers that Crossover Phase starts.
-     * It SHOULD be called at the beginnig of Crossover Phase 
+     * It SHOULD be called at the beginig of Crossover Phase 
      * or observer system will not work as it was designed.
      */
     void notifyCrossover(); 
@@ -107,10 +123,10 @@ class Population
  * 
  * FitnessFunction class should allow to compare value of FF for 2 Subjects.
  * This class SHOULD be able to calculate and keep FF value to compare with.
- * The most important part of this class is operator> method which compares
+ * The most important part of this class is operator> method with compare
  * two FF values.
  *
- * @note This class is not only functor but also kind a container for FF value.
+ * @note This class is not only functor but also kinda container for FF value.
  * 
  * @author Andrzej 'Yester' Fiedukowicz
  * @author Maciej 'mac' Grzybek 
@@ -123,7 +139,7 @@ class FitnessFunction
      * Compere current object with other FF object.
      *
      * @param toCompare - const reference to other FF value.
-     * @return true if current FF is BETTER (whatever that means) than toCompare.
+     * @return true if current FF is BETTER (whatever that means) then toCompare.
      */
     virtual bool operator>( const FitnessFunction& toCompare );    
 
@@ -131,9 +147,16 @@ class FitnessFunction
      * Prepare FF object to compare using Subject object which provides necessary informations. 
      * Typical implementation will calculate & save some function value.
      * 
-     * @param toCalculate - Subject we want to "calculate" FF value of.
+     * @param toCalculate - Subject for which we want to "calculate" FF value.
      */
     virtual void calculate( const Subject& toCalculate );
+
+    /**
+     * Clone this object - create it deep copy. Used to "type recognize" in Population.
+     * 
+     * @return smart pointer to deep copy of object
+     */
+    virtual auto_ptr< FitnessFunction > clone(); 
 };
 
 }/*end of namespace*/

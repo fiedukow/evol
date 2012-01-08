@@ -33,6 +33,12 @@ class Subject
      * Vector of Chromosomes as subject attributes.
      */
     Vector<shared_ptr<Chromosome> > chromosomes;
+    
+
+    /*
+     * TODO: setInitialValue(); - set all chromosomes as you like
+     *       clone(); - deep copy
+     */
 };
 
 /**
