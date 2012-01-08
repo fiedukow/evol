@@ -98,4 +98,39 @@ class Population
      */
     void notifyCrossover(); 
 }
+
+/**
+ * @interface FitnessFunction
+ * 
+ * FitnessFunction class should allow to compare value of FF for 2 Subjects.
+ * This class SHOULD be able to calculate and keep FF value to compare with.
+ * The most important part of this class is operator> method with compare
+ * two FF values.
+ *
+ * @note This class is not only functor but also kinda container for FF value.
+ * 
+ * @author Andrzej 'Yester' Fiedukowicz
+ * @author Maciej 'mac' Grzybek 
+ */
+class FitnessFunction
+{
+    public:
+
+    /**
+     * Compere current object with other FF object.
+     *
+     * @param toCompare - const reference to other FF value.
+     * @return true if current FF is BETTER (whatever that means) then toCompare.
+     */
+    virtual bool operator>( const FitnessFunction& toCompare );    
+
+    /**
+     * Prepare FF object to compare using Subject object which provides necessary informations. 
+     * Typical implementation will calculate & save some function value.
+     * 
+     * @param toCalculate - Subject for which we want to "calculate" FF value.
+     */
+    virtual void calculate( const Subject& toCalculate );
+}
+
 #endif
