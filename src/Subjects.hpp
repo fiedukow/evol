@@ -2,15 +2,13 @@
 #define _SUBJECTS_HPP_
 
 /**
- *  @author Andrzej 'Yester' Fieudkowicz
- *  @author Maciej 'mac' Grzybek
- */
-
-/**
  * Class represents Subject (person, individual etc.)
  * Subject can:
  * - crossover with other Subject
  * - mutate (self-modification)
+ *
+ *  @author Andrzej 'Yester' Fieudkowicz
+ *  @author Maciej 'mac' Grzybek
  */
 class Subject
 {
@@ -35,6 +33,9 @@ class Subject
 
 /**
  * Abstract class (interface) for Chromosome (Subject's attribute) representation
+ *
+ *  @author Andrzej 'Yester' Fieudkowicz
+ *  @author Maciej 'mac' Grzybek
  */
 class Chromosome
 {
