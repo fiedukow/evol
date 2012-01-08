@@ -1,3 +1,4 @@
+#ifdef DEBUG_MODE
 /**
  * Simple debug library
  */
@@ -55,4 +56,12 @@ int debug_iterator;
              if(!(a)) std::cerr << "\t\t[FAIL]\n";                              \
              else  std::cerr << "\t\t[OK]\n";                                
 #endif
+#else
+#define V(a,b)
+#define M(a)
+#define T(a,b)
+#define A(a)
+#define C(a)
 
+/*ifdef DEBUG_MODE*/
+#endif
