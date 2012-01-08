@@ -1,4 +1,4 @@
-#include "Subjects.hpp"
+#include "Subject.hpp"
 #include <stdexcept>
 
 namespace evol
@@ -7,10 +7,10 @@ namespace evol
 std::shared_ptr<Subject> Subject::crossWith(std::shared_ptr<Subject> &subject)
 {
     /* not tested yet */
-/*    for( auto chromosome : this->chromosomes)
-    {*/
+    for( std::shared_ptr<Chromosome> chromosome : this->chromosomes)
+    {
         /* @FIXME implement this */
-   // }
+    }
 }
 
 std::shared_ptr<Subject> Subject::mutate()
@@ -43,6 +43,11 @@ std::shared_ptr<Chromosome> Subject::getChromosome(unsigned int id) throw(Chromo
 }
 
 void Subject::replaceChromosomes(std::vector< std::shared_ptr<Chromosome> > &chromosomes)
+{
+    /* @FIXME implement this */
+}
+
+std::shared_ptr<Subject> clone()
 {
     /* @FIXME implement this */
 }

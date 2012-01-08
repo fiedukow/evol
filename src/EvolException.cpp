@@ -1,4 +1,7 @@
-#include "Exceptions.hpp"
+#include "EvolException.hpp"
+
+namespace evol
+{
 
 /* out of bound exception pack */
 class OutOfBoundException : EvolException
@@ -59,3 +62,5 @@ class SubjectAllocationException : AllocationException
     public:
     SubjectAllocationException(const std::bad_alloc &e) : AllocationException(e);
 };
+
+} /* end of evol namespace */

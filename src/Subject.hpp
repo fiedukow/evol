@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <memory>
-#include "Exceptions.hpp"
+#include "EvolException.hpp"
 
 namespace evol
 {
@@ -57,20 +57,20 @@ class Subject
      * @param  smart pointer to Subject which dereferences to Subject to crossover with.
      * @return smart pointer to Subject which represents product of crossover with Subject from argument, which is new Subject.
      */
-    std::shared_ptr<Subject> crossWith(std::shared_ptr<Subject> &subject);
+    virtual std::shared_ptr<Subject> crossWith(std::shared_ptr<Subject> &subject);
 
     /**
      * Do the mutation (self-modification) of subject.
      * @return smart pointer reference as a product of mutation, which is new Subject.
      */
-    std::shared_ptr<Subject> mutate();
+    virtual std::shared_ptr<Subject> mutate();
 
     /**
      * Add single chromosome to vector of subject's chromosomes.
      * @param chromosome smart pointer to chromosome to be added
      * @throw ChromosomeAllocationException throws when allocation in chromosomes container failed
      */
-    void addChromosome(std::shared_ptr<Chromosome> &chromosome) throw(ChromosomeAllocationException);
+    virtual void addChromosome(std::shared_ptr<Chromosome> &chromosome) throw(ChromosomeAllocationException);
 
     /**
      * Get single chromosome by given id
@@ -78,34 +78,26 @@ class Subject
      * @return smart pointer to got chromosome
      * @throw ChromosomeOutOfBoundException throws when asked for chromosome out of bound in chromosomes container
      */
-    std::shared_ptr<Chromosome> getChromosome(unsigned int id) throw(ChromosomeOutOfBoundException);
+    virtual std::shared_ptr<Chromosome> getChromosome(unsigned int id) throw(ChromosomeOutOfBoundException);
 
     /**
      * Replace whole vector of subject's chromosomes.
      * @param chromosomes reference to vector of chromosomes that will replace current
      */
-    void replaceChromosomes(std::Vector< std::shared_ptr<Chromosome> > &chromosomes);
+    virtual void replaceChromosomes(std::vector< std::shared_ptr<Chromosome> > &chromosomes);
 
 
-    /*
-     * TODO: setInitialValue(); - set all chromosomes as you like
-     *       clone(); - deep copy
+    /**
+     * Set initial value of current Subject (collection of Chromosomes)
+     * It produces new instance of collection and swaps it with current.
      */
+    virtual void setInitialValue();
 
-};
-
-/**
- * Abstract class (interface) for Chromosome (Subject's attribute) representation
- *
- *  @author Andrzej 'Yester' Fieudkowicz
- *  @author Maciej 'mac' Grzybek
- */
-class Chromosome
-{
-    public:
-=======
-    void replaceChromosomes(std::vector< std::shared_ptr<Chromosome> > &chromosomes);
->>>>>>> Exceptions class appears:
+    /**
+     * Clones current Subject (with it's all chromosomes)
+     * It produces deep copy of Subject
+     */
+    virtual std::shared_ptr<Subject> clone();
 
 };
 
