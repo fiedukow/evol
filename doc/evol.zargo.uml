@@ -58,7 +58,7 @@
 			CodeGeneration
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Sun Jan 08 10:18:36 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Sun Jan 08 11:58:08 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.29.2(6) revised on $Date: 2007-05-12 08:08:08 +0200 (Sat, 12 May 2007) $ </XMI.exporterVersion>
@@ -86,6 +86,19 @@
                 </UML:Parameter>
                 <UML:Parameter xmi.id = '127-0-0-1--699f8a35:134318a3374:-8000:0000000000000D30'
                   name = 'chrom' isSpecification = 'false'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = '127-0-0-1--699f8a35:134318a3374:-8000:0000000000000D2A'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = '127-0-0-1-11c6d319:134bc9ba5ca:-8000:000000000000102F'
+              name = 'mutate' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+              isQuery = 'false' concurrency = 'sequential' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'true'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = '127-0-0-1-11c6d319:134bc9ba5ca:-8000:0000000000001030'
+                  name = 'return' isSpecification = 'false' kind = 'return'>
                   <UML:Parameter.type>
                     <UML:Class xmi.idref = '127-0-0-1--699f8a35:134318a3374:-8000:0000000000000D2A'/>
                   </UML:Parameter.type>
@@ -1008,7 +1021,7 @@
       name="Class Diagram"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[400, 696, 399, 74]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[400, 696, 399, 88]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;attributesVisible=true;"
        href="127-0-0-1--699f8a35:134318a3374:-8000:0000000000000D2A"
        fill="1"
        fillcolor="white"
@@ -1022,7 +1035,7 @@
       x="400"
       y="696"
       width="399"
-      height="74"
+      height="88"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -1068,7 +1081,7 @@
       />
     </group>
     <group name="Fig0.3"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[401, 719, 397, 23]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[401, 719, 397, 22]"
          href="127-0-0-1--699f8a35:134318a3374:-8000:0000000000000D2A"
          fill="0"
          fillcolor="white"
@@ -1082,7 +1095,7 @@
         x="401"
         y="719"
         width="397"
-        height="23"
+        height="22"
         fill="1"
         fillcolor="white"
         stroke="0"
@@ -1100,7 +1113,7 @@
       />
     </group>
     <group name="Fig0.4"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[401, 742, 397, 26]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[401, 741, 397, 41]"
          href="127-0-0-1--699f8a35:134318a3374:-8000:0000000000000D2A"
          fill="0"
          fillcolor="white"
@@ -1112,9 +1125,9 @@
       
       <rectangle name="Fig0.4.0"
         x="401"
-        y="742"
+        y="741"
         width="397"
-        height="26"
+        height="41"
         fill="1"
         fillcolor="white"
         stroke="0"
@@ -1122,7 +1135,7 @@
       />
       <rectangle name="Fig0.4.1"
         x="401"
-        y="742"
+        y="741"
         width="397"
         height="1"
         fill="1"
@@ -1132,7 +1145,23 @@
       />
       <text name="Fig0.4.2"
         x="401"
-        y="743"
+        y="742"
+        width="397"
+        height="16"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="true"
+        bold="false"
+        textsize="12"
+        justification="Left"
+      >crossWith(chrom : Chromosome) : Chromosome</text>
+      <text name="Fig0.4.3"
+        x="401"
+        y="758"
         width="397"
         height="22"
         fill="0"
@@ -1145,13 +1174,13 @@
         bold="false"
         textsize="12"
         justification="Left"
-      >crossWith(chrom : Chromosome) : Chromosome</text>
+      >mutate() : Chromosome</text>
     </group>
     <rectangle name="Fig0.5"
       x="400"
       y="696"
       width="399"
-      height="74"
+      height="88"
       fill="0"
       fillcolor="white"
       stroke="1"
@@ -1369,7 +1398,7 @@
       <moveto x="584"
               y="848" />
       <lineto x="584"
-              y="770" />
+              y="784" />
     </path>
   </group>
   <group name="Fig3"
