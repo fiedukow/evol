@@ -85,7 +85,34 @@ void Population::crossoverSubjects()
 
 bool Population::isGoalAchieved()
 {
-    return ( currentBestFF!=NULL && this->goal > *currentBestFF );
+    return ( currentBestFF!=NULL && this->goal <= *currentBestFF );
 }
+
+
+
+/*
+ * FitnessFunction implementation
+ */
+
+bool FitnessFunction::operator >= ( const FitnessFunction& toCompare ) const
+{
+    return ( *this > toCompare || *this == toCompare );
+}
+
+bool FitnessFunction::operator <  ( const FitnessFunction& toCompare ) const
+{
+    return ( *this < toCompare || *this == toCompare );
+}
+
+bool FitnessFunction::operator <= ( const FitnessFunction& toCompare ) const
+{
+    return !( *this > toCompare );
+}
+
+bool FitnessFunction::operator != ( const FitnessFunction& toCompare ) const
+{
+    return !( *this == toCompare );
+}
+
 
 }/*end of namespace*/

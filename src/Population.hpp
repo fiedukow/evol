@@ -158,8 +158,15 @@ class FitnessFunction
      * @param toCompare - const reference to other FF value.
      * @return true if current FF is BETTER (whatever that means) then toCompare.
      */
-    virtual bool operator>( const FitnessFunction& toCompare ) const;    
+    virtual bool operator >  ( const FitnessFunction& toCompare ) const;    
+    virtual bool operator == ( const FitnessFunction& toCompare ) const;    
+    
+    virtual bool operator >= ( const FitnessFunction& toCompare ) const;    
+    virtual bool operator <  ( const FitnessFunction& toCompare ) const;    
+    virtual bool operator <= ( const FitnessFunction& toCompare ) const;    
+    virtual bool operator != ( const FitnessFunction& toCompare ) const;    
 
+ 
     /**
      * Prepare FF object to compare using Subject object which provides necessary informations. 
      * Typical implementation will calculate & save some function value.
