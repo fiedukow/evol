@@ -80,7 +80,7 @@ class Subject
      * Clones current Subject (with it's all chromosomes)
      * It produces deep copy of Subject
      */
-    virtual SubjectPtr clone();
+    virtual SubjectPtr clone() = 0;
 
 };
 

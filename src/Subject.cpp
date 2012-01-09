@@ -81,25 +81,4 @@ void Subject::replaceChromosomes(std::vector< ChromosomePtr > &chromosomes)
     this->chromosomes.swap(chromosomes);
 }
 
-SubjectPtr Subject::clone()
-{
-    M("Subject::clone() called.");
-    
-    std::vector< ChromosomePtr > newChromosomes;
-
-    std::vector< ChromosomePtr >::const_iterator iter = this->chromosomes.begin();
-    std::vector< ChromosomePtr >::const_iterator endIterator = this->chromosomes.end();
-
-    for(;iter != endIterator; ++iter)
-    {
-        newChromosomes.push_back(*iter);
-    }
-
-    Subject *newSubject = new Subject();
-    M("newSubject instantiated.");
-    newSubject->replaceChromosomes(newChromosomes);
-    M("chromosomes swaped.");
-    return SubjectPtr(newSubject);
-}
-
 } /* end of evol namespace */
