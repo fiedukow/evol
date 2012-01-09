@@ -26,12 +26,12 @@ class Chromosome
      * @param chromosome - smart pointer to Chromosome which dereferences to Chromosome to crossover with.
      * @return smart pointer to Chromosome which represents product of crossover current chromosome with chromosome from argument, which is new Chromosome.
      */
-    virtual ChromosomePtr crossWith(ChromosomePtr toCross ) const;
+    virtual ChromosomePtr crossWith(ChromosomePtr toCross ) const = 0;
 
     /**
      * Do the mutation (self-modification) of current Chromosome
      */
-    virtual void mutate();
+    virtual void mutate() = 0;
 };
 
 } /* end of evol namespace */
