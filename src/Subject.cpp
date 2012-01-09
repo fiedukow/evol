@@ -7,24 +7,41 @@ namespace evol
 std::shared_ptr<Subject> Subject::crossWith(std::shared_ptr<Subject> &subject)
 {
     /* not tested yet */
+    Subject *subject;
     if(this->chromosomes.size() != subject.chromosomes.size())
     {
         throw SubjectCrossException(this->chromosomes.size(),subject.chromosomes.size());
     }
+
+    std::vector< std::shared_ptr<Chromosome> >::const_iterator iter = this->chromosomes.begin();
+    std::vector< std::shared_ptr<Chromosome> >::const_iterator iter2 = subject.begin();
+
     std::vector< std::shared_ptr<Chromosome> >::const_iterator endIterator = this->chromosomes.end();
-    for( std::vector< std::shared_ptr<Chromosome> >::const_iterator iter = this->chromosomes.begin(), std::vector< std::shared_ptr<Chromosome> >::const_iterator iter2 = subject.begin(); iter != endIterator; ++iter,++iter2)
+    if(iter != endIterator) /* if there is any chromosome in current subject */
+    {
+        subject = new Subject(); /* create result subject, to return */
+    }
+    for(;iter != endIterator;++iter,++iter2)
     {
         if(typeid(*iter) != typeid(*iter2))
         {
+            delete subject; /* if exception occured, delete subject to be returned */
             throw ChromosomeCrossException(typeid(*iter).name(),typeid(*iter2).name());
         }
-        /* @FIXME implement this */
+        subject->addChromosome((*iter)->crossWith(*iter2)); /* test it */
     }
+    return std::shared_ptr<Subject>(subject);
 }
 
 std::shared_ptr<Subject> Subject::mutate()
 {
-    /* @FIXME implement this */
+    std::vector< std::shared_ptr<Chromosome> >::const_iterator iter = this->chromosomes.begin();
+
+    std::vector< std::shared_ptr<Chromosome> >::const_iterator endIterator = this->chromosomes.end();
+    for(;iter != endIterator;++iter)
+    {
+        (*iter)->mutate();
+    }
 }
 
 void Subject::addChromosome(std::shared_ptr<Chromosome> &chromosome) throw(ChromosomeAllocationException)
