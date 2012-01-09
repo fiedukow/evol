@@ -158,9 +158,9 @@ class BMI : FitnessFunction
 int main()
 {
     M("POCZATEK PROGRAMU.");
-    const BMI goal();
-    SubjectPtr mySubject( (Subject*) new Czlowiek() );
-    Population populacja( ( FitnessFunction& ) goal, mySubject, 200 );
+    const BMI goal;
+    SubjectPtr czlowiekSubject( (Subject*) new Czlowiek() );
+    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 200 );
     Czlowiek* wynik;
     try
     {
@@ -173,5 +173,5 @@ int main()
     #ifdef DEBUG
     wynik.drukuj();
     #endif
-    
+    return 0;
 }
