@@ -10,6 +10,7 @@ namespace evol
 
 class FitnessFunction;
 
+typedef std::shared_ptr<FitnessFunction> FFPtr;
 
 /**
  * Population class.
@@ -30,12 +31,21 @@ class Population
      * Reference value to compare with.
      */
     const FitnessFunction &goal; 
-    std::shared_ptr< FitnessFunction > currentBestFF;
-    const std::shared_ptr< Subject > subjectPrototype;    
+    FFPtr currentBestFF;
+    const SubjectPtr subjectPrototype;    
     unsigned int bestId;
     double crossFactor;
     unsigned int populationSize;
-    std::vector< std::shared_ptr< Subject > > subjects;
+    std::vector< SubjectPtr > subjects;
+
+    /* observers piece of code */
+
+    /* container for selection observers */
+    std::vector< SObserverPtr > selectionObservers;
+    /* container for mutate observers */
+    std::vector< MObserverPtr > mutateObservers;
+    /* container for crossover observers */
+    std::vector< CObserverPtr > crossoverObservers;
 
     public:
     
@@ -59,23 +69,23 @@ class Population
     /*
      * Register observer which will be notify at the begining of Selection phase
      *
-     * @param observer - observer object pointer to be register.
+     * @param toRegister - observer object pointer to be register.
      */
-    void registerObserver( std::shared_ptr<SelectionObserver> observer );
+    void registerObserver( std::shared_ptr<SelectionObserver> toRegister );
 
     /*
      * Register observer which will be notify at the begining of Mutate phase
      *
-     * @param observer - observer object pointer to be register.
+     * @param toRegister - observer object pointer to be register.
      */
-    void registerObserver( std::shared_ptr<MutateObserver> observer );
+    void registerObserver( std::shared_ptr<MutateObserver> toRegister );
 
     /*
      * Register observer which will be notify at the begining of Crossover phase
      * 
-     * @param observer - observer object pointer to be register.
+     * @param toRegister - observer object pointer to be register.
      */
-    void registerObserver( std::shared_ptr<CrossoverObserver> observer);
+    void registerObserver( std::shared_ptr<CrossoverObserver> toRegister );
    
     protected:
     

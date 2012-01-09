@@ -1,11 +1,17 @@
 #ifndef _OBSERVERS_HPP_
 #define _OBSERVERS_HPP_
 
+#include <memory>
+
 class Population;
 
+class SelectionObserver;
+class MutateObserver;
+class CrossoverObserver;
 
-/**
-*/
+typedef std::shared_ptr<SelectionObserver> SObserverPtr;
+typedef std::shared_ptr<MutateObserver> MObserverPtr;
+typedef std::shared_ptr<CrossoverObserver> CObserverPtr;
 
 /**
  * Abstract class (interface) for Selection observer,

@@ -55,7 +55,7 @@ void Population::start() throw ( SubjectOutOfBoundException )
 void Population::pickStartGeneration()
 {
     M("Losuje poczatkowa populacje");
-    for( int i = 0; i < populationSize; ++i )
+    for( unsigned int i = 0; i < populationSize; ++i )
     {
         std::shared_ptr< Subject > currentSubject = subjectPrototype->clone();        
         currentSubject->setInitialValue();
@@ -89,19 +89,19 @@ bool Population::isGoalAchieved()
 }
 
 
-void registerObserver( std::shared_ptr<SelectionObserver> observer )
+void Population::registerObserver( SObserverPtr toRegister )
 {
-    /* @FIXME implement this */
+    selectionObservers.push_back(toRegister);
 }
 
-void registerObserver( std::shared_ptr<MutateObserver> observer )
+void Population::registerObserver( MObserverPtr toRegister )
 {
-    /* @FIXME implement this */
+    mutateObservers.push_back(toRegister);
 }
 
-void registerObserver( std::shared_ptr<MutateObserver> observer )
+void Population::registerObserver( CObserverPtr toRegister )
 {
-    /* @FIXME implement this */
+    crossoverObservers.push_back(toRegister);
 }
 
 /*
