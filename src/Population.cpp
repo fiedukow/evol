@@ -17,14 +17,14 @@ Population::Population( const FitnessFunction &goal_,
 void Population::start() throw ( SubjectOutOfBoundException )
 {
     /*default values*/
-    bestId = 0;
-    crossFactor = 1.0; 
+    this->bestId = 0;
+    this->crossFactor = 1.0; 
 
     pickStartGeneration();
     currentBestFF = this->goal.clone();
     try
     {
-        currentBestFF->calculate( *subjects[bestId] );
+        currentBestFF->calculate( *subjects[this->bestId] );
     }
     catch( const std::out_of_range &e )
     {
@@ -43,7 +43,7 @@ void Population::start() throw ( SubjectOutOfBoundException )
         /*current best*/
         try
         {
-            currentBestFF->calculate( *subjects[bestId] );
+            currentBestFF->calculate( *subjects[this->bestId] );
         }
         catch( const std::out_of_range &e )
         {
@@ -74,7 +74,7 @@ void Population::mutateSubjects()
 
 void Population::crossoverSubjects()
 {
-    for( int i = 0; i < crossFactor*populationSize; ++i )
+    for( int i = 0; i < this->crossFactor*populationSize; ++i )
     {
         unsigned int first  = EvolFunctions::random( 0, subjects.size()-1 );
         unsigned int second = EvolFunctions::random( 0, subjects.size()-2 );
@@ -88,6 +88,7 @@ bool Population::isGoalAchieved()
     return ( currentBestFF!=NULL && this->goal <= *currentBestFF );
 }
 
+/* observers part */
 
 void Population::registerObserver( SObserverPtr toRegister )
 {
@@ -102,6 +103,39 @@ void Population::registerObserver( MObserverPtr toRegister )
 void Population::registerObserver( CObserverPtr toRegister )
 {
     crossoverObservers.push_back(toRegister);
+}
+
+void Population::notifySelection()
+{
+    std::vector<SObserverPtr>::const_iterator iter = selectionObservers.begin();
+    std::vector<SObserverPtr>::const_iterator endIterator = selectionObservers.end();
+
+    for(;iter != endIterator;++iter)
+    {
+        (*iter)->update(*this);
+    }
+}
+
+void Population::notifyMutate()
+{
+    std::vector<MObserverPtr>::const_iterator iter = mutateObservers.begin();
+    std::vector<MObserverPtr>::const_iterator endIterator = mutateObservers.end();
+
+    for(;iter != endIterator;++iter)
+    {
+        (*iter)->update(*this);
+    }
+}
+
+void Population::notifyCrossover()
+{
+    std::vector<CObserverPtr>::const_iterator iter = crossoverObservers.begin();
+    std::vector<CObserverPtr>::const_iterator endIterator = crossoverObservers.end();
+
+    for(;iter != endIterator;++iter)
+    {
+        (*iter)->update(*this);
+    }
 }
 
 /*

@@ -56,7 +56,7 @@ class Population
      * @param populationSize - maximal populaion size after selection phase
      */
    Population(const FitnessFunction &goal_, 
-              const std::shared_ptr< Subject > prototype_, 
+              const SubjectPtr prototype_, 
               unsigned int populationSize_ );
 
 
@@ -71,21 +71,21 @@ class Population
      *
      * @param toRegister - observer object pointer to be register.
      */
-    void registerObserver( std::shared_ptr<SelectionObserver> toRegister );
+    void registerObserver( SObserverPtr toRegister );
 
     /*
      * Register observer which will be notify at the begining of Mutate phase
      *
      * @param toRegister - observer object pointer to be register.
      */
-    void registerObserver( std::shared_ptr<MutateObserver> toRegister );
+    void registerObserver( MObserverPtr toRegister );
 
     /*
      * Register observer which will be notify at the begining of Crossover phase
      * 
      * @param toRegister - observer object pointer to be register.
      */
-    void registerObserver( std::shared_ptr<CrossoverObserver> toRegister );
+    void registerObserver( CObserverPtr toRegister );
    
     protected:
     
