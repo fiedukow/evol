@@ -89,6 +89,20 @@ bool Population::isGoalAchieved()
 }
 
 
+void registerObserver( std::shared_ptr<SelectionObserver> observer )
+{
+    /* @FIXME implement this */
+}
+
+void registerObserver( std::shared_ptr<MutateObserver> observer )
+{
+    /* @FIXME implement this */
+}
+
+void registerObserver( std::shared_ptr<MutateObserver> observer )
+{
+    /* @FIXME implement this */
+}
 
 /*
  * FitnessFunction implementation

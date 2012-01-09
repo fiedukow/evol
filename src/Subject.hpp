@@ -31,7 +31,7 @@ class Subject
     /**
      * vector of Chromosomes as subject attributes.
      */
-    std::vector< std::shared_ptr<Chromosome> > chromosomes;
+    std::vector< ChromosomePtr > chromosomes;
 
     public:
 
@@ -52,7 +52,7 @@ class Subject
      * @param chromosome smart pointer to chromosome to be added
      * @throw ChromosomeAllocationException throws when allocation in chromosomes container failed
      */
-    virtual void addChromosome(std::shared_ptr<Chromosome> chromosome) throw(ChromosomeAllocationException);
+    virtual void addChromosome(ChromosomePtr chromosome) throw(ChromosomeAllocationException);
 
     /**
      * Get single chromosome by given id
@@ -60,13 +60,13 @@ class Subject
      * @return smart pointer to got chromosome
      * @throw ChromosomeOutOfBoundException throws when asked for chromosome out of bound in chromosomes container
      */
-    virtual std::shared_ptr<Chromosome> getChromosome(unsigned int id) throw(ChromosomeOutOfBoundException);
+    virtual ChromosomePtr getChromosome(unsigned int id) throw(ChromosomeOutOfBoundException);
 
     /**
      * Replace whole vector of subject's chromosomes.
      * @param chromosomes reference to vector of chromosomes that will replace current
      */
-    virtual void replaceChromosomes(std::vector< std::shared_ptr<Chromosome> > &chromosomes);
+    virtual void replaceChromosomes(std::vector< ChromosomePtr > &chromosomes);
 
 
     /**
