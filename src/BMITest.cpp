@@ -110,6 +110,23 @@ class Czlowiek : Subject
         this->addChromosome( waga   );       
     }
 
+    SubjectPtr clone() const
+    {
+            M("Czlowiek::clone() called.");
+            std::vector< ChromosomePtr > newChromosomes;
+            std::vector< ChromosomePtr >::const_iterator iter = this->chromosomes.begin();
+            std::vector< ChromosomePtr >::const_iterator endIterator = this->chromosomes.end();
+            for(;iter != endIterator; ++iter)
+            {
+                    newChromosomes.push_back(*iter);
+            }
+            Czlowiek *newCzlowiek = new Czlowiek();
+            M("newCzlowiek instantiated.");
+            newCzlowiek->replaceChromosomes(newChromosomes);
+            M("chromosomes swaped.");
+            return SubjectPtr(static_cast<Subject*>(newCzlowiek));
+    }
+
     #ifdef DEBUG
     void drukuj()
     {
