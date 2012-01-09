@@ -153,6 +153,13 @@ class BMI : FitnessFunction
         this->bmiValue = pow( ((double) ((Czlowiek&) toCalculate).getCm() / 100.0 ), 2 )
                    /  (double) ((Czlowiek&) toCalculate).getKg();
     }
+    
+    std::auto_ptr < FitnessFunction > clone()
+    {
+        std::auto_ptr<FitnessFunction> result = new BMI();
+        result->bmiValue = this->bmiValue;
+        return result;
+    }
 };
 
 int main()
