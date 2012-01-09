@@ -86,7 +86,7 @@ class SubjectOutOfBoundException : OutOfBoundException
  */
 class AllocationException : EvolException
 {
-    private:
+    protected:
     /*
      * received in constructor exception (possibly from container which has thrown it's own bad_alloc exception
      */
@@ -181,8 +181,11 @@ class SubjectCrossException : CrossException
     public:
     /**
      * Constructor stores sizes of first and second subject's chromosomes collections
+     * @param sizeOfFirst size of first chromosome container
+     * @param sizeOfSecond size of second chromosome container
      */
-    SubjectCrossException(unsigned int first, unsigned int second);
+    SubjectCrossException(unsigned int sizeOfFirst, unsigned int sizeOfSecond);
+    virtual ~SubjectCrossException() throw();
 
     /*
      * what() method returns message with exception details
@@ -207,8 +210,11 @@ class ChromosomeCrossException : CrossException
     public:
     /**
      * Constructor stores name of first and second subject
+     * @param first name of first chromosome object (class)
+     * @param second name of second chromosome object (class)
      */
     ChromosomeCrossException(const char *first, const char *second);
+    virtual ~ChromosomeCrossException() throw();
 
     /*
      * what() method returns message with exception details

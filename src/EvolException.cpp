@@ -50,4 +50,27 @@ const char* SubjectAllocationException::what() const throw()
         return this->e.what();
 }
 
+CrossException::~CrossException() throw() {}
+const char* CrossException::what() const throw()
+{
+    return "Outsized crossover exception";
+}
+
+SubjectCrossException::SubjectCrossException(unsigned int sizeOfFirst, unsigned int sizeOfSecond) : firstSize(sizeOfFirst), secondSize(sizeOfSecond) {}
+SubjectCrossException::~SubjectCrossException() throw() {}
+
+const char* SubjectCrossException::what() const throw()
+{
+    return "Subject's crossover exception: chromosomes count mismatch.";
+}
+
+ChromosomeCrossException::ChromosomeCrossException(const char *first, const char *second) : firstName(first), secondName(second) {}
+ChromosomeCrossException::~ChromosomeCrossException() throw() {}
+
+const char* ChromosomeCrossException::what() const throw()
+{
+    return "Chromosome crossover exception: chromosomes' types mismatch.";
+}
+
+
 } /* end of evol namespace */
