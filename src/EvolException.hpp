@@ -31,14 +31,14 @@ class OutOfBoundException : EvolException
     /*
      * received in constructor exception (possibly from container which has thrown it's own out_of_range exception
      */
-    const std::out_of_range &e;
+    const std::out_of_range e;
     public:
     /*
      * Constructor which gets and stores exception thrown by container
      * which thrown it's own out_of_range exception
      * @param e reference to exception thrown by container
      */
-    OutOfBoundException(const std::out_of_range &e);
+    OutOfBoundException(const std::out_of_range e);
 
     /**
      * Virtual destructor
@@ -61,7 +61,7 @@ class OutOfBoundException : EvolException
 class ChromosomeOutOfBoundException : OutOfBoundException
 {
     public:
-    ChromosomeOutOfBoundException(const std::out_of_range &e);
+    ChromosomeOutOfBoundException(const std::out_of_range e);
 };
 
 /*
@@ -73,7 +73,7 @@ class ChromosomeOutOfBoundException : OutOfBoundException
 class SubjectOutOfBoundException : OutOfBoundException
 {
     public:
-    SubjectOutOfBoundException(const std::out_of_range &e);
+    SubjectOutOfBoundException(const std::out_of_range e);
 };
 
 /*
@@ -88,7 +88,7 @@ class AllocationException : EvolException
     /*
      * received in constructor exception (possibly from container which has thrown it's own bad_alloc exception
      */
-    const std::bad_alloc &e;
+    const std::bad_alloc e;
 
     public:
     /*
@@ -96,7 +96,7 @@ class AllocationException : EvolException
      * which thrown it's own out_of_range exception
      * @param e reference to exception thrown by container
      */
-    AllocationException(const std::bad_alloc &e);
+    AllocationException(const std::bad_alloc e);
     
     virtual ~AllocationException() throw();
 
@@ -116,7 +116,7 @@ class AllocationException : EvolException
 class ChromosomeAllocationException : AllocationException
 {
     public:
-    ChromosomeAllocationException(const std::bad_alloc &e);
+    ChromosomeAllocationException(const std::bad_alloc e);
 };
 
 /* 
@@ -128,7 +128,7 @@ class ChromosomeAllocationException : AllocationException
 class SubjectAllocationException : AllocationException
 {
     public:
-    SubjectAllocationException(const std::bad_alloc &e);
+    SubjectAllocationException(const std::bad_alloc e);
 };
 
 /**
