@@ -26,7 +26,7 @@ class Chromosome
      * @param chromosome - smart pointer to Chromosome which dereferences to Chromosome to crossover with.
      * @return smart pointer to Chromosome which represents product of crossover current chromosome with chromosome from argument, which is new Chromosome.
      */
-    virtual ChromosomePtr crossWith(ChromosomePtr chromsome) const;
+    virtual ChromosomePtr crossWith(ChromosomePtr toCross ) const;
 
     /**
      * Do the mutation (self-modification) of current Chromosome
