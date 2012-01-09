@@ -61,16 +61,31 @@ void Population::pickStartGeneration()
     M("Population::pickStartGeneration() called.");
     for( unsigned int i = 0; i < populationSize; ++i )
     {
-        std::shared_ptr< Subject > currentSubject = subjectPrototype->clone();        
+        SubjectPtr currentSubject = subjectPrototype->clone();        
         currentSubject->setInitialValue();
         subjects.push_back(currentSubject);        
     }
     T( "Current population", this->subjects );
 }
 
+void Population::selectSubjects()
+{
+    M("Population::selectSubjects() called.");
+    for( SubjectPtr currentSubject : this->subjects )
+    {
+        /* @FIXME implement this */
+    }
+}
+
+void reproductSubjects()
+{
+    /* @FIXME implement this */
+}
+
 void Population::mutateSubjects()
 {
-    for( std::shared_ptr< Subject > currentSubject : this->subjects )
+    M("Population::mutateSubjects() called.");
+    for( SubjectPtr currentSubject : this->subjects )
     {
         if( EvolFunctions::random() < 0.2 ) /*20% chance*/
             currentSubject->mutate();
@@ -172,6 +187,11 @@ bool FitnessFunction::operator <= ( const FitnessFunction& toCompare ) const
 bool FitnessFunction::operator != ( const FitnessFunction& toCompare ) const
 {
     return !( *this == toCompare );
+}
+
+void FitnessFunction::calculate( const Subject& toCalculate )
+{
+    /* @FIXME implement this */
 }
 
 

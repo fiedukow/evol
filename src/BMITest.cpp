@@ -29,7 +29,7 @@ class Wzrost : Chromosome
         return cm;
     }
 
-    ChromosomePtr crossWith( ChromosomePtr toCross )
+    ChromosomePtr crossWith( ChromosomePtr toCross ) const
     {
         double contributionFactor = EvolFunctions::random();
         int resultCm;
@@ -66,7 +66,7 @@ class Waga : Chromosome
         return kg;
     }
 
-    ChromosomePtr crossWith( ChromosomePtr toCross )
+    ChromosomePtr crossWith( ChromosomePtr toCross ) const
     {  
         double contributionFactor = EvolFunctions::random();
         int resultKg;
@@ -102,9 +102,7 @@ class Czlowiek : Subject
         return ptrCast( Waga,   this->getChromosome( 1 ) )->getKg();
     }    
     
-    private:
-
-    void setIntialValue()
+    void setInitialValue()
     {
         ChromosomePtr wzrost( (Chromosome*) new Wzrost() );
         ChromosomePtr waga( (Chromosome*) new Waga() );
@@ -130,8 +128,9 @@ class BMI : FitnessFunction
 
     public:
 
-    BMI(){
-        bmiValue = 20.0;
+    BMI()
+    {
+        this->bmiValue = 20.0;
     }
     
     /* const static double perfectBMI; jk */
@@ -154,10 +153,10 @@ class BMI : FitnessFunction
                    /  (double) ((Czlowiek&) toCalculate).getKg();
     }
     
-    std::auto_ptr < FitnessFunction > clone()
+    std::unique_ptr < FitnessFunction > clone() const
     {
-        std::auto_ptr<FitnessFunction> result = new BMI();
-        result->bmiValue = this->bmiValue;
+        std::unique_ptr<FitnessFunction> result = std::unique_ptr<FitnessFunction>(new BMI());
+        ((BMI&)(*result)).bmiValue = this->bmiValue;
         return result;
     }
 };
@@ -178,7 +177,7 @@ int main()
         std::cerr << e.what() << std::endl ;
     }
     #ifdef DEBUG
-    wynik.drukuj();
+    wynik->drukuj();
     #endif
     return 0;
 }

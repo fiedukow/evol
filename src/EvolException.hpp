@@ -43,7 +43,7 @@ class OutOfBoundException : EvolException
     /**
      * Virtual destructor
      */
-    virtual ~OutOfBoundException() throw();
+    virtual ~OutOfBoundException() throw() = 0;
     
     /*
      * what() method calls container's out_of_range (stored) exception's what() method.

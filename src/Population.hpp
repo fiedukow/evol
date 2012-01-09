@@ -163,14 +163,14 @@ class FitnessFunction
     public:
 
     /**
-     * Compere current object with other FF object. You HAVE TO overwrite > and == operator
-     * to use basic class functionality. All other compare operator are "implicit" :-)
+     * Compare current object with other FF object. You HAVE TO overwrite > and == operator
+     * to use basic class functionality. All other comparation operators are "implicit" :-)
      *
      * @param toCompare - const reference to other FF value.
      * @return true if current FF is BETTER (whatever that means) then toCompare.
      */
-    virtual bool operator >  ( const FitnessFunction& toCompare ) const;    
-    virtual bool operator == ( const FitnessFunction& toCompare ) const;    
+    virtual bool operator >  ( const FitnessFunction& toCompare ) const = 0;    
+    virtual bool operator == ( const FitnessFunction& toCompare ) const = 0;    
     
     /*
      * Guess what?
@@ -194,7 +194,7 @@ class FitnessFunction
      * 
      * @return smart pointer to deep copy of object
      */
-    virtual std::auto_ptr< FitnessFunction > clone() const; 
+    virtual std::unique_ptr< FitnessFunction > clone() const = 0; 
 };
 
 }/*end of namespace*/
