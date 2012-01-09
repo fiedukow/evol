@@ -173,7 +173,7 @@ class FitnessFunction
     virtual bool operator == ( const FitnessFunction& toCompare ) const;    
     
     /*
-     * Gues what?
+     * Guess what?
      */
     virtual bool operator >= ( const FitnessFunction& toCompare ) const;    
     virtual bool operator <  ( const FitnessFunction& toCompare ) const;    
