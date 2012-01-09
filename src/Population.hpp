@@ -153,7 +153,8 @@ class FitnessFunction
     public:
 
     /**
-     * Compere current object with other FF object.
+     * Compere current object with other FF object. You HAVE TO overwrite > and == operator
+     * to use basic class functionality. All other compare operator are "implicit" :-)
      *
      * @param toCompare - const reference to other FF value.
      * @return true if current FF is BETTER (whatever that means) then toCompare.
@@ -161,6 +162,9 @@ class FitnessFunction
     virtual bool operator >  ( const FitnessFunction& toCompare ) const;    
     virtual bool operator == ( const FitnessFunction& toCompare ) const;    
     
+    /*
+     * Gues what?
+     */
     virtual bool operator >= ( const FitnessFunction& toCompare ) const;    
     virtual bool operator <  ( const FitnessFunction& toCompare ) const;    
     virtual bool operator <= ( const FitnessFunction& toCompare ) const;    
