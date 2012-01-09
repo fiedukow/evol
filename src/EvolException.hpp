@@ -43,7 +43,7 @@ class OutOfBoundException : EvolException
     /**
      * Virtual destructor
      */
-    virtual ~OutOfBoundException() throw() = 0;
+    virtual ~OutOfBoundException() throw();
     
     /*
      * what() method calls container's out_of_range (stored) exception's what() method.
@@ -119,6 +119,12 @@ class ChromosomeAllocationException : AllocationException
     public:
     ChromosomeAllocationException(const std::bad_alloc e);
     virtual ~ChromosomeAllocationException() throw();
+
+    /*
+     * what() method calls container's bad_alloc (stored) exception's what() method.
+     * @return const char* string returned by stored exception's what() method
+     */
+    virtual const char* what() const throw();
 };
 
 /* 
@@ -132,6 +138,12 @@ class SubjectAllocationException : AllocationException
     public:
     SubjectAllocationException(const std::bad_alloc e);
     virtual ~SubjectAllocationException() throw();
+
+    /*
+     * what() method calls container's bad_alloc (stored) exception's what() method.
+     * @return const char* string returned by stored exception's what() method
+     */
+    virtual const char* what() const throw();
 };
 
 /**
@@ -145,6 +157,13 @@ class CrossException : EvolException
 {
     public:
     virtual ~CrossException() throw();
+    
+    /*
+     * what() method returns message about exception
+     * @return const char* null terminated string with message
+     */
+    virtual const char* what() const throw();
+
 };
 
 /**
@@ -164,6 +183,13 @@ class SubjectCrossException : CrossException
      * Constructor stores sizes of first and second subject's chromosomes collections
      */
     SubjectCrossException(unsigned int first, unsigned int second);
+
+    /*
+     * what() method returns message with exception details
+     * @return const char* null terminated string with exception details
+     */
+    virtual const char* what() const throw();
+
 };
 
 /**
@@ -183,6 +209,12 @@ class ChromosomeCrossException : CrossException
      * Constructor stores name of first and second subject
      */
     ChromosomeCrossException(const char *first, const char *second);
+
+    /*
+     * what() method returns message with exception details
+     * @return const char* null terminated string with exception details
+     */
+    virtual const char* what() const throw();
 };
 
 

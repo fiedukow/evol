@@ -3,6 +3,12 @@
 namespace evol
 {
 
+EvolException::~EvolException() throw() {}
+const char* EvolException::what() const throw()
+{
+    return "Evol library exception has occured.";
+}
+
 /* out of bound exception pack */
 
 OutOfBoundException::OutOfBoundException(const std::out_of_range e) : e(e) {}
@@ -31,7 +37,17 @@ const char* AllocationException::what() const throw()
 ChromosomeAllocationException::ChromosomeAllocationException(const std::bad_alloc e) : AllocationException(e) {}
 ChromosomeAllocationException::~ChromosomeAllocationException() throw() {}
 
+const char* ChromosomeAllocationException::what() const throw()
+{
+        return this->e.what();
+}
+
 SubjectAllocationException::SubjectAllocationException(const std::bad_alloc e) : AllocationException(e) {}
 SubjectAllocationException::~SubjectAllocationException() throw() {}
+
+const char* SubjectAllocationException::what() const throw()
+{
+        return this->e.what();
+}
 
 } /* end of evol namespace */
