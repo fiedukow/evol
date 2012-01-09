@@ -30,8 +30,7 @@ objs/BMITest.o: src/BMITest.cpp src/debug.h src/Population.hpp src/Subject.hpp \
  src/EvolException.hpp src/Chromosome.hpp src/Observer.hpp src/EvolFunctions.hpp
 	@ echo "    CXX  ./src/BMITest.cpp"
 	@ $(CXX) $(CXXFLAGS) -c "./src/BMITest.cpp" -o $@
-objs/Subject.o: src/Subject.cpp src/Subject.hpp src/EvolException.hpp src/Chromosome.hpp \
- debug.h
+objs/Subject.o: src/Subject.cpp src/Subject.hpp src/EvolException.hpp src/Chromosome.hpp src/debug.h
 	@ echo "    CXX  ./src/Subject.cpp"
 	@ $(CXX) $(CXXFLAGS) -c "./src/Subject.cpp" -o $@
 debug.h:
