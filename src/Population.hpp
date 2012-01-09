@@ -32,8 +32,8 @@ class Population
     const FitnessFunction &goal; 
     std::shared_ptr< FitnessFunction > currentBestFF;
     const std::shared_ptr< Subject > subjectPrototype;    
-    static const unsigned int bestId = 0;
-    static const double crossFactor = 1;
+    unsigned int bestId;
+    double crossFactor;
     unsigned int populationSize;
     std::vector< std::shared_ptr< Subject > > subjects;
 
@@ -131,7 +131,9 @@ class Population
      * or observer system will not work as it was designed.
      */
     void notifyCrossover(); 
+
 };
+
 
 /**
  * @interface FitnessFunction

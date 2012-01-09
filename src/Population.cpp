@@ -1,5 +1,6 @@
 #include "Population.hpp"
 #include "debug.h"
+#include "EvolFunctions.hpp"
 
 namespace evol
 {
@@ -15,6 +16,10 @@ Population::Population( const FitnessFunction &goal_,
 
 void Population::start() throw ( SubjectOutOfBoundException )
 {
+    /*default values*/
+    bestId = 0;
+    crossFactor = 1.0; 
+
     pickStartGeneration();
     currentBestFF = this->goal.clone();
     try
@@ -26,7 +31,7 @@ void Population::start() throw ( SubjectOutOfBoundException )
         throw SubjectOutOfBoundException(e);
     }
         
-    while( !isGoalAchived() )
+    while( !isGoalAchieved() )
     {
         T( "Obecna populacja", subjects );       
         C( goal > *currentBestFF );
@@ -71,16 +76,16 @@ void Population::crossoverSubjects()
 {
     for( int i = 0; i < crossFactor*populationSize; ++i )
     {
-        first  = EvolFunctions::random( 0, subjects.size()-1 );
-        second = EvolFunctions::random( 0, subjects.size()-2 );
+        unsigned int first  = EvolFunctions::random( 0, subjects.size()-1 );
+        unsigned int second = EvolFunctions::random( 0, subjects.size()-2 );
         if( second == first ) second++;
-        subjects[first].crossWith( subjects[second] );
+        subjects[first]->crossWith( subjects[second] );
     }
 }
 
-bool Population::isGoalAchived()
+bool Population::isGoalAchieved()
 {
-    return ( currentBestFF!=NULL && this.goal <= *currentBestFF );
+    return ( currentBestFF!=NULL && this->goal > *currentBestFF );
 }
 
 }/*end of namespace*/
