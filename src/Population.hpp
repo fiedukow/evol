@@ -63,7 +63,7 @@ class Population
     /**
      * Do main algorithm loop
      */
-    virtual void start() throw ( SubjectOutOfBoundException );
+    virtual SubjectPtr start() throw ( SubjectOutOfBoundException );
 
 
     /*

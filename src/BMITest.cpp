@@ -111,6 +111,15 @@ class Czlowiek : Subject
         this->addChromosome( wzrost );
         this->addChromosome( waga   );       
     }
+
+    #ifdef DEBUG
+    void drukuj()
+    {
+        std::cout << "Czlowiek ideal ma " << this->getCm() << "cm. wzrostu \
+                      oraz wazy " << this->getKg() << "kg.\n";
+                
+    }    
+    #endif
 };
 
 
@@ -152,12 +161,17 @@ int main()
     const BMI goal();
     SubjectPtr mySubject( (Subject*) new Czlowiek() );
     Population populacja( ( FitnessFunction& ) goal, mySubject, 200 );
+    Czlowiek* wynik;
     try
     {
-        populacja.start( );
+        wynik = ptrCast(Czlowiek, populacja.start( ));
     }
     catch ( OutOfBoundException &e )
     {
         std::cerr << e.what() << std::endl ;
     }
+    #ifdef DEBUG
+    wynik.drukuj();
+    #endif
+    
 }

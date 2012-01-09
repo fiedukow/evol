@@ -14,7 +14,7 @@ Population::Population( const FitnessFunction &goal_,
     M("Obiekt klasy Population jest tworzony");
 }
 
-void Population::start() throw ( SubjectOutOfBoundException )
+SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
 {
     M("Population::start() called.");
     /*default values*/
@@ -53,6 +53,7 @@ void Population::start() throw ( SubjectOutOfBoundException )
             throw SubjectOutOfBoundException(e);
         }   
     }
+    return this->subjects[this->bestId];
 }
 
 void Population::pickStartGeneration()
