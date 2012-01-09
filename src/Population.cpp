@@ -77,11 +77,6 @@ void Population::selectSubjects()
     }
 }
 
-void reproductSubjects()
-{
-    /* @FIXME implement this */
-}
-
 void Population::mutateSubjects()
 {
     M("Population::mutateSubjects() called.");
@@ -187,11 +182,6 @@ bool FitnessFunction::operator <= ( const FitnessFunction& toCompare ) const
 bool FitnessFunction::operator != ( const FitnessFunction& toCompare ) const
 {
     return !( *this == toCompare );
-}
-
-void FitnessFunction::calculate( const Subject& toCalculate )
-{
-    /* @FIXME implement this */
 }
 
 

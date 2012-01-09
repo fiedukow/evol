@@ -99,11 +99,6 @@ class Population
      */
     virtual void selectSubjects();
     
-    /** 
-     * Reproduction phase - generate some new Subjects
-     */
-    virtual void reproductSubjects();
-
     /**
      * Mutation phase - mutate some element which eachother 
      */
