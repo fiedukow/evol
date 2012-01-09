@@ -16,7 +16,7 @@ Population::Population( const FitnessFunction &goal_,
 void Population::start() throw ( SubjectOutOfBoundException )
 {
     pickStartGeneration();
-    this.currentBestFF = goal.clone();
+    currentBestFF = this->goal.clone();
     try
     {
         currentBestFF->calculate( *subjects[bestId] );
@@ -58,15 +58,16 @@ void Population::pickStartGeneration()
     } 
 }
 
-void Population::reproductSubjects()
+void Population::mutateSubjects()
 {
     for( std::shared_ptr< Subject > currentSubject : subjects )
     {
-        currentSubject->mutate();
+        if( EvolFunctions::random() < 0.2 ) /*20% chance*/
+            currentSubject->mutate();
     }
 }
 
-void Population::reproductSubjects()
+void Population::crossoverSubjects()
 {
     for( int i = 0; i < crossFactor*populationSize; ++i )
     {
