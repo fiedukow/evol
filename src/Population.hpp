@@ -210,7 +210,7 @@ class FitnessFunction
      * 
      * @param toCalculate - Subject for which we want to "calculate" FF value.
      */
-    virtual void calculate( const Subject& toCalculate );
+    virtual void calculate( const Subject& toCalculate ) = 0;
 
     /**
      * Clone this object - create it deep copy. Used to "type recognize" in Population.
