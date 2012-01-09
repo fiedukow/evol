@@ -31,7 +31,7 @@ class OutOfBoundException : EvolException
     /*
      * received in constructor exception (possibly from container which has thrown it's own out_of_range exception
      */
-    std::out_of_range &e;
+    const std::out_of_range &e;
     public:
     /*
      * Constructor which gets and stores exception thrown by container
@@ -88,7 +88,7 @@ class AllocationException : EvolException
     /*
      * received in constructor exception (possibly from container which has thrown it's own bad_alloc exception
      */
-    std::bad_alloc &e;
+    const std::bad_alloc &e;
 
     public:
     /*
@@ -181,8 +181,6 @@ class ChromosomeCrossException : CrossException
      */
     ChromosomeCrossException(const char *first, const char *second);
 };
-
-
 
 
 } /* end of evol namespace */

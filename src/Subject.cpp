@@ -4,7 +4,7 @@
 namespace evol
 {
 
-std::shared_ptr<Subject> Subject::crossWith(std::shared_ptr<Subject> &subject)
+SubjectPtr Subject::crossWith(SubjectPtr &subject) const throw (SubjectCrossException)
 {
     /* not tested yet */
     Subject *returnSubject;
@@ -13,11 +13,11 @@ std::shared_ptr<Subject> Subject::crossWith(std::shared_ptr<Subject> &subject)
         throw SubjectCrossException(this->chromosomes.size(),subject->chromosomes.size());
     }
 
-    std::vector< std::shared_ptr<Chromosome> >::const_iterator iter = this->chromosomes.begin();
-    std::vector< std::shared_ptr<Chromosome> >::const_iterator iter2 = subject->chromosomes.begin();
+    std::vector< ChromosomePtr >::const_iterator iter = this->chromosomes.begin();
+    std::vector< ChromosomePtr >::const_iterator iter2 = subject->chromosomes.begin();
 
-    std::vector< std::shared_ptr<Chromosome> >::const_iterator endIterator = this->chromosomes.end();
-    if(iter != endIterator) /* if there is any chromosome in current subject */
+    std::vector< ChromosomePtr >::const_iterator endIterator = this->chromosomes.end();
+    if(this->chromosomes.size() > 0) /* if there is any chromosome in current subject */
     {
         returnSubject = new Subject(); /* create result subject, to return */
     }
@@ -30,21 +30,21 @@ std::shared_ptr<Subject> Subject::crossWith(std::shared_ptr<Subject> &subject)
         }
         returnSubject->addChromosome(((*iter)->crossWith(*iter2))); /* test it */
     }
-    return std::shared_ptr<Subject>(subject);
+    return SubjectPtr(subject);
 }
 
-std::shared_ptr<Subject> Subject::mutate()
+void Subject::mutate()
 {
-    std::vector< std::shared_ptr<Chromosome> >::const_iterator iter = this->chromosomes.begin();
+    std::vector< ChromosomePtr >::const_iterator iter = this->chromosomes.begin();
 
-    std::vector< std::shared_ptr<Chromosome> >::const_iterator endIterator = this->chromosomes.end();
+    std::vector< ChromosomePtr >::const_iterator endIterator = this->chromosomes.end();
     for(;iter != endIterator;++iter)
     {
         (*iter)->mutate();
     }
 }
 
-void Subject::addChromosome(std::shared_ptr<Chromosome> chromosome) throw(ChromosomeAllocationException)
+void Subject::addChromosome(ChromosomePtr chromosome) throw(ChromosomeAllocationException)
 {
     try
     {
@@ -56,11 +56,11 @@ void Subject::addChromosome(std::shared_ptr<Chromosome> chromosome) throw(Chromo
     }
 }
 
-std::shared_ptr<Chromosome> Subject::getChromosome(unsigned int id) throw(ChromosomeOutOfBoundException)
+ChromosomePtr Subject::getChromosome(unsigned int id) throw(ChromosomeOutOfBoundException)
 {
     try
     {
-        return std::shared_ptr<Chromosome>(this->chromosomes.at(id));
+        return ChromosomePtr(this->chromosomes.at(id));
     }
     catch(const std::out_of_range &e)
     {
@@ -68,15 +68,29 @@ std::shared_ptr<Chromosome> Subject::getChromosome(unsigned int id) throw(Chromo
     }
 }
 
-void Subject::replaceChromosomes(std::vector< std::shared_ptr<Chromosome> > &chromosomes)
+void Subject::replaceChromosomes(std::vector< ChromosomePtr > &chromosomes)
 {
-    /* @FIXME implement this */
+    /* swap content of current chromosomes vector with given one */
+    this->chromosomes.swap(chromosomes);
 }
 
-std::shared_ptr<Subject> clone()
+SubjectPtr Subject::clone()
 {
     /* @FIXME implement this */
     
+    std::vector< ChromosomePtr > newChromosomes;
+
+    std::vector< ChromosomePtr >::const_iterator iter = this->chromosomes.begin();
+    std::vector< ChromosomePtr >::const_iterator endIterator = this->chromosomes.end();
+
+    for(;iter != endIterator; ++iter)
+    {
+        newChromosomes.push_back(*iter);
+    }
+
+    Subject *newSubject = new Subject();
+    newSubject->replaceChromosomes(newChromosomes);
+    return SubjectPtr(newSubject);
 }
 
 } /* end of evol namespace */

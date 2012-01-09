@@ -4,63 +4,27 @@ namespace evol
 {
 
 /* out of bound exception pack */
-class OutOfBoundException : EvolException
-{
-    private:
-    std::out_of_range &e;
-    public:
-    OutOfBoundException(const std::out_of_range &e)
-    {
-        this.e = e;
-    }
-    
-    const char* what() const throw()
-    {
-        return e.what();
-    }
-};
+OutOfBoundException::OutOfBoundException(const std::out_of_range &e) : e(e) {}
 
-class ChromosomeOutOfBoundException : OutOfBoundException
+const char* OutOfBoundException::what() const throw()
 {
-    public:
-    ChromosomeOutOfBoundException(const std::out_of_range &e) : OutOfBoundException(e);
-};
+        return this->e.what();
+}
 
-class SubjectOutOfBoundException : OutOfBoundException
-{
-    public:
-    SubjectOutOfBoundException(const std::out_of_range &e) : OutOfBoundException(e);
-};
+ChromosomeOutOfBoundException::ChromosomeOutOfBoundException(const std::out_of_range &e) : OutOfBoundException(e) {}
+
+SubjectOutOfBoundException::SubjectOutOfBoundException(const std::out_of_range &e) : OutOfBoundException(e) {}
 
 /* allocation exception pack */
-class AllocationException : EvolException
+AllocationException::AllocationException(const std::bad_alloc &e) : e(e) {}
+
+const char* AllocationException::what() const throw()
 {
-    private:
-    std::bad_alloc &e;
+        return this->e.what();
+}
 
-    public:
-    AllocationException(const std::bad_alloc &e)
-    {
-        this.e = e;
-    }
+ChromosomeAllocationException::ChromosomeAllocationException(const std::bad_alloc &e) : AllocationException(e) {}
 
-    const char* what() const throw()
-    {
-        return e.what();
-    }
-};
-
-class ChromosomeAllocationException : AllocationException
-{
-    public:
-    ChromosomeAllocationException(const std::bad_alloc &e) : AllocationException(e);
-};
-
-
-class SubjectAllocationException : AllocationException
-{
-    public:
-    SubjectAllocationException(const std::bad_alloc &e) : AllocationException(e);
-};
+SubjectAllocationException::SubjectAllocationException(const std::bad_alloc &e) : AllocationException(e) {}
 
 } /* end of evol namespace */
