@@ -82,6 +82,7 @@ class Waga : Chromosome
         this->kg += EvolFunctions::random( -5, 5 );
         return;
     }
+    
 };
 
 
@@ -108,6 +109,24 @@ class Czlowiek : Subject
         ChromosomePtr waga( (Chromosome*) new Waga() );
         this->addChromosome( wzrost );
         this->addChromosome( waga   );       
+    }
+
+    SubjectPtr clone()
+    {
+        SubjectPtr result( (Subject*) new Czlowiek() );
+
+        /*@TODO fix those ugly lines */
+        ChromosomePtr wzrost( (Chromosome*) new Wzrost(
+            ptrCast( Wzrost, this->getChromosome( 0 ))->getCm()  
+        ) );
+        ChromosomePtr waga( (Chromosome*) new Waga(
+            ptrCast( Waga, this->getChromosome( 1 ))->getKg()  
+        ) );
+
+        result->addChromosome( wzrost );
+        result->addChromosome( waga   );      
+ 
+        return result;
     }
 
     #ifdef DEBUG
