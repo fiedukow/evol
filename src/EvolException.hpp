@@ -62,6 +62,7 @@ class ChromosomeOutOfBoundException : OutOfBoundException
 {
     public:
     ChromosomeOutOfBoundException(const std::out_of_range e);
+    virtual ~ChromosomeOutOfBoundException() throw();
 };
 
 /*
@@ -74,6 +75,7 @@ class SubjectOutOfBoundException : OutOfBoundException
 {
     public:
     SubjectOutOfBoundException(const std::out_of_range e);
+    virtual ~SubjectOutOfBoundException() throw();
 };
 
 /*
@@ -97,7 +99,6 @@ class AllocationException : EvolException
      * @param e reference to exception thrown by container
      */
     AllocationException(const std::bad_alloc e);
-    
     virtual ~AllocationException() throw();
 
     /*
@@ -117,6 +118,7 @@ class ChromosomeAllocationException : AllocationException
 {
     public:
     ChromosomeAllocationException(const std::bad_alloc e);
+    virtual ~ChromosomeAllocationException() throw();
 };
 
 /* 
@@ -129,6 +131,7 @@ class SubjectAllocationException : AllocationException
 {
     public:
     SubjectAllocationException(const std::bad_alloc e);
+    virtual ~SubjectAllocationException() throw();
 };
 
 /**

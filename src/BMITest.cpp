@@ -94,12 +94,12 @@ class Czlowiek : Subject
     int getCm() const 
     {
         this->getChromosome( 0 );
-        ptrCast( Wzrost, this->getChromosome( 0 ) )->getCm();
+        return ptrCast( Wzrost, this->getChromosome( 0 ) )->getCm();
     }
 
     int getKg() const 
     {
-        ptrCast( Waga,   this->getChromosome( 1 ) )->getKg();
+        return ptrCast( Waga,   this->getChromosome( 1 ) )->getKg();
     }    
     
     private:

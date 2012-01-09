@@ -5,6 +5,7 @@
 #include <memory>
 #include "EvolException.hpp"
 #include "Chromosome.hpp"
+#include "debug.h"
 
 namespace evol
 {
