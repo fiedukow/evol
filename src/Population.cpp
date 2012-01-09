@@ -6,7 +6,7 @@ namespace evol
 {
 
 Population::Population( const FitnessFunction &goal_, 
-                        const std::shared_ptr< Subject > prototype_, 
+                        const SubjectPtr prototype_, 
                         unsigned int populationSize_ ) 
                         : goal(goal_), populationSize(populationSize_),
                           subjectPrototype( prototype_->clone() )
@@ -16,6 +16,7 @@ Population::Population( const FitnessFunction &goal_,
 
 void Population::start() throw ( SubjectOutOfBoundException )
 {
+    M("Population::start() called.");
     /*default values*/
     this->bestId = 0;
     this->crossFactor = 1.0; 
@@ -28,12 +29,13 @@ void Population::start() throw ( SubjectOutOfBoundException )
     }
     catch( const std::out_of_range &e )
     {
+        M("out_of_range exception occured. Throwing SubjectOutOfBoundException.");
         throw SubjectOutOfBoundException(e);
     }
         
     while( !isGoalAchieved() )
     {
-        T( "Obecna populacja", subjects );       
+        T( "Obecna populacja", this->subjects );       
         C( goal > *currentBestFF );
         C( subjects.size() == populationSize );
         crossoverSubjects();
@@ -43,10 +45,11 @@ void Population::start() throw ( SubjectOutOfBoundException )
         /*current best*/
         try
         {
-            currentBestFF->calculate( *subjects[this->bestId] );
+            currentBestFF->calculate( *(this->subjects[this->bestId]) );
         }
         catch( const std::out_of_range &e )
         {
+            M("out_of_range exception occured. Throwing SubjectOutOfBoundException.");
             throw SubjectOutOfBoundException(e);
         }   
     }
@@ -54,18 +57,19 @@ void Population::start() throw ( SubjectOutOfBoundException )
 
 void Population::pickStartGeneration()
 {
-    M("Losuje poczatkowa populacje");
+    M("Population::pickStartGeneration() called.");
     for( unsigned int i = 0; i < populationSize; ++i )
     {
         std::shared_ptr< Subject > currentSubject = subjectPrototype->clone();        
         currentSubject->setInitialValue();
         subjects.push_back(currentSubject);        
-    } 
+    }
+    T( "Current population", this->subjects );
 }
 
 void Population::mutateSubjects()
 {
-    for( std::shared_ptr< Subject > currentSubject : subjects )
+    for( std::shared_ptr< Subject > currentSubject : this->subjects )
     {
         if( EvolFunctions::random() < 0.2 ) /*20% chance*/
             currentSubject->mutate();
@@ -74,17 +78,21 @@ void Population::mutateSubjects()
 
 void Population::crossoverSubjects()
 {
+    M("Population::crossoverSubjects() called.");
     for( int i = 0; i < this->crossFactor*populationSize; ++i )
     {
         unsigned int first  = EvolFunctions::random( 0, subjects.size()-1 );
         unsigned int second = EvolFunctions::random( 0, subjects.size()-2 );
-        if( second == first ) second++;
-        subjects[first]->crossWith( subjects[second] );
+        if( second == first ) ++second;
+        subjects[first]->crossWith( this->subjects[second] );
     }
+    T( "Current population", this->subjects );
 }
 
 bool Population::isGoalAchieved()
 {
+    M("Population::isGoalAchieved() called.");
+    V("currentBestFF",currentBestFF);
     return ( currentBestFF!=NULL && this->goal <= *currentBestFF );
 }
 
@@ -92,16 +100,19 @@ bool Population::isGoalAchieved()
 
 void Population::registerObserver( SObserverPtr toRegister )
 {
+    M("Population::registerObserver() called.");
     selectionObservers.push_back(toRegister);
 }
 
 void Population::registerObserver( MObserverPtr toRegister )
 {
+    M("Population::registerObserver() called.");
     mutateObservers.push_back(toRegister);
 }
 
 void Population::registerObserver( CObserverPtr toRegister )
 {
+    M("Population::registerObserver() called.");
     crossoverObservers.push_back(toRegister);
 }
 

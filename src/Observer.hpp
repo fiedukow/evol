@@ -3,6 +3,9 @@
 
 #include <memory>
 
+namespace evol
+{
+
 class Population;
 
 class SelectionObserver;
@@ -66,5 +69,7 @@ class CrossoverObserver
      */
     virtual void update(Population& population);
 };
+
+} /* end of evol namespace */
 
 #endif

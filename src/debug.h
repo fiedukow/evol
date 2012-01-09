@@ -1,4 +1,7 @@
-#ifdef DEBUG_MODE
+#ifndef _DEBUG_H_
+#define _DEBUG_H_
+
+#ifdef DEBUG
 /**
  * Simple debug library
  */
@@ -63,5 +66,7 @@ int debug_iterator;
 #define A(a)
 #define C(a)
 
-/*ifdef DEBUG_MODE*/
+/*ifdef DEBUG*/
+#endif
+
 #endif

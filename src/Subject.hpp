@@ -60,7 +60,7 @@ class Subject
      * @return smart pointer to got chromosome
      * @throw ChromosomeOutOfBoundException throws when asked for chromosome out of bound in chromosomes container
      */
-    virtual ChromosomePtr getChromosome(unsigned int id) throw(ChromosomeOutOfBoundException);
+    virtual ChromosomePtr getChromosome(unsigned int id) const throw(ChromosomeOutOfBoundException);
 
     /**
      * Replace whole vector of subject's chromosomes.

@@ -11,6 +11,9 @@ namespace evol
  */
 struct EvolFunctions
 {
+
+    static bool isInitialized;
+
     /*     
      * @return random value between 0 and 1
      */
@@ -24,6 +27,6 @@ struct EvolFunctions
     static int random( int begin, int end );
 };
 
-}
+} /* end of evol namespace */
 
 #endif
