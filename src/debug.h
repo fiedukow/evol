@@ -9,7 +9,6 @@
 #define DEBUG_ITERATOR
 #include <assert.h>
 #include <iostream>
-int debug_iterator;
 #endif
 
 /*
@@ -32,14 +31,14 @@ int debug_iterator;
  * Print message (first argument) and container (second argument) content with numeration.
  */
 #ifndef T 
-#define T(a,b) debug_iterator=0;                                                \
+#define T(a,b) { int debug_iterator=0;                                          \
              std::cerr << (a) << std::endl;                                     \
              for( auto debug_tmp_value : (b) )                                  \
              {                                                                  \
                  std::cerr << debug_iterator << ".\t" << debug_tmp_value;       \
                  std::cerr << std::endl;                                        \
                  ++debug_iterator;                                              \
-             }                                                                  
+             }} 
 #endif
 
 /*
