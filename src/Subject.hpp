@@ -28,7 +28,7 @@ typedef std::shared_ptr<Subject> SubjectPtr;
  */
 class Subject
 {
-    private:
+    protected:
     /**
      * vector of Chromosomes as subject attributes.
      */
@@ -80,7 +80,7 @@ class Subject
      * Clones current Subject (with it's all chromosomes)
      * It produces deep copy of Subject
      */
-    virtual SubjectPtr clone() = 0;
+    virtual SubjectPtr clone() const = 0;
 
 };
 

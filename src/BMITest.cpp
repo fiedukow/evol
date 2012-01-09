@@ -44,7 +44,13 @@ class Wzrost : Chromosome
     {
         this->cm += EvolFunctions::random( -20, 20 );
         return;
-    }        
+    }
+ 
+    ChromosomePtr clone( )
+    {
+        ChromosomePtr result( (Chromosome*) new Wzrost ( this->cm ) );
+        return result;
+    }
 };
 
 class Waga : Chromosome
@@ -82,6 +88,12 @@ class Waga : Chromosome
         this->kg += EvolFunctions::random( -5, 5 );
         return;
     }
+
+    ChromosomePtr clone( )
+    {
+        ChromosomePtr result( (Chromosome*) new Waga ( this->kg ) );
+        return result;
+    }
     
 };
 
@@ -111,20 +123,13 @@ class Czlowiek : Subject
         this->addChromosome( waga   );       
     }
 
-    SubjectPtr clone()
+    SubjectPtr clone() const 
     {
         SubjectPtr result( (Subject*) new Czlowiek() );
 
         /*@TODO fix those ugly lines */
-        ChromosomePtr wzrost( (Chromosome*) new Wzrost(
-            ptrCast( Wzrost, this->getChromosome( 0 ))->getCm()  
-        ) );
-        ChromosomePtr waga( (Chromosome*) new Waga(
-            ptrCast( Waga, this->getChromosome( 1 ))->getKg()  
-        ) );
-
-        result->addChromosome( wzrost );
-        result->addChromosome( waga   );      
+        result->addChromosome( ptrCast( Wzrost, this->getChromosome( 0 ) )->clone()  );
+        result->addChromosome( ptrCast( Waga,   this->getChromosome( 1 ) )->clone()  );      
  
         return result;
     }
