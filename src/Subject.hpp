@@ -74,7 +74,7 @@ class Subject
      * Set initial value of current Subject (collection of Chromosomes)
      * It produces new instance of collection and swaps it with current.
      */
-    virtual void setInitialValue();
+    virtual void setInitialValue() = 0;
 
     /**
      * Clones current Subject (with it's all chromosomes)
