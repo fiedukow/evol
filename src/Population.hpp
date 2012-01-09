@@ -30,8 +30,10 @@ class Population
      * Reference value to compare with.
      */
     const FitnessFunction &goal; 
-    const std::shared_ptr< Subject > subjectPrototype;
+    std::shared_ptr< FitnessFunction > currentBestFF;
+    const std::shared_ptr< Subject > subjectPrototype;    
     static const unsigned int bestId = 0;
+    static const double crossFactor = 1;
     unsigned int populationSize;
     std::vector< std::shared_ptr< Subject > > subjects;
 

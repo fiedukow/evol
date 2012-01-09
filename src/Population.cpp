@@ -16,7 +16,7 @@ Population::Population( const FitnessFunction &goal_,
 void Population::start() throw ( SubjectOutOfBoundException )
 {
     pickStartGeneration();
-    std::auto_ptr<FitnessFunction> currentBestFF = goal.clone();
+    this.currentBestFF = goal.clone();
     try
     {
         currentBestFF->calculate( *subjects[bestId] );
@@ -26,7 +26,7 @@ void Population::start() throw ( SubjectOutOfBoundException )
         throw SubjectOutOfBoundException(e);
     }
         
-    while( goal > *currentBestFF )
+    while( !isGoalAchived() )
     {
         T( "Obecna populacja", subjects );       
         C( goal > *currentBestFF );
@@ -57,4 +57,29 @@ void Population::pickStartGeneration()
         subjects.push_back(currentSubject);        
     } 
 }
+
+void Population::reproductSubjects()
+{
+    for( std::shared_ptr< Subject > currentSubject : subjects )
+    {
+        currentSubject->mutate();
+    }
+}
+
+void Population::reproductSubjects()
+{
+    for( int i = 0; i < crossFactor*populationSize; ++i )
+    {
+        first  = EvolFunctions::random( 0, subjects.size()-1 );
+        second = EvolFunctions::random( 0, subjects.size()-2 );
+        if( second == first ) second++;
+        subjects[first].crossWith( subjects[second] );
+    }
+}
+
+bool Population::isGoalAchived()
+{
+    return ( currentBestFF!=NULL && this.goal <= *currentBestFF );
+}
+
 }/*end of namespace*/
