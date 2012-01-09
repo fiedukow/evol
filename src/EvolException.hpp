@@ -15,7 +15,7 @@ namespace evol
 class EvolException : std::exception
 {
     public:
-    virtual ~EvolException();
+    virtual ~EvolException() throw();
     virtual const char* what() const throw();
 };
 
@@ -43,7 +43,7 @@ class OutOfBoundException : EvolException
     /**
      * Virtual destructor
      */
-    virtual ~OutOfBoundException();
+    virtual ~OutOfBoundException() throw();
     
     /*
      * what() method calls container's out_of_range (stored) exception's what() method.
@@ -98,7 +98,7 @@ class AllocationException : EvolException
      */
     AllocationException(const std::bad_alloc &e);
     
-    virtual ~AllocationException();
+    virtual ~AllocationException() throw();
 
     /*
      * what() method calls container's bad_alloc (stored) exception's what() method.
@@ -141,7 +141,7 @@ class SubjectAllocationException : AllocationException
 class CrossException : EvolException
 {
     public:
-    virtual ~CrossException();
+    virtual ~CrossException() throw();
 };
 
 /**
@@ -173,13 +173,13 @@ class SubjectCrossException : CrossException
 class ChromosomeCrossException : CrossException
 {
     private:
-    std::string &firstName;
-    std::second &secondName;
+    const char *firstName;
+    const char *secondName;
     public:
     /**
      * Constructor stores name of first and second subject
      */
-    ChromosomeCrossException(std::string &first, std::string &second);
+    ChromosomeCrossException(const char *first, const char *second);
 };
 
 

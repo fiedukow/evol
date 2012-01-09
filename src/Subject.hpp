@@ -70,7 +70,7 @@ class Subject
      * @param chromosome smart pointer to chromosome to be added
      * @throw ChromosomeAllocationException throws when allocation in chromosomes container failed
      */
-    virtual void addChromosome(std::shared_ptr<Chromosome> &chromosome) throw(ChromosomeAllocationException);
+    virtual void addChromosome(std::shared_ptr<Chromosome> chromosome) throw(ChromosomeAllocationException);
 
     /**
      * Get single chromosome by given id
