@@ -128,9 +128,15 @@ class Czlowiek : Subject
         SubjectPtr result( (Subject*) new Czlowiek() );
 
         /*@TODO fix those ugly lines */
-        result->addChromosome( ptrCast( Wzrost, this->getChromosome( 0 ) )->clone()  );
-        result->addChromosome( ptrCast( Waga,   this->getChromosome( 1 ) )->clone()  );      
- 
+        try
+        {
+            result->addChromosome( ptrCast( Wzrost, this->getChromosome( 0 ) )->clone()  );
+            result->addChromosome( ptrCast( Waga,   this->getChromosome( 1 ) )->clone()  );      
+        }
+        catch(ChromosomeOutOfBoundException &e)
+        {
+            std::cout << e.what() << std::endl;
+        }
         return result;
     }
 

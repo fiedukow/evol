@@ -27,7 +27,7 @@ class EvolException : std::exception
  */
 class OutOfBoundException : EvolException
 {
-    private:
+    protected:
     /*
      * received in constructor exception (possibly from container which has thrown it's own out_of_range exception
      */
