@@ -140,6 +140,34 @@ class Population
 };
 
 
+/*
+ * @FIXME - isnt any better place for that?
+ */
+class SubjectComparator
+{
+friend class Population;
+private:
+    const FitnessFunction& prototype;
+
+    /*
+     * Create comparator with given FF prototype
+     */
+    SubjectComparator( const FitnessFunction& goal );
+
+public:
+
+    /*
+     * Compare pair of Subjects
+     *
+     * @param SubjectPtr first
+     * @param SubjectPtr second
+     * @return true if first Subject should be before second in collection
+     */
+    bool operator() ( const SubjectPtr first, const SubjectPtr second );
+};
+
+
+
 /**
  * @interface FitnessFunction
  * 

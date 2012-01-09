@@ -1,6 +1,7 @@
 #include "Population.hpp"
 #include "debug.h"
 #include "EvolFunctions.hpp"
+#include <algorithm>
 
 namespace evol
 {
@@ -71,10 +72,10 @@ void Population::pickStartGeneration()
 void Population::selectSubjects()
 {
     M("Population::selectSubjects() called.");
-    for( SubjectPtr currentSubject : this->subjects )
-    {
-        /* @FIXME implement this */
-    }
+    SubjectComparator comparator( goal );
+    std::sort (this->subjects.begin(), this->subjects.end(), comparator );
+    this->subjects.erase( this->subjects.begin() + this->populationSize,
+                          this->subjects.end() );
 }
 
 void Population::mutateSubjects()
@@ -159,6 +160,22 @@ void Population::notifyCrossover()
         (*iter)->update(*this);
     }
 }
+
+/*
+ * SubjectComparator implementation
+ */
+SubjectComparator::SubjectComparator( const FitnessFunction& goal ) : prototype( goal )
+{ }
+
+bool SubjectComparator::operator() ( const SubjectPtr first, const SubjectPtr second )
+{
+    std::unique_ptr< FitnessFunction > firstResult  = this->prototype.clone();
+    firstResult->calculate( *first ); 
+    std::unique_ptr< FitnessFunction > secondResult = this->prototype.clone();
+    secondResult->calculate( *second );
+    return firstResult > secondResult;
+}
+
 
 /*
  * FitnessFunction implementation

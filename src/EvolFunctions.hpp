@@ -25,6 +25,7 @@ struct EvolFunctions
      * @return random integral value between 'begin' and 'end'
      */
     static int random( int begin, int end );
+
 };
 
 } /* end of evol namespace */
