@@ -22,7 +22,9 @@ class Wzrost : Chromosome
     }
 
     Wzrost( int cm ) : cm(cm)
-    { }
+    {
+        this->setCm(cm); /* we call setter on already set value to guard range (border values) */
+    }
     
     int getCm()
     {
@@ -82,7 +84,9 @@ class Waga : Chromosome
     }
     
     Waga( int kg ) : kg(kg)
-    { }
+    {
+        this->setKg(kg); /* like in Wzrost */
+    }
 
     int getKg( )
     {
