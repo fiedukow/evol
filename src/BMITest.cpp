@@ -37,12 +37,13 @@ class Wzrost : Chromosome
             resultCm += ptrCast(Wzrost,toCross)->cm * (1 - contributionFactor);
 
         ChromosomePtr result( (Chromosome*) ( new Wzrost( resultCm ) ) );
+        std::cout << "Wzrost::crossWith() called. res = "<<resultCm << std::endl;
         return result;
     }
     
     void mutate( )
     {
-        this->cm += EvolFunctions::random( -3, 2 );// @FIXME
+        this->cm += EvolFunctions::random( -2, 2 );
         return;
     }
  
@@ -87,7 +88,7 @@ class Waga : Chromosome
 
     void mutate( )
     {
-        this->kg += EvolFunctions::random( -2, 1 ); /* @FIXME */
+        this->kg += EvolFunctions::random( -1, 1 );
         return;
     }
 
