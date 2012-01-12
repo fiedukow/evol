@@ -3,6 +3,8 @@
 #include "EvolFunctions.hpp"
 #include <algorithm>
 
+#include <iostream>
+
 namespace evol
 {
 
@@ -42,6 +44,7 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
         crossoverSubjects();
         mutateSubjects();
         selectSubjects();        
+        
 
         /*current best*/
         try
@@ -53,6 +56,11 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
             M("out_of_range exception occured. Throwing SubjectOutOfBoundException.");
             throw SubjectOutOfBoundException(e);
         }   
+
+        #ifdef DEBUG2
+        subjects[0]->drukuj();
+        currentBestFF->drukuj();
+        #endif
     }
     return this->subjects[this->bestId];
 }

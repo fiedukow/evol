@@ -42,7 +42,7 @@ class Wzrost : Chromosome
     
     void mutate( )
     {
-        this->cm += EvolFunctions::random( -20, 20 );
+        this->cm += EvolFunctions::random( -3, 2 );// @FIXME
         return;
     }
  
@@ -62,6 +62,7 @@ class Waga : Chromosome
     Waga( )
     {
         this->kg = EvolFunctions::random( 30, 150 );
+        V("Waga",this->kg);
     }
     
     Waga( int kg ) : kg(kg)
@@ -80,12 +81,13 @@ class Waga : Chromosome
             resultKg += ptrCast(Waga,toCross)->kg * (1 - contributionFactor);
 
         ChromosomePtr result( (Chromosome*) new Waga( resultKg ) );
+        std::cout << "Waga::crossWith() called. res = "<<resultKg << std::endl;
         return result;
     }   
 
     void mutate( )
     {
-        this->kg += EvolFunctions::random( -5, 5 );
+        this->kg += EvolFunctions::random( -2, 1 ); /* @FIXME */
         return;
     }
 
@@ -106,17 +108,19 @@ class Czlowiek : Subject
 
     int getCm() const 
     {
-        this->getChromosome( 0 );
+        M("Czlowiek::getCm() called.");
         return ptrCast( Wzrost, this->getChromosome( 0 ) )->getCm();
     }
 
     int getKg() const 
     {
+        M("Czlowiek::getKg() called.");
         return ptrCast( Waga,   this->getChromosome( 1 ) )->getKg();
     }    
     
     void setInitialValue()
     {
+        M("Czlowiek::setInitialValue() called.");
         ChromosomePtr wzrost( (Chromosome*) new Wzrost() );
         ChromosomePtr waga( (Chromosome*) new Waga() );
         this->addChromosome( wzrost );
@@ -130,17 +134,19 @@ class Czlowiek : Subject
         /*@TODO fix those ugly lines */
         try
         {
+            M("addChromosome(getChromosome(0)) called.");
             result->addChromosome( ptrCast( Wzrost, this->getChromosome( 0 ) )->clone()  );
             result->addChromosome( ptrCast( Waga,   this->getChromosome( 1 ) )->clone()  );      
         }
         catch(ChromosomeOutOfBoundException &e)
         {
             std::cout << e.what() << std::endl;
+            exit(0);
         }
         return result;
     }
 
-    #ifdef DEBUG
+    #ifdef DEBUG2
     void drukuj()
     {
         std::cout << "Czlowiek ideal ma " << this->getCm() << "cm. wzrostu \
@@ -179,8 +185,9 @@ class BMI : FitnessFunction
 
     void calculate( const Subject& toCalculate )
     {
-        this->bmiValue = pow( ((double) ((Czlowiek&) toCalculate).getCm() / 100.0 ), 2 )
-                   /  (double) ((Czlowiek&) toCalculate).getKg();
+        this->bmiValue =  (double) ((Czlowiek&) toCalculate).getKg() / pow( ((double) ((Czlowiek&) toCalculate).getCm() / 100.0 ), 2 );
+                   
+        //std::cout << (double) ((Czlowiek&) toCalculate).getCm() << " " << (double) ((Czlowiek&) toCalculate).getKg() << " " << bmiValue << std::endl;
     }
     
     std::unique_ptr < FitnessFunction > clone() const
@@ -189,6 +196,13 @@ class BMI : FitnessFunction
         ((BMI&)(*result)).bmiValue = this->bmiValue;
         return result;
     }
+
+    #ifdef DEBUG2
+    void drukuj()
+    {
+        std::cout << "BMI: " << bmiValue << std::endl ;
+    }
+    #endif
 };
 
 int main()
@@ -196,7 +210,8 @@ int main()
     M("POCZATEK PROGRAMU.");
     const BMI goal;
     SubjectPtr czlowiekSubject( (Subject*) new Czlowiek() );
-    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 200 );
+    czlowiekSubject->setInitialValue();
+    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 10 );
     Czlowiek* wynik;
     try
     {
@@ -206,7 +221,7 @@ int main()
     {
         std::cerr << e.what() << std::endl ;
     }
-    #ifdef DEBUG
+    #ifdef DEBUG2
     wynik->drukuj();
     #endif
     return 0;

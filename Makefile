@@ -3,7 +3,7 @@
 CC=gcc
 CXX=g++
 CFLAGS=$(O) 
-CXXFLAGS=$(CFLAGS) --std=c++0x -DDEBUG
+CXXFLAGS=$(CFLAGS) --std=c++0x -DDEBUG2
 O=-O2
 LFLAGS=
 OBJS=objs/Population.o objs/EvolFunctions.o objs/EvolException.o objs/BMITest.o objs/Subject.o

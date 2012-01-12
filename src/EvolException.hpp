@@ -25,7 +25,7 @@ class EvolException : std::exception
  * @author Andrzej 'Yester' Fiedukowicz
  * @author Maciej 'mac' Grzybek
  */
-class OutOfBoundException : EvolException
+class OutOfBoundException : public EvolException
 {
     protected:
     /*
@@ -58,7 +58,7 @@ class OutOfBoundException : EvolException
  * @author Andrzej 'Yester' Fiedukowicz
  * @author Maciej 'mac' Grzybek
  */
-class ChromosomeOutOfBoundException : OutOfBoundException
+class ChromosomeOutOfBoundException : public OutOfBoundException
 {
     public:
     ChromosomeOutOfBoundException(const std::out_of_range e);
@@ -71,7 +71,7 @@ class ChromosomeOutOfBoundException : OutOfBoundException
  * @author Andrzej 'Yester' Fiedukowicz
  * @author Maciej 'mac' Grzybek
  */
-class SubjectOutOfBoundException : OutOfBoundException
+class SubjectOutOfBoundException : public OutOfBoundException
 {
     public:
     SubjectOutOfBoundException(const std::out_of_range e);
@@ -84,7 +84,7 @@ class SubjectOutOfBoundException : OutOfBoundException
  * @author Andrzej 'Yester' Fiedukowicz
  * @author Maciej 'mac' Grzybek
  */
-class AllocationException : EvolException
+class AllocationException : public EvolException
 {
     protected:
     /*
@@ -114,7 +114,7 @@ class AllocationException : EvolException
  * @author Andrzej 'Yester' Fiedukowicz
  * @author Maciej 'mac' Grzybek
  */
-class ChromosomeAllocationException : AllocationException
+class ChromosomeAllocationException : public AllocationException
 {
     public:
     ChromosomeAllocationException(const std::bad_alloc e);
@@ -133,7 +133,7 @@ class ChromosomeAllocationException : AllocationException
  * @author Andrzej 'Yester' Fiedukowicz
  * @author Maciej 'mac' Grzybek
  */
-class SubjectAllocationException : AllocationException
+class SubjectAllocationException : public AllocationException
 {
     public:
     SubjectAllocationException(const std::bad_alloc e);
@@ -153,7 +153,7 @@ class SubjectAllocationException : AllocationException
  * @author Maciej 'mac' Grzybek
  */
 
-class CrossException : EvolException
+class CrossException : public EvolException
 {
     public:
     virtual ~CrossException() throw();
@@ -173,7 +173,7 @@ class CrossException : EvolException
  * @author Andrzej 'Yester' Fiedukowicz
  * @author Maciej 'mac' Grzybek
  */
-class SubjectCrossException : CrossException
+class SubjectCrossException : public CrossException
 {
     private:
     unsigned int firstSize;
@@ -202,7 +202,7 @@ class SubjectCrossException : CrossException
  * @author Andrzej 'Yester' Fiedukowicz
  * @author Maciej 'mac' Grzybek
  */
-class ChromosomeCrossException : CrossException
+class ChromosomeCrossException : public CrossException
 {
     private:
     const char *firstName;
