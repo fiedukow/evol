@@ -19,7 +19,7 @@ double EvolFunctions::random()
 
 int EvolFunctions::random( int begin, int end )
 {
-    return EvolFunctions::random()*(end-begin+1)+begin;
+    return EvolFunctions::random()*(end-begin)+begin;
 }
 
 } /* end of evol namespace */
