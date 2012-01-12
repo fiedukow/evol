@@ -18,7 +18,7 @@ class Wzrost : Chromosome
     
     Wzrost( )
     {
-        this->cm = EvolFunctions::random( 100, 200 );
+        this->setCm(EvolFunctions::random( 100, 200 ));
     }
 
     Wzrost( int cm ) : cm(cm)
@@ -47,6 +47,15 @@ class Wzrost : Chromosome
         return;
     }
  
+    void setCm(int toSet)
+    {
+        if(toSet > 200)
+            toSet = 200;
+        if(toSet < 100)
+            toSet = 100;
+        this->cm = toSet;
+    }
+
     ChromosomePtr clone( )
     {
         ChromosomePtr result( (Chromosome*) new Wzrost ( this->cm ) );
@@ -62,7 +71,7 @@ class Waga : Chromosome
     
     Waga( )
     {
-        this->kg = EvolFunctions::random( 30, 150 );
+        this->setKg(EvolFunctions::random( 30, 150 ));
         V("Waga",this->kg);
     }
     
@@ -90,6 +99,15 @@ class Waga : Chromosome
     {
         this->kg += EvolFunctions::random( -1, 1 );
         return;
+    }
+
+    void setKg(int toSet)
+    {
+        if(toSet>150)
+            toSet = 150;
+        if(toSet<30)
+            toSet = 30;
+        this->kg = toSet;
     }
 
     ChromosomePtr clone( )
