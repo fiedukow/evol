@@ -3,8 +3,8 @@
 #include "Chromosome.hpp"
 #include "EvolFunctions.hpp"
 #include "EvolException.hpp"
-#include <iostream>
 #include <math.h>
+#include <iostream>
 
 #define ptrCast(typ, nazwa) ((typ*)(&(*(nazwa))))
 
@@ -42,17 +42,24 @@ class Wzrost : Chromosome
     
     void mutate( )
     {
-        setCm( this->cm += EvolFunctions::random( -10, 10 ) );
+        this->addCm( EvolFunctions::random( -10, 10 ) );
         return;
     }
  
     void setCm(int toSet)
     {
-        if(toSet > 200)
-            toSet = 200;
-        if(toSet < 100)
-            toSet = 100;
-        this->cm = toSet;
+            if(toSet > 200)
+                    this->cm = 200;
+            else if(toSet < 100)
+                    this->cm = 100;
+            else
+                    this->cm = toSet;
+
+    }
+
+    void addCm(int toAdd)
+    {
+        this->setCm(this->cm + toAdd);
     }
 
     ChromosomePtr clone( )
@@ -70,7 +77,7 @@ class Waga : Chromosome
     
     Waga( )
     {
-        this->setKg(EvolFunctions::random( 30, 150 ));
+        this->addKg(EvolFunctions::random( 30, 150 ));
         V("Waga",this->kg);
     }
     
@@ -95,17 +102,23 @@ class Waga : Chromosome
 
     void mutate( )
     {
-        this->setKg( this->getKg() + EvolFunctions::random( -4, 4 ) );
+        this->addKg( EvolFunctions::random( -4, 4 ) );
         return;
     }
 
     void setKg(int toSet)
     {
-        if(toSet>150)
-            toSet = 150;
-        if(toSet<30)
-            toSet = 30;
-        this->kg = toSet;
+            if(toSet > 150)
+                    this->kg = 150;
+            else if(toSet < 30)
+                    this->kg = 30;
+            else
+                    this->kg = toSet;
+    }
+
+    void addKg(int toAdd)
+    {
+        this->setKg(this->kg + toAdd);
     }
 
     ChromosomePtr clone( )
@@ -190,22 +203,19 @@ class BMI : FitnessFunction
     #define perfectBMI 21.0
     bool operator > ( const FitnessFunction& toCompare ) const
     {
-        std::cout << ">";        
-        return abs( perfectBMI - this->bmiValue      ) < 
-               abs( perfectBMI - ((BMI&) toCompare).bmiValue );
+        return EvolFunctions::abs( perfectBMI - this->bmiValue      ) < 
+               EvolFunctions::abs( perfectBMI - ((BMI&) toCompare).bmiValue );
     }
     
     bool operator == ( const FitnessFunction& toCompare ) const
     {
-        return abs( perfectBMI - this->bmiValue      ) ==
-               abs( perfectBMI - ((BMI&) toCompare).bmiValue );
+        return EvolFunctions::abs( perfectBMI - this->bmiValue      ) ==
+               EvolFunctions::abs( perfectBMI - ((BMI&) toCompare).bmiValue );
     }
 
     void calculate( const Subject& toCalculate )
     {
         this->bmiValue =  (double) ((Czlowiek&) toCalculate).getKg() / pow( ((double) ((Czlowiek&) toCalculate).getCm() / 100.0 ), 2 );
-                   
-        //std::cout << (double) ((Czlowiek&) toCalculate).getCm() << " " << (double) ((Czlowiek&) toCalculate).getKg() << " " << bmiValue << std::endl;
     }
     
     std::unique_ptr < FitnessFunction > clone() const

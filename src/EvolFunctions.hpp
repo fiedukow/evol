@@ -26,6 +26,12 @@ struct EvolFunctions
      */
     static int random( int begin, int end );
 
+    /*
+     * @param valueToAbs
+     * @return ABS of given double value
+     */
+    static double abs( double valueToAbs );
+
 };
 
 } /* end of evol namespace */

@@ -3,9 +3,9 @@
 CC=gcc
 CXX=g++
 CFLAGS=$(O) 
-CXXFLAGS=$(CFLAGS) --std=c++0x -DDEBUG2
+CXXFLAGS=$(CFLAGS) --std=c++0x
 O=-O2
-LFLAGS=
+LFLAGS=-lm
 OBJS=objs/Population.o objs/EvolFunctions.o objs/EvolException.o objs/BMITest.o objs/Subject.o
 
 
@@ -54,11 +54,15 @@ run: all
 
 .PHONY: d debug
 d: debug
-debug: CFLAGS += -DDEBUG -g
+debug: CFLAGS += -DDEBUG2 -g
 debug: O=-O0
 debug: CC=gcc
 debug: CXX=g++
 debug: all
+
+.PHONY: fulldebug
+fulldebug: CFLAGS += -DDEBUG
+fulldebug: debug
 
 .PHONY: check-syntax
 check-syntax:

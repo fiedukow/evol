@@ -22,4 +22,13 @@ int EvolFunctions::random( int begin, int end )
     return EvolFunctions::random()*(end-begin)+begin;
 }
 
+double EvolFunctions::abs( double valueToAbs )
+    {
+        if(valueToAbs < 0)
+            return -valueToAbs;
+        else
+            return valueToAbs;
+    }
+
+
 } /* end of evol namespace */
