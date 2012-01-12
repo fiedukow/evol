@@ -37,13 +37,12 @@ class Wzrost : Chromosome
             resultCm += ptrCast(Wzrost,toCross)->cm * (1 - contributionFactor);
 
         ChromosomePtr result( (Chromosome*) ( new Wzrost( resultCm ) ) );
-        std::cout << "Wzrost::crossWith() called. res = "<<resultCm << std::endl;
         return result;
     }
     
     void mutate( )
     {
-        this->cm += EvolFunctions::random( -2, 2 );
+        setCm( this->cm += EvolFunctions::random( -10, 10 ) );
         return;
     }
  
@@ -91,13 +90,12 @@ class Waga : Chromosome
             resultKg += ptrCast(Waga,toCross)->kg * (1 - contributionFactor);
 
         ChromosomePtr result( (Chromosome*) new Waga( resultKg ) );
-        std::cout << "Waga::crossWith() called. res = "<<resultKg << std::endl;
         return result;
     }   
 
     void mutate( )
     {
-        this->kg += EvolFunctions::random( -1, 1 );
+        this->setKg( this->getKg() + EvolFunctions::random( -4, 4 ) );
         return;
     }
 
@@ -192,6 +190,7 @@ class BMI : FitnessFunction
     #define perfectBMI 21.0
     bool operator > ( const FitnessFunction& toCompare ) const
     {
+        std::cout << ">";        
         return abs( perfectBMI - this->bmiValue      ) < 
                abs( perfectBMI - ((BMI&) toCompare).bmiValue );
     }
