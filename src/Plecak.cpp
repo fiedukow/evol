@@ -20,7 +20,7 @@ typedef std::shared_ptr< Przedmiot > PrzedmiotPtr;
 class Skarbiec
 {    
     /*wektor powinien być zawsze posortowany wg. wagi przedmiotu */
-    vector< PrzedmiotPtr > przedmioty;
+    std::vector< PrzedmiotPtr > przedmioty;
 
     public:
     #define DP(waga,wartosc) this->przedmioty.push_back( new Przedmiot(waga,wartosc) );
@@ -41,14 +41,14 @@ class Skarbiec
     }
 
     /*tworzy skrarbiec na bazie wektora (np. konkretnego plecaka*/
-    Skrabiec( vector <PrzedmiotPtr> przedmioty )
+    Skarbiec( std::vector <PrzedmiotPtr> przedmioty )
     {        
         this->przedmioty = przedmioty;        
         this->sortuj();
     }
         
     /*wybiera losowy przedmiot spośród takiego podzbioru przedmiotów 
-      w skarbcu, że waga każdego z nich jest mniejsza równa maskWaga*/
+      w skarbcu, że waga każdego z nich jest mniejsza równa maksWaga*/
     PrzedmiotPtr wybierzLosowy( int maksWaga )
     {
         /* ustal zakres losowania */
@@ -105,9 +105,9 @@ class Przedmiot
 };
 
 
-class ZawartoscPlecaka : Chromosome
+class ZawartoscPlecaka : public Chromosome
 {
-    vector< PrzedmiotPtr > przedmioty;
+    std::vector< PrzedmiotPtr > przedmioty;
     static double udzwig;
 
     public: 
@@ -116,13 +116,18 @@ class ZawartoscPlecaka : Chromosome
      */
     ZawartoscPlecaka( const Skarbiec& skad )
     {
-        /*@FIXME*/
+        std::shared_ptr<Skarbiec> SkarbPtr = skad.clone();
+        PrzedmiotPtr przedmiot;
+        while(przedmiot = SkarbPtr->wybierzLosowy(udzwig-getWagaSumaryczna()))
+        {
+            przedmioty.push_back(przedmiot);
+        }
     }
 
     /* ile przedmiotow jest aktualnie w plecaku*/
     int getIlePrzedmiotow( )
     {
-        return this-przedmioty.size();
+        return this->przedmioty.size();
     }
 
     /* waga wszystkich przedmiotow w plecaku*/
@@ -178,7 +183,7 @@ class ZawartoscPlecaka : Chromosome
 
 
 
-class Plecak : Subject
+class Plecak : public Subject
 {
     public:
     
@@ -224,12 +229,12 @@ class WartoscPlecaka : FitnessFunction
     
     bool operator > ( const FitnessFunction& toCompare ) const
     {
-        return this->wartosc > toCompare.wartosc;
+        return this->wartosc > ((WartoscPlecaka&)toCompare).wartosc;
     }
     
     bool operator == ( const FitnessFunction& toCompare ) const
     {
-        return this->wartosc == toCompare.wartosc;
+        return this->wartosc == ((WartoscPlecaka&)toCompare).wartosc;
     }
 
     /*policz wartosc funkcji celu:
