@@ -137,6 +137,10 @@ class Population
      */
     void notifyCrossover(); 
 
+    /**
+     * Adds another subject to collection
+     */
+    void addSubject( SubjectPtr toAdd );
 };
 
 

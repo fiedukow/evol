@@ -34,17 +34,23 @@ class Wzrost : Chromosome
     ChromosomePtr crossWith( ChromosomePtr toCross ) const
     {
         double contributionFactor = EvolFunctions::random();
-        int resultCm;
+        double resultCm;
             resultCm += this->cm * contributionFactor;
             resultCm += ptrCast(Wzrost,toCross)->cm * (1 - contributionFactor);
+        #ifdef DEBUG
+        std::cout << "Rodzic 1: " <<  this->cm \
+        << " Rodzic 2: "<< ptrCast(Wzrost,toCross)->cm \
+        << " Dziecko: "<< resultCm << std::endl ;
+        #endif
 
-        ChromosomePtr result( (Chromosome*) ( new Wzrost( resultCm ) ) );
+        ChromosomePtr result( (Chromosome*) ( new Wzrost( (int) resultCm ) ) );
         return result;
     }
     
     void mutate( )
     {
-        this->addCm( EvolFunctions::random( -10, 10 ) );
+        /*@note: wylaczona mutacja*/
+        //this->addCm( EvolFunctions::random( -10, 10 ) );
         return;
     }
  
@@ -104,9 +110,10 @@ class Waga : Chromosome
         return result;
     }   
 
+    /* @note: wylaczona mutacja */
     void mutate( )
     {
-        this->addKg( EvolFunctions::random( -4, 4 ) );
+    //this->addKg( EvolFunctions::random( -4, 4 ) );
         return;
     }
 
@@ -155,6 +162,7 @@ class Czlowiek : Subject
     void setInitialValue()
     {
         M("Czlowiek::setInitialValue() called.");
+        this->clearChromosomes();
         ChromosomePtr wzrost( (Chromosome*) new Wzrost() );
         ChromosomePtr waga( (Chromosome*) new Waga() );
         this->addChromosome( wzrost );
@@ -181,10 +189,9 @@ class Czlowiek : Subject
     }
 
     #ifdef DEBUG2
-    void drukuj()
+    void drukuj() const 
     {
-        std::cout << "Czlowiek ideal ma " << this->getCm() << "cm. wzrostu \
-                      oraz wazy " << this->getKg() << "kg.\n";
+        std::cout << "" << this->getCm() << "cm. " << this->getKg() << "kg.\n";
                 
     }    
     #endif
@@ -207,6 +214,12 @@ class BMI : FitnessFunction
     #define perfectBMI 21.0
     bool operator > ( const FitnessFunction& toCompare ) const
     {
+        #ifdef DEBUG
+        std::cout << "Wolam > " << std::endl;
+        std::cout << "Wynik " << (EvolFunctions::abs( perfectBMI - this->bmiValue      ) < 
+               EvolFunctions::abs( perfectBMI - ((BMI&) toCompare).bmiValue ));
+        #endif
+ 
         return EvolFunctions::abs( perfectBMI - this->bmiValue      ) < 
                EvolFunctions::abs( perfectBMI - ((BMI&) toCompare).bmiValue );
     }

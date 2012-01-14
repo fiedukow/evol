@@ -83,8 +83,16 @@ class Subject
     virtual SubjectPtr clone() const = 0;
 
     #ifdef DEBUG2
-    virtual void drukuj() = 0;
+    virtual void drukuj() const = 0;
     #endif
+
+    protected: 
+    /**
+     * Clears chromosomes list.
+     * It can be used to overwrite all chromosomes using
+     * 'list' of chromosomes to add and addChromosome method.
+     */
+    virtual void clearChromosomes();
 
 };
 

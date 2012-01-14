@@ -58,8 +58,10 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
         }   
 
         #ifdef DEBUG2
+        std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
         subjects[0]->drukuj();
         currentBestFF->drukuj();
+        std::cout << std::endl;
         #endif
     }
     return this->subjects[this->bestId];
@@ -81,9 +83,16 @@ void Population::selectSubjects()
 {
     M("Population::selectSubjects() called.");
     SubjectComparator comparator( goal );
+    V( "Wielkosc populacji ", subjects.size() );
     std::sort (this->subjects.begin(), this->subjects.end(), comparator );
     this->subjects.erase( this->subjects.begin() + this->populationSize,
                           this->subjects.end() );
+    for( SubjectPtr sub : subjects )
+    {
+        std::shared_ptr<FitnessFunction> wynik = goal.clone();
+        wynik->calculate( *sub );
+        wynik->drukuj();
+    }
 }
 
 void Population::mutateSubjects()
@@ -104,9 +113,17 @@ void Population::crossoverSubjects()
         unsigned int first  = EvolFunctions::random( 0, subjects.size()-1 );
         unsigned int second = EvolFunctions::random( 0, subjects.size()-2 );
         if( second == first ) ++second;
-        subjects[first]->crossWith( this->subjects[second] );
+        #ifdef DEBUG
+        std::cout << "Lacza sie ze soba ludzie: "<< first << " i " << second << std::endl;
+        #endif
+        this->addSubject( subjects[first]->crossWith( this->subjects[second] ) );
     }
     T( "Current population", this->subjects );
+}
+
+void Population::addSubject( SubjectPtr toAdd )
+{
+    this->subjects.push_back( toAdd );
 }
 
 bool Population::isGoalAchieved()
@@ -177,11 +194,19 @@ SubjectComparator::SubjectComparator( const FitnessFunction& goal ) : prototype(
 
 bool SubjectComparator::operator() ( const SubjectPtr first, const SubjectPtr second )
 {
+    M("Cos sie porownuje");
     std::unique_ptr< FitnessFunction > firstResult  = this->prototype.clone();
     firstResult->calculate( *first ); 
+    #ifdef DEBUG
+    firstResult->drukuj();
+    #endif
     std::unique_ptr< FitnessFunction > secondResult = this->prototype.clone();
     secondResult->calculate( *second );
-    return firstResult > secondResult;
+    #ifdef DEBUG
+    secondResult->drukuj();
+    std::cout <<  "koniec porownania wynik " <<  (((*firstResult) > (*secondResult)) ? "brak zmian" : "zmiana" << std::endl;
+    #endif
+    return (*firstResult) > (*secondResult);
 }
 
 

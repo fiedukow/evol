@@ -1,5 +1,6 @@
 #include "Subject.hpp"
 #include <stdexcept>
+#include <iostream>
 
 namespace evol
 {
@@ -9,6 +10,13 @@ SubjectPtr Subject::crossWith(SubjectPtr &subject) const throw (SubjectCrossExce
     M("Subject::crossWith called.");
     SubjectPtr returnSubject;
     /* not tested yet */
+    #ifdef DEBUG
+    M("Lacze ze soba");
+    this->drukuj();
+    M("oraz");
+    subject->drukuj();
+    M("wychodzi z tego ");
+    #endif
     if(this->chromosomes.size() != subject->chromosomes.size())
     {
         M("Chromosomes containers size mismatch.");
@@ -17,6 +25,7 @@ SubjectPtr Subject::crossWith(SubjectPtr &subject) const throw (SubjectCrossExce
 
     M("Clonning subject.");
     returnSubject = SubjectPtr(subject->clone());
+    returnSubject->clearChromosomes();
 
     std::vector< ChromosomePtr >::const_iterator iter = this->chromosomes.begin();
     std::vector< ChromosomePtr >::const_iterator iter2 = subject->chromosomes.begin();
@@ -32,6 +41,10 @@ SubjectPtr Subject::crossWith(SubjectPtr &subject) const throw (SubjectCrossExce
         M("Adding chromosome (product of crossover)");
         returnSubject->addChromosome(((*iter)->crossWith(*iter2))); /* test it */
     }
+    #ifdef DEBUG
+    returnSubject->drukuj();
+    std::cout << std::endl << std::endl;
+    #endif
     return returnSubject;
 }
 
@@ -79,6 +92,13 @@ void Subject::replaceChromosomes(std::vector< ChromosomePtr > &chromosomes)
     M("Subject::replaceChromosomes called.");
     /* swap content of current chromosomes vector with given one */
     this->chromosomes.swap(chromosomes);
+
+}
+
+void Subject::clearChromosomes()
+{
+    this->chromosomes.clear();
+    return;
 }
 
 } /* end of evol namespace */
