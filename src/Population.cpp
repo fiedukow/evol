@@ -69,21 +69,18 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
 
 void Population::pickStartGeneration()
 {
-    M("Population::pickStartGeneration() called.");
     for( unsigned int i = 0; i < populationSize; ++i )
     {
         SubjectPtr currentSubject = subjectPrototype->clone();        
         currentSubject->setInitialValue();
         subjects.push_back(currentSubject);        
     }
-    T( "Current population", this->subjects );
 }
 
 void Population::selectSubjects()
 {
-    M("Population::selectSubjects() called.");
+    notifySelection();
     SubjectComparator comparator( goal );
-    V( "Wielkosc populacji ", subjects.size() );
     std::sort (this->subjects.begin(), this->subjects.end(), comparator );
     this->subjects.erase( this->subjects.begin() + this->populationSize,
                           this->subjects.end() );
@@ -91,15 +88,12 @@ void Population::selectSubjects()
     {
         std::shared_ptr<FitnessFunction> wynik = goal.clone();
         wynik->calculate( *sub );
-        #ifdef DEBUG
-        wynik->drukuj();
-        #endif
     }
 }
 
 void Population::mutateSubjects()
 {
-    M("Population::mutateSubjects() called.");
+    notifyMutate();
     for( SubjectPtr currentSubject : this->subjects )
     {
         if( EvolFunctions::random() < 0.2 ) /*20% chance*/
@@ -109,18 +103,14 @@ void Population::mutateSubjects()
 
 void Population::crossoverSubjects()
 {
-    M("Population::crossoverSubjects() called.");
+    notifyCrossover();
     for( int i = 0; i < this->crossFactor*populationSize; ++i )
     {
         unsigned int first  = EvolFunctions::random( 0, subjects.size()-1 );
         unsigned int second = EvolFunctions::random( 0, subjects.size()-2 );
         if( second == first ) ++second;
-        #ifdef DEBUG
-        std::cout << "Lacza sie ze soba ludzie: "<< first << " i " << second << std::endl;
-        #endif
         this->addSubject( subjects[first]->crossWith( this->subjects[second] ) );
     }
-    T( "Current population", this->subjects );
 }
 
 void Population::addSubject( SubjectPtr toAdd )
@@ -130,8 +120,6 @@ void Population::addSubject( SubjectPtr toAdd )
 
 bool Population::isGoalAchieved()
 {
-    M("Population::isGoalAchieved() called.");
-    V("currentBestFF",currentBestFF);
     return ( currentBestFF!=NULL && this->goal <= *currentBestFF );
 }
 

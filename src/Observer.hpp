@@ -31,7 +31,7 @@ class SelectionObserver
      * @param population Population reference, which notifies observer.
      * @return void Nothing is returned.
      */
-    virtual void update(Population& population);
+    virtual void update(Population& population) = 0;
 };
 
 /**
@@ -49,7 +49,7 @@ class MutateObserver
      * @param population Population reference, which notifies observer.
      * @return void Nothing is returned.
      */
-    virtual void update(Population& population);
+    virtual void update(Population& population) = 0;
 };
 
 /**
@@ -67,7 +67,7 @@ class CrossoverObserver
      * @param population Population reference, which notifies observer.
      * @return void Nothing is returned.
      */
-    virtual void update(Population& population);
+    virtual void update(Population& population) = 0;
 };
 
 } /* end of evol namespace */

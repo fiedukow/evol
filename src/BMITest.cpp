@@ -6,9 +6,19 @@
 #include <math.h>
 #include <iostream>
 
+#include "Observer.hpp"
+
 #define ptrCast(typ, nazwa) ((typ*)(&(*(nazwa))))
 
 using namespace evol;
+
+class MyMutateObserver : public MutateObserver
+{
+    void update(Population& population)
+    {
+        std::cout << "MutateObserver fired!" << std::endl;
+    }
+};
 
 class Wzrost : Chromosome
 {
@@ -21,7 +31,7 @@ class Wzrost : Chromosome
         this->setCm(EvolFunctions::random( 100, 200 ));
     }
 
-    Wzrost( int cm ) : cm(cm)
+    Wzrost( int cm )
     {
         this->setCm(cm); /* we call setter on already set value to guard range (border values) */
     }
@@ -37,10 +47,6 @@ class Wzrost : Chromosome
         double resultCm;
             resultCm += this->cm * contributionFactor;
             resultCm += ptrCast(Wzrost,toCross)->cm * (1 - contributionFactor);
-        std::cout << "Rodzic 1: " <<  this->cm \
-        << " Rodzic 2: "<< ptrCast(Wzrost,toCross)->cm \
-        << " Dziecko: "<< resultCm << std::endl ;
-
         ChromosomePtr result( (Chromosome*) ( new Wzrost( (int) resultCm ) ) );
         return result;
     }
@@ -104,12 +110,10 @@ class Waga : Chromosome
             resultKg += this->kg * contributionFactor;
             resultKg += ptrCast(Waga,toCross)->kg * (1 - contributionFactor);
 
-
         ChromosomePtr result( (Chromosome*) new Waga( resultKg ) );
         return result;
     }   
 
-    /* @note: wylaczona mutacja */
     void mutate( )
     {
         this->addKg( EvolFunctions::random( -2, 2 ) );
@@ -172,7 +176,7 @@ class Czlowiek : Subject
     {
         SubjectPtr result( (Subject*) new Czlowiek() );
 
-        /*@TODO fix those ugly lines */
+        /*@TODO fix these ugly lines */
         try
         {
             M("addChromosome(getChromosome(0)) called.");
@@ -256,8 +260,11 @@ int main()
     SubjectPtr czlowiekSubject( (Subject*) new Czlowiek() );
     czlowiekSubject->setInitialValue();
     /*@FIXME naruszenie ochrony pamieci dla populacji wielkosci 1*/
-    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 100 );
+    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 10 );
+    MyMutateObserver *mObserver = new MyMutateObserver();
+    MObserverPtr mObsPtr(mObserver);
     Czlowiek* wynik;
+    populacja.registerObserver( mObsPtr );
     try
     {
         wynik = ptrCast(Czlowiek, populacja.start( ));
