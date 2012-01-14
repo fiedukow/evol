@@ -10,11 +10,11 @@
 
 using namespace evol;
 
-typedef std::shared_ptr< Przedmiot > PrzedmiotPtr
+typedef std::shared_ptr< Przedmiot > PrzedmiotPtr;
+
 
 /**
  *  Skarbiec przechowuje przedmioty do wyboru
- *  Ze skarbca nie można nic wyjąc, ale można skorzystać z jego zawartości.
  *  Skarbiec potrafi wylosować element do wyjęcia, który ma conajwyżej zadaną wagę.
  */
 class Skarbiec
@@ -23,26 +23,71 @@ class Skarbiec
     vector< PrzedmiotPtr > przedmioty;
 
     public:
+    #define DP(waga,wartosc) this->przedmioty.push_back( new Przedmiot(waga,wartosc) );
     Skarbiec()
     {
         /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
           ale mogla by byc wczytana np. z pliku lub bazy danych) */
-        /*@FIXME*/
+        DP(2.4, 300);
+        DP(2.4, 300);
+        DP(2.4, 300);
+        DP(2.4, 300);
+        DP(2.4, 300);
+        DP(2.4, 300);
+        DP(2.4, 300);
+        DP(2.4, 300);
+        DP(2.4, 300);
+        this->sortuj();
     }
 
     /*tworzy skrarbiec na bazie wektora (np. konkretnego plecaka*/
     Skrabiec( vector <PrzedmiotPtr> przedmioty )
     {        
-        /*@FIXME*/
+        this->przedmioty = przedmioty;        
+        this->sortuj();
     }
-    
+        
     /*wybiera losowy przedmiot spośród takiego podzbioru przedmiotów 
       w skarbcu, że waga każdego z nich jest mniejsza równa maskWaga*/
     PrzedmiotPtr wybierzLosowy( int maksWaga )
     {
-        /*@FIXME*/
+        /* ustal zakres losowania */
+        int i = -1;
+        for( PrzedmiotPtr przedmiot : przedmioty )
+        {
+           if( przedmiot.getWaga()>maksWaga )
+                ++i;
+           else 
+                break;          
+        }
+        if( i < 0 ) return PrzedmiotPtr(NULL);
+        int wybor = EvolFunctions::random( 0, i );
+        PrzedmiotPtr rezultat = przedmioty[wybor];
+        przedmioty.erase(wybor);
+        return rezultat;
     }
-}
+
+    /*tworzy kopie skarbca*/
+    std::unique_ptr<Skarbiec> clone()
+    {
+        vector <PrzedmiotPtr> kopia = this->przedmioty;
+        return std::unique_ptr( new Skarbiec(kopia) );
+    }
+
+    private:
+    sortuj()
+    {
+        sort( this->przedmioty.begin(), this->przedmioty.end(), new PrzedmiotComparator()); 
+    }
+};
+
+class PrzedmiotComparator
+{
+    bool operator( const PrzedmiotPtr first, const PrzedmiotPtr second )
+    {
+        return first->getWaga() < second->getWaga();
+    }
+};
 
 class Przedmiot 
 {
@@ -57,7 +102,7 @@ class Przedmiot
     /* gettery */
     double getWaga(){ return this->waga;    }
     int getWartosc(){ return this->wartosc; }
-}
+};
 
 
 class ZawartoscPlecaka : Chromosome
@@ -148,7 +193,8 @@ class Plecak : Subject
     /*wykonuje kopie plecaka*/
     SubjectPtr clone() const 
     {
-        /*@FIXME*/
+        SubjectPtr nowyPlecak = new Plecak(); 
+        nowyPlecak.addChromosome( this->chromosomes[0] );
     }
 
     #ifdef DEBUG2
@@ -170,9 +216,11 @@ class WartoscPlecaka : FitnessFunction
     /* tworzy prototypowa wartosc do ktorej bedziemy darzyc*/
     WartoscPlecaka()
     {
-        /*@FIXME*/
         this->wartosc = 2000 ;
     }
+
+    WartoscPlecaka( int wartosc ) : wartosc(wartosc)
+    {}
     
     bool operator > ( const FitnessFunction& toCompare ) const
     {
@@ -190,13 +238,14 @@ class WartoscPlecaka : FitnessFunction
     */
     void calculate( const Subject& toCalculate )
     {
-        /*@FIXME*/
+        Plecak& doOceny = (Plecak&) toCalculate;
+        this->wartoc = doOceny.getWartosc();
     }
     
     /*tworzy kopie funckji celu*/
     std::unique_ptr < FitnessFunction > clone() const
     {
-        /*@FIXME*/
+        return std::unique_ptr< FitnessFunction >( new WartoscPlecaka( this->wartosc ) );  
     }
 
     #ifdef DEBUG2
