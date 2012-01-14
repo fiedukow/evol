@@ -6,9 +6,19 @@
 #include <math.h>
 #include <iostream>
 
+#include "Observer.hpp"
+
 #define ptrCast(typ, nazwa) ((typ*)(&(*(nazwa))))
 
 using namespace evol;
+
+class MyMutateObserver : public MutateObserver
+{
+    void update(Population& population)
+    {
+        std::cout << "MutateObserver fired!" << std::endl;
+    }
+};
 
 class Wzrost : Chromosome
 {
@@ -177,7 +187,7 @@ class Czlowiek : Subject
     {
         SubjectPtr result( (Subject*) new Czlowiek() );
 
-        /*@TODO fix those ugly lines */
+        /*@TODO fix these ugly lines */
         try
         {
             M("addChromosome(getChromosome(0)) called.");
@@ -261,7 +271,10 @@ int main()
     SubjectPtr czlowiekSubject( (Subject*) new Czlowiek() );
     czlowiekSubject->setInitialValue();
     Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 10 );
+    MyMutateObserver *mObserver = new MyMutateObserver();
+    MObserverPtr mObsPtr(mObserver);
     Czlowiek* wynik;
+    populacja.registerObserver( mObsPtr );
     try
     {
         wynik = ptrCast(Czlowiek, populacja.start( ));
