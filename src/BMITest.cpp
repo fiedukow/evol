@@ -21,7 +21,7 @@ class Wzrost : Chromosome
         this->setCm(EvolFunctions::random( 100, 200 ));
     }
 
-    Wzrost( int cm ) : cm(cm)
+    Wzrost( int cm )
     {
         this->setCm(cm); /* we call setter on already set value to guard range (border values) */
     }
@@ -37,8 +37,8 @@ class Wzrost : Chromosome
         double resultCm;
             resultCm += this->cm * contributionFactor;
             resultCm += ptrCast(Wzrost,toCross)->cm * (1 - contributionFactor);
-        #ifdef DEBUG
-        std::cout << "Rodzic 1: " <<  this->cm \
+        #ifdef DEBUG2
+        std::cout << "Wzrost: Rodzic 1: " <<  this->cm \
         << " Rodzic 2: "<< ptrCast(Wzrost,toCross)->cm \
         << " Dziecko: "<< resultCm << std::endl ;
         #endif
@@ -49,8 +49,7 @@ class Wzrost : Chromosome
     
     void mutate( )
     {
-        /*@note: wylaczona mutacja*/
-        //this->addCm( EvolFunctions::random( -10, 10 ) );
+        this->addCm( EvolFunctions::random( -4, 4 ) );
         return;
     }
  
@@ -102,18 +101,23 @@ class Waga : Chromosome
     ChromosomePtr crossWith( ChromosomePtr toCross ) const
     {  
         double contributionFactor = EvolFunctions::random();
-        int resultKg;
+        int resultKg = 0;
             resultKg += this->kg * contributionFactor;
             resultKg += ptrCast(Waga,toCross)->kg * (1 - contributionFactor);
+
+        #ifdef DEBUG2
+        std::cout << "Waga: Rodzic 1: " <<  this->kg \
+        << " Rodzic 2: "<< ptrCast(Waga,toCross)->kg \
+        << " Dziecko: "<< resultKg << std::endl ;
+        #endif
 
         ChromosomePtr result( (Chromosome*) new Waga( resultKg ) );
         return result;
     }   
 
-    /* @note: wylaczona mutacja */
     void mutate( )
     {
-    //this->addKg( EvolFunctions::random( -4, 4 ) );
+        this->addKg( EvolFunctions::random( -4, 4 ) );
         return;
     }
 
@@ -207,7 +211,7 @@ class BMI : FitnessFunction
 
     BMI()
     {
-        this->bmiValue = 20.0;
+        this->bmiValue = 20.9;
     }
     
     /* const static double perfectBMI; jk */
