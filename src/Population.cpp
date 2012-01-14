@@ -91,7 +91,9 @@ void Population::selectSubjects()
     {
         std::shared_ptr<FitnessFunction> wynik = goal.clone();
         wynik->calculate( *sub );
+        #ifdef DEBUG
         wynik->drukuj();
+        #endif
     }
 }
 
