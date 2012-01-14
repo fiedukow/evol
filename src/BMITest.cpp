@@ -37,11 +37,9 @@ class Wzrost : Chromosome
         double resultCm;
             resultCm += this->cm * contributionFactor;
             resultCm += ptrCast(Wzrost,toCross)->cm * (1 - contributionFactor);
-        #ifdef DEBUG
         std::cout << "Rodzic 1: " <<  this->cm \
         << " Rodzic 2: "<< ptrCast(Wzrost,toCross)->cm \
         << " Dziecko: "<< resultCm << std::endl ;
-        #endif
 
         ChromosomePtr result( (Chromosome*) ( new Wzrost( (int) resultCm ) ) );
         return result;
@@ -50,7 +48,7 @@ class Wzrost : Chromosome
     void mutate( )
     {
         /*@note: wylaczona mutacja*/
-        //this->addCm( EvolFunctions::random( -10, 10 ) );
+        this->addCm( EvolFunctions::random( -5, 5 ) );
         return;
     }
  
@@ -102,9 +100,10 @@ class Waga : Chromosome
     ChromosomePtr crossWith( ChromosomePtr toCross ) const
     {  
         double contributionFactor = EvolFunctions::random();
-        int resultKg;
+        int resultKg = 0;
             resultKg += this->kg * contributionFactor;
             resultKg += ptrCast(Waga,toCross)->kg * (1 - contributionFactor);
+
 
         ChromosomePtr result( (Chromosome*) new Waga( resultKg ) );
         return result;
@@ -113,7 +112,7 @@ class Waga : Chromosome
     /* @note: wylaczona mutacja */
     void mutate( )
     {
-    //this->addKg( EvolFunctions::random( -4, 4 ) );
+        this->addKg( EvolFunctions::random( -2, 2 ) );
         return;
     }
 
@@ -207,7 +206,7 @@ class BMI : FitnessFunction
 
     BMI()
     {
-        this->bmiValue = 20.0;
+        this->bmiValue = 20.9;
     }
     
     /* const static double perfectBMI; jk */
@@ -256,7 +255,8 @@ int main()
     const BMI goal;
     SubjectPtr czlowiekSubject( (Subject*) new Czlowiek() );
     czlowiekSubject->setInitialValue();
-    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 10 );
+    /*@FIXME naruszenie ochrony pamieci dla populacji wielkosci 1*/
+    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 100 );
     Czlowiek* wynik;
     try
     {
