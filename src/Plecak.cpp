@@ -5,12 +5,40 @@
 #include "EvolException.hpp"
 #include <math.h>
 #include <iostream>
+#include <algorithm>
 
 #define ptrCast(typ, nazwa) ((typ*)(&(*(nazwa))))
 
 using namespace evol;
 
+class Przedmiot;
+
 typedef std::shared_ptr< Przedmiot > PrzedmiotPtr;
+
+
+class Przedmiot 
+{
+    double waga;
+    int wartosc;
+
+    public: 
+    /* prosty konsturktor */
+    Przedmiot( double waga, int wartosc): waga(waga), wartosc(wartosc)
+    {}
+
+    /* gettery */
+    double getWaga(){ return this->waga;    }
+    int getWartosc(){ return this->wartosc; }
+};
+
+class PrzedmiotComparator
+{
+    public:
+    bool operator()( const PrzedmiotPtr first, const PrzedmiotPtr second )
+    {
+        return first->getWaga() < second->getWaga();
+    }
+};
 
 
 /**
@@ -23,7 +51,7 @@ class Skarbiec
     std::vector< PrzedmiotPtr > przedmioty;
 
     public:
-    #define DP(waga,wartosc) this->przedmioty.push_back( new Przedmiot(waga,wartosc) );
+    #define DP(waga,wartosc) this->przedmioty.push_back( PrzedmiotPtr ( new Przedmiot(waga,wartosc ) ) );
     Skarbiec()
     {
         /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
@@ -55,7 +83,7 @@ class Skarbiec
         int i = -1;
         for( PrzedmiotPtr przedmiot : przedmioty )
         {
-           if( przedmiot.getWaga()>maksWaga )
+           if( przedmiot->getWaga()>maksWaga )
                 ++i;
            else 
                 break;          
@@ -63,45 +91,24 @@ class Skarbiec
         if( i < 0 ) return PrzedmiotPtr(NULL);
         int wybor = EvolFunctions::random( 0, i );
         PrzedmiotPtr rezultat = przedmioty[wybor];
-        przedmioty.erase(wybor);
+        this->przedmioty.erase(przedmioty.begin()+wybor);
         return rezultat;
     }
 
     /*tworzy kopie skarbca*/
-    std::unique_ptr<Skarbiec> clone()
+    std::unique_ptr<Skarbiec> clone() const 
     {
-        vector <PrzedmiotPtr> kopia = this->przedmioty;
-        return std::unique_ptr( new Skarbiec(kopia) );
+        std::vector <PrzedmiotPtr> kopia = this->przedmioty;
+        return std::unique_ptr<Skarbiec>( new Skarbiec(kopia) );
+
     }
 
     private:
-    sortuj()
+    void sortuj()
     {
-        sort( this->przedmioty.begin(), this->przedmioty.end(), new PrzedmiotComparator()); 
+        PrzedmiotComparator comparator;
+        std::sort( this->przedmioty.begin(), this->przedmioty.end(), comparator ); 
     }
-};
-
-class PrzedmiotComparator
-{
-    bool operator( const PrzedmiotPtr first, const PrzedmiotPtr second )
-    {
-        return first->getWaga() < second->getWaga();
-    }
-};
-
-class Przedmiot 
-{
-    double waga;
-    int wartosc;
-
-    public: 
-    /* prosty konsturktor */
-    Przedmiot( double waga, int wartosc): waga(waga), wartosc(wartosc)
-    {}
-
-    /* gettery */
-    double getWaga(){ return this->waga;    }
-    int getWartosc(){ return this->wartosc; }
 };
 
 
@@ -179,14 +186,14 @@ class ZawartoscPlecaka : public Chromosome
     }
 
     /*wykonuje kopie chromosomu*/ 
-    ChromosomePtr clone( )
+    ChromosomePtr clone( ) const
     {
         /*@FIXME*/
     }
 };
 
 
-
+Skarbiec SKARBIEC_OGOLNY;
 
 class Plecak : public Subject
 {
@@ -196,15 +203,20 @@ class Plecak : public Subject
     void setInitialValue()
     {
         this->clearChromosomes();
-        ChromosomePtr zawartosc = new ZawartoscPlecaka( SKARBIEC_OGOLNY );
+        ChromosomePtr zawartosc = ChromosomePtr(new ZawartoscPlecaka( SKARBIEC_OGOLNY ));
         this->addChromosome( zawartosc );       
     }
 
     /*wykonuje kopie plecaka*/
     SubjectPtr clone() const 
     {
-        SubjectPtr nowyPlecak = new Plecak(); 
-        nowyPlecak.addChromosome( this->chromosomes[0] );
+        SubjectPtr nowyPlecak = SubjectPtr(new Plecak()); 
+        nowyPlecak->addChromosome( this->chromosomes[0] );
+    }
+
+    int getWartoscSumaryczna()
+    {
+        ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna();
     }
 
     #ifdef DEBUG2
@@ -249,7 +261,7 @@ class WartoscPlecaka : FitnessFunction
     void calculate( const Subject& toCalculate )
     {
         Plecak& doOceny = (Plecak&) toCalculate;
-        this->wartoc = doOceny.getWartosc();
+        this->wartosc = doOceny.getWartoscSumaryczna();
     }
     
     /*tworzy kopie funckji celu*/
