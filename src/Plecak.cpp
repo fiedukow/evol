@@ -133,7 +133,12 @@ class ZawartoscPlecaka : public Chromosome
     /* waga wszystkich przedmiotow w plecaku*/
     double getWagaSumaryczna( )
     {
-        /*@FIXME*/
+        double waga = 0;
+        for( auto przedmiot : przedmioty )
+        {
+            waga += przedmiot->getWaga();
+        }
+        return waga;
     }
 
     /* pobiera udzwig*/
@@ -218,7 +223,7 @@ class WartoscPlecaka : FitnessFunction
 
     public:
 
-    /* tworzy prototypowa wartosc do ktorej bedziemy darzyc*/
+    /* tworzy prototypowa wartosc do ktorej bedziemy dazyc*/
     WartoscPlecaka()
     {
         this->wartosc = 2000 ;
