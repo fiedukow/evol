@@ -6,6 +6,7 @@
 #include <math.h>
 #include <iostream>
 #include <algorithm>
+#include <set>
 #include "Observer.hpp"
 
 #define ptrCast(typ, nazwa) ((typ*)(&(*(nazwa))))
@@ -15,7 +16,51 @@ using namespace evol;
 class Przedmiot;
 class Skarbiec;
 
+
 typedef std::shared_ptr< Przedmiot > PrzedmiotPtr;
+
+class Przedmiot 
+{
+    double waga;
+    int wartosc;
+
+    public: 
+    /* prosty konsturktor */
+    Przedmiot( double waga, int wartosc): waga(waga), wartosc(wartosc)
+    {}
+
+    /* gettery */
+    double getWaga(){ return this->waga;    }
+    int getWartosc(){ return this->wartosc; }
+};
+
+class PrzedmiotComparator
+{
+    public:
+    bool operator()( const PrzedmiotPtr first, const PrzedmiotPtr second )
+    {    
+        return ( first->getWaga() < second->getWaga() ||
+                 first->getWaga() == second->getWaga() && first!=second );
+    }
+};
+
+
+class MySet : public std::set<PrzedmiotPtr, PrzedmiotComparator >
+{
+    public:
+    PrzedmiotPtr operator[ ]( int index )
+    {
+        return *(getIt(index));
+    }
+
+    std::set<PrzedmiotPtr, PrzedmiotComparator>::iterator getIt( int index )
+    {
+        std::set<PrzedmiotPtr, PrzedmiotComparator>::iterator it = this->begin();
+        for(int i = 0; i < index; ++i, ++it )
+        {}
+        return it;
+    }
+};
 
 class CyclesCounter : public CrossoverObserver
 {
@@ -41,32 +86,6 @@ class CyclesCounter : public CrossoverObserver
         return cycleCounter;
     }
 };
-
-class Przedmiot 
-{
-    double waga;
-    int wartosc;
-
-    public: 
-    /* prosty konsturktor */
-    Przedmiot( double waga, int wartosc): waga(waga), wartosc(wartosc)
-    {}
-
-    /* gettery */
-    double getWaga(){ return this->waga;    }
-    int getWartosc(){ return this->wartosc; }
-};
-
-class PrzedmiotComparator
-{
-    public:
-    bool operator()( const PrzedmiotPtr first, const PrzedmiotPtr second )
-    {
-        return first->getWaga() < second->getWaga();
-    }
-};
-
-
 /**
  *  Skarbiec przechowuje przedmioty do wyboru
  *  Skarbiec potrafi wylosować element do wyjęcia, który ma conajwyżej zadaną wagę.
@@ -74,10 +93,10 @@ class PrzedmiotComparator
 class Skarbiec
 {    
     /*wektor powinien być zawsze posortowany wg. wagi przedmiotu */
-    std::vector< PrzedmiotPtr > przedmioty;
+    MySet przedmioty;
 
     public:
-    #define DP(waga,wartosc) this->przedmioty.push_back( PrzedmiotPtr ( new Przedmiot(waga,wartosc ) ) );
+    #define DP(waga,wartosc) this->przedmioty.insert( PrzedmiotPtr ( new Przedmiot(waga,wartosc ) ) );
     Skarbiec()
     {
         /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
@@ -90,17 +109,18 @@ class Skarbiec
         DP( 0.3,   20    );
         DP( 0.01,  10    );
         DP( 2,     23    );
-        DP( 23.2,  1200  );
+        DP( 23.2,  1201  );
         DP( 12.3,  290   );
         DP( 2.2,   200   );
         DP( 120.0, 203   );
-        DP( 0.01,  223   );
+        DP( 0.1,  223   );
         DP( 0.1,   233   );
+        std::cout << this->przedmioty.size() <<std::endl;
         this->sortuj();
     }
 
     /*tworzy skrarbiec na bazie wektora (np. konkretnego plecaka*/
-    Skarbiec( std::vector <PrzedmiotPtr> przedmioty )
+    Skarbiec( MySet przedmioty )
     {        
         this->przedmioty = przedmioty;        
         this->sortuj();
@@ -121,27 +141,26 @@ class Skarbiec
                 break;          
         }      
         if( i < 0 ) return PrzedmiotPtr();
-        std::cout << "Wybieram z: " << i << std::endl; 
+//        std::cout << "Wybieram z: " << i << std::endl; 
         int wybor = EvolFunctions::random( 0, i );
-        std::cout << "Wypadlo na " << wybor << std::endl;
+//        std::cout << "Wypadlo na " << wybor << std::endl;
         PrzedmiotPtr rezultat = przedmioty[wybor];
-        this->przedmioty.erase(przedmioty.begin()+wybor);
+        this->przedmioty.erase(this->przedmioty.getIt(wybor));
         return rezultat;
     }
 
     /*tworzy kopie skarbca*/
     std::unique_ptr<Skarbiec> clone() const 
     {
-        std::vector <PrzedmiotPtr> kopia = this->przedmioty;
+        MySet kopia = this->przedmioty;
         return std::unique_ptr<Skarbiec>( new Skarbiec(kopia) );
-
     }
 
     private:
     void sortuj()
     {
         PrzedmiotComparator comparator;
-        std::sort( this->przedmioty.begin(), this->przedmioty.end(), comparator ); 
+        //std::sort( this->przedmioty.begin(), this->przedmioty.end(), comparator ); 
     }
 };
 Skarbiec SKARBIEC_OGOLNY;
@@ -149,7 +168,7 @@ Skarbiec SKARBIEC_OGOLNY;
 
 class ZawartoscPlecaka : public Chromosome
 {
-    std::vector< PrzedmiotPtr > przedmioty;
+    MySet przedmioty;
     constexpr static double udzwig = 50.0;
 
     public: 
@@ -166,7 +185,7 @@ class ZawartoscPlecaka : public Chromosome
              przedmiot = SkarbPtr->wybierzLosowy( this->pobierzPozostalaPojemnosc() )
             ) 
         {
-            przedmioty.push_back(przedmiot);
+            przedmioty.insert(przedmiot);
         }
     }
 
@@ -206,7 +225,7 @@ class ZawartoscPlecaka : public Chromosome
     /*dodaje okreslony przedmiot do plecaka*/
     void dodajDoPlecaka( PrzedmiotPtr doDodania )
     {
-        this->przedmioty.push_back( doDodania );
+        this->przedmioty.insert( doDodania );
     }
 
     /*krzuje dwa plecaki ze soba w taki sposob ze
@@ -264,7 +283,7 @@ class ZawartoscPlecaka : public Chromosome
         for(unsigned int i = 0; i<1; ++i)
         {
             unsigned int randomIndex = EvolFunctions::random()*(this->przedmioty.size()-1);
-            this->przedmioty.erase(this->przedmioty.begin()+randomIndex);
+            this->przedmioty.erase(this->przedmioty.getIt(randomIndex));
         }
         /* dodajemy tyle przedmiotow ze skarbca glownego ile sie da na miejsce usunietych */
         std::unique_ptr<Skarbiec> cloneOfSkarbiec = SKARBIEC_OGOLNY.clone();
@@ -355,7 +374,7 @@ class WartoscPlecaka : FitnessFunction
     /* tworzy prototypowa wartosc do ktorej bedziemy dazyc*/
     WartoscPlecaka()
     {
-        this->wartosc = 2000 ;
+        this->wartosc = 7000 ;
     }
 
     WartoscPlecaka( int wartosc ) : wartosc(wartosc)
@@ -401,8 +420,8 @@ int main()
 
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
     Population populacja( ( FitnessFunction& ) goal, plecak, 100 );
-    CyclesCounter *populationCyclesCounter = new CyclesCounter();
-    populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
+    //CyclesCounter *populationCyclesCounter = new CyclesCounter();
+    //populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
     Plecak *wynik;
     try
     {
@@ -412,8 +431,7 @@ int main()
     {
         std::cerr << e.what() << std::endl ;
     }
-    #ifdef DEBUG2
+    std::cout << "\n\nNajlepszy wynik " <<std::endl;
     wynik->drukuj();
-    #endif
     return 0;
 }
