@@ -249,8 +249,13 @@ class ZawartoscPlecaka : public Chromosome
     /*wykonuje kopie chromosomu*/ 
     ChromosomePtr clone( ) const
     {
-        
-        /*@FIXME*/
+        ChromosomePtr toReturn( new ZawartoscPlecaka() );
+        for( auto entry : this->przedmioty )
+        {
+            toReturn->dodajDoPlecaka( entry );
+        }
+
+        return toReturn;
     }
 
     private:
