@@ -123,9 +123,12 @@ class ZawartoscPlecaka : public Chromosome
      */
     ZawartoscPlecaka( const Skarbiec& skad )
     {
-        std::shared_ptr<Skarbiec> SkarbPtr = skad.clone();
+        std::unique_ptr<Skarbiec> SkarbPtr = skad.clone();
         PrzedmiotPtr przedmiot;
-        while(przedmiot = SkarbPtr->wybierzLosowy(udzwig-getWagaSumaryczna()))
+        while(
+                (przedmiot = SkarbPtr->wybierzLosowy(
+                                ZawartoscPlecaka::udzwig-getWagaSumaryczna() 
+                                )) != NULL)
         {
             przedmioty.push_back(przedmiot);
         }
@@ -146,6 +149,16 @@ class ZawartoscPlecaka : public Chromosome
             waga += przedmiot->getWaga();
         }
         return waga;
+    }
+
+    int getWartoscSumaryczna( )
+    {
+        int wartosc = 0;
+        for( auto przedmiot : przedmioty )
+        {
+            wartosc += przedmiot->getWartosc();
+        }
+        return wartosc;
     }
 
     /* pobiera udzwig*/
@@ -173,7 +186,38 @@ class ZawartoscPlecaka : public Chromosome
     */
     ChromosomePtr crossWith( ChromosomePtr toCross ) const
     {
-        /*@FIXME*/
+        double randomFactor = EvolFunctions::random();
+        ChromosomePtr nowaZawartoscPlecaka( new ZawartoscPlecaka() );
+        {
+                std::unique_ptr<Skarbiec> biezacePrzedmiotyPtr( new Skarbiec(przedmioty) );
+                // wez wylosowana ilosc przedmiotow ze starego plecaka
+                for(unsigned int i = 0;i<randomFactor*przedmioty.size();++i)
+                {
+                    PrzedmiotPtr wybranyPrzedmiot = ptrCast(Skarbiec,biezacePrzedmiotyPtr)->wybierzLosowy( ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->pobierzPozostalaPojemnosc() );
+                    if(wybranyPrzedmiot == NULL)
+                        break;
+                    else
+                        ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->dodajDoPlecaka(wybranyPrzedmiot);
+                }
+        }
+        // dopoki to mozliwe, losuj ze skarbca drugiego plecaka przedmiotu
+        {
+                std::unique_ptr<Skarbiec> drugiePrzedmiotyPtr( new Skarbiec(ptrCast(ZawartoscPlecaka,toCross)->przedmioty) );
+                PrzedmiotPtr przedmiot;
+                while( (przedmiot = drugiePrzedmiotyPtr->wybierzLosowy( ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->pobierzPozostalaPojemnosc() )) != NULL )
+                {
+                    ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->dodajDoPlecaka(przedmiot);
+                }
+        }
+        {
+            std::unique_ptr<Skarbiec> cloneOfSkarbiec = SKARBIEC_OGOLNY.clone();
+            PrzedmiotPtr przedmiot;
+            while( (przedmiot = cloneOfSkarbiec->wybierzLosowy( ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->pobierzPozostalaPojemnosc() ) ) != NULL)
+            {
+                ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->dodajDoPlecaka(przedmiot);
+            }
+        }
+
     }
     
     /* mutuje plecak w taki sposob ze
@@ -188,8 +232,19 @@ class ZawartoscPlecaka : public Chromosome
     /*wykonuje kopie chromosomu*/ 
     ChromosomePtr clone( ) const
     {
+        
         /*@FIXME*/
     }
+
+    private:
+    ZawartoscPlecaka()
+    {}
+
+    int pobierzPozostalaPojemnosc()
+    {
+        return ZawartoscPlecaka::udzwig - this->getWagaSumaryczna();
+    }
+
 };
 
 
