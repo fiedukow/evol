@@ -12,6 +12,7 @@
 using namespace evol;
 
 class Przedmiot;
+class Skarbiec;
 
 typedef std::shared_ptr< Przedmiot > PrzedmiotPtr;
 
@@ -110,6 +111,7 @@ class Skarbiec
         std::sort( this->przedmioty.begin(), this->przedmioty.end(), comparator ); 
     }
 };
+Skarbiec SKARBIEC_OGOLNY;
 
 
 class ZawartoscPlecaka : public Chromosome
@@ -248,7 +250,6 @@ class ZawartoscPlecaka : public Chromosome
 };
 
 
-Skarbiec SKARBIEC_OGOLNY;
 
 class Plecak : public Subject
 {
