@@ -41,7 +41,7 @@ class PrzedmiotComparator
     bool operator()( const PrzedmiotPtr first, const PrzedmiotPtr second )
     {    
         return ( first->getWaga() < second->getWaga() ||
-                 first->getWaga() == second->getWaga() && first<second );
+                 (first->getWaga() == second->getWaga() && first<second ));
     }
 };
 
@@ -100,12 +100,11 @@ class Skarbiec
     #define DP(waga,wartosc) this->przedmioty.insert( PrzedmiotPtr ( new Przedmiot(waga,wartosc ) ) );
     Skarbiec()
     {
-        for( std::pair<double,unsigned int> entry : *getSafeData("dane.txt") )
+        std::vector< std::pair<double,unsigned int> > data = *getSafeData("dane.txt");
+        for( auto& entry : data )
         {
             DP(entry.first, entry.second);
-            std::cout << "dodaje: " <<entry.first << "," <<entry.second << std::endl;
         }
-        throw std::exception();
         /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
           ale mogla by byc wczytana np. z pliku lub bazy danych) */
 /*        DP( 2.4,   300   ); 

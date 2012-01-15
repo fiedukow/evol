@@ -32,12 +32,12 @@ class Population
      */
     const FitnessFunction &goal; 
     FFPtr currentBestFF;
-    bool stop;
     unsigned int bestId;
     double crossFactor;
     unsigned int populationSize;
     const SubjectPtr subjectPrototype;    
     std::vector< SubjectPtr > subjects;
+    bool stop;
 
     /* observers piece of code */
 
