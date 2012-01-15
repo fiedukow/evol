@@ -103,7 +103,9 @@ class Skarbiec
         for( std::pair<double,unsigned int> entry : *getSafeData("dane.txt") )
         {
             DP(entry.first, entry.second);
+            std::cout << "dodaje: " <<entry.first << "," <<entry.second << std::endl;
         }
+        throw std::exception();
         /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
           ale mogla by byc wczytana np. z pliku lub bazy danych) */
 /*        DP( 2.4,   300   ); 
@@ -164,7 +166,7 @@ class Skarbiec
     {
         typedef std::vector< std::pair<double,unsigned int> > pairVector;
 
-        pairVector *toReturn = new std::vector< std::pair<double,unsigned int> >();
+        pairVector *toReturn = new pairVector();
         std::shared_ptr< pairVector > ptrToReturn(toReturn);
         std::ifstream fh;
         fh.open(filePath, std::ios::in);
@@ -173,10 +175,11 @@ class Skarbiec
             while( fh.good() )
             {
                 double waga = 0;
-                int wartosc = 0;
+                unsigned int wartosc = 0;
                 fh >> waga >> wartosc;
                 toReturn->push_back(std::make_pair(waga,wartosc));
             }
+            toReturn->pop_back(); // because ifstream.good() is true until we try to get data after last one from file, so we get one more element than is in file
             fh.close();
         }
         else
