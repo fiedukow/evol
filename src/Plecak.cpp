@@ -98,6 +98,7 @@ class Skarbiec
         if( i < 0 ) return PrzedmiotPtr();
         std::cout << "Wybieram z: " << i << std::endl; 
         int wybor = EvolFunctions::random( 0, i );
+        std::cout << "Wypadlo na " << wybor << std::endl;
         PrzedmiotPtr rezultat = przedmioty[wybor];
         this->przedmioty.erase(przedmioty.begin()+wybor);
         return rezultat;
@@ -374,7 +375,7 @@ int main()
     plecak->setInitialValue();
 
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
-    Population populacja( ( FitnessFunction& ) goal, plecak, 100 );
+    Population populacja( ( FitnessFunction& ) goal, plecak, 10 );
     Plecak *wynik;
     try
     {

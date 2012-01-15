@@ -19,7 +19,7 @@ double EvolFunctions::random()
 
 int EvolFunctions::random( int begin, int end )
 {
-    return EvolFunctions::random()*(end-begin)+begin;
+    return rand()%(end-begin+1)+begin;
 }
 
 double EvolFunctions::abs( double valueToAbs )
