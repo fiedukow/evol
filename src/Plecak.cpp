@@ -39,12 +39,12 @@ class PrzedmiotComparator
     public:
     bool operator()( const PrzedmiotPtr first, const PrzedmiotPtr second )
     {    
-        std::cout << "Operator() called "<<fist << " " << second;
+        std::cout << "Operator() called "<<first << " " << second;
         std::cout << " with result " << ( first->getWaga() < second->getWaga() ||
-                 first->getWaga() == second->getWaga() && !(first==second) );
+                 first->getWaga() == second->getWaga() && !(first==second) ) << std::endl;
  
         return ( first->getWaga() < second->getWaga() ||
-                 first->getWaga() == second->getWaga() && !(first==second) );
+                 first->getWaga() == second->getWaga() && first<second );
     }
 };
 
@@ -117,7 +117,7 @@ class Skarbiec
         DP( 12.3,  290   );
         DP( 2.2,   200   );
         DP( 120.0, 203   );
-        DP( 0.1,  223   );
+        DP( 0.1,   223   );
         DP( 0.1,   233   );
         std::cout << this->przedmioty.size() <<std::endl;
         this->sortuj();
