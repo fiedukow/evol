@@ -40,7 +40,7 @@ class PrzedmiotComparator
     bool operator()( const PrzedmiotPtr first, const PrzedmiotPtr second )
     {    
         return ( first->getWaga() < second->getWaga() ||
-                 first->getWaga() == second->getWaga() && first!=second );
+                 first->getWaga() == second->getWaga() && !(first==second) );
     }
 };
 
@@ -124,7 +124,7 @@ class Skarbiec
     {        
         this->przedmioty = przedmioty;        
         this->sortuj();
-        std::cout << "ILE: " << this->przedmioty.size() << std::endl;
+        //std::cout << "ILE: " << this->przedmioty.size() << std::endl;
     }
         
     /*wybiera losowy przedmiot spośród takiego podzbioru przedmiotów 
@@ -152,8 +152,7 @@ class Skarbiec
     /*tworzy kopie skarbca*/
     std::unique_ptr<Skarbiec> clone() const 
     {
-        MySet kopia = this->przedmioty;
-        return std::unique_ptr<Skarbiec>( new Skarbiec(kopia) );
+        return std::unique_ptr<Skarbiec>( new Skarbiec( this->przedmioty) );
     }
 
     private:
@@ -185,8 +184,8 @@ class ZawartoscPlecaka : public Chromosome
              przedmiot = SkarbPtr->wybierzLosowy( this->pobierzPozostalaPojemnosc() )
             ) 
         {
-            przedmioty.insert(przedmiot);
-        }
+            dodajDoPlecaka(przedmiot);
+       }
     }
 
     /* ile przedmiotow jest aktualnie w plecaku*/
@@ -225,7 +224,9 @@ class ZawartoscPlecaka : public Chromosome
     /*dodaje okreslony przedmiot do plecaka*/
     void dodajDoPlecaka( PrzedmiotPtr doDodania )
     {
-        this->przedmioty.insert( doDodania );
+        PrzedmiotComparator comp;
+        std::cout << "#" << doDodania<< "\t" << this->przedmioty.insert( doDodania ).second  << std::endl;
+        return;
     }
 
     /*krzuje dwa plecaki ze soba w taki sposob ze
@@ -235,6 +236,7 @@ class ZawartoscPlecaka : public Chromosome
     */
     ChromosomePtr crossWith( ChromosomePtr toCross ) const
     {
+        std::cout << "Coross" << std::endl;
         double randomFactor = EvolFunctions::random();
         ChromosomePtr nowaZawartoscPlecaka( new ZawartoscPlecaka() );
         {
@@ -266,7 +268,7 @@ class ZawartoscPlecaka : public Chromosome
                 ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->dodajDoPlecaka(przedmiot);
             }
         }
-
+        std::cout << "EOC" << std::endl;
         return nowaZawartoscPlecaka;
 
     }
@@ -277,6 +279,7 @@ class ZawartoscPlecaka : public Chromosome
      */
     void mutate( )
     {
+        std::cout << "mutate" << std::endl;
         if(this->przedmioty.size() == 0)
             return;
         /* usuwamy podana ilosc przedmiotow - zmien dla zwiekszenia stopnia mutacji */
@@ -298,6 +301,7 @@ class ZawartoscPlecaka : public Chromosome
     /*wykonuje kopie chromosomu*/ 
     ChromosomePtr clone( ) const
     {
+        std::cout << "clone" << std::endl;
         ChromosomePtr toReturn( new ZawartoscPlecaka() );
         for( auto entry : this->przedmioty )
         {
@@ -311,7 +315,7 @@ class ZawartoscPlecaka : public Chromosome
     {
         std::cout << "W plecaku znajduje sie " << this->przedmioty.size() << ": " << std::endl;
         for( PrzedmiotPtr entry : this->przedmioty )
-            std::cout << entry->getWaga() << "kg. " << entry->getWartosc() << "$" << std::endl ;
+            std::cout << entry << ": " << entry->getWaga() << "kg. " << entry->getWartosc() << "$" << std::endl ;
         std::cout << "Suma wag " << this->getWagaSumaryczna() << "\t";
         std::cout << "Suma wartosci " << this->getWartoscSumaryczna() <<std::endl;
     }
@@ -419,9 +423,9 @@ int main()
     plecak->setInitialValue();
 
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
-    Population populacja( ( FitnessFunction& ) goal, plecak, 100 );
-    //CyclesCounter *populationCyclesCounter = new CyclesCounter();
-    //populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
+    Population populacja( ( FitnessFunction& ) goal, plecak, 10 );
+    CyclesCounter *populationCyclesCounter = new CyclesCounter();
+    populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
     Plecak *wynik;
     try
     {
