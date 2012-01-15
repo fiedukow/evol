@@ -252,7 +252,7 @@ class ZawartoscPlecaka : public Chromosome
         ChromosomePtr toReturn( new ZawartoscPlecaka() );
         for( auto entry : this->przedmioty )
         {
-            toReturn->dodajDoPlecaka( entry );
+            ptrCast(ZawartoscPlecaka, toReturn)->dodajDoPlecaka( entry );
         }
 
         return toReturn;
@@ -287,7 +287,7 @@ class Plecak : public Subject
     SubjectPtr clone() const 
     {
         SubjectPtr nowyPlecak = SubjectPtr(new Plecak()); 
-        nowyPlecak->addChromosome( this->chromosomes[0]->clone() );
+        nowyPlecak->addChromosome( ptrCast( ZawartoscPlecaka, this->chromosomes[0])->clone()  );
 
         return nowyPlecak;
     }
