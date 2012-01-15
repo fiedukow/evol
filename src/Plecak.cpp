@@ -39,10 +39,6 @@ class PrzedmiotComparator
     public:
     bool operator()( const PrzedmiotPtr first, const PrzedmiotPtr second )
     {    
-        std::cout << "Operator() called "<<first << " " << second;
-        std::cout << " with result " << ( first->getWaga() < second->getWaga() ||
-                 first->getWaga() == second->getWaga() && !(first==second) ) << std::endl;
- 
         return ( first->getWaga() < second->getWaga() ||
                  first->getWaga() == second->getWaga() && first<second );
     }
@@ -119,7 +115,6 @@ class Skarbiec
         DP( 120.0, 203   );
         DP( 0.1,   223   );
         DP( 0.1,   233   );
-        std::cout << this->przedmioty.size() <<std::endl;
         this->sortuj();
     }
 
@@ -228,8 +223,7 @@ class ZawartoscPlecaka : public Chromosome
     /*dodaje okreslony przedmiot do plecaka*/
     void dodajDoPlecaka( PrzedmiotPtr doDodania )
     {
-        PrzedmiotComparator comp;
-        std::cout << "#" << doDodania<< "\t" << this->przedmioty.insert( doDodania ).second  << std::endl;
+        this->przedmioty.insert( doDodania );
         return;
     }
 
@@ -240,7 +234,6 @@ class ZawartoscPlecaka : public Chromosome
     */
     ChromosomePtr crossWith( ChromosomePtr toCross ) const
     {
-        std::cout << "Coross" << std::endl;
         double randomFactor = EvolFunctions::random();
         ChromosomePtr nowaZawartoscPlecaka( new ZawartoscPlecaka() );
         {
@@ -272,7 +265,6 @@ class ZawartoscPlecaka : public Chromosome
                 ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->dodajDoPlecaka(przedmiot);
             }
         }
-        std::cout << "EOC" << std::endl;
         return nowaZawartoscPlecaka;
 
     }
@@ -283,7 +275,6 @@ class ZawartoscPlecaka : public Chromosome
      */
     void mutate( )
     {
-        std::cout << "mutate" << std::endl;
         if(this->przedmioty.size() == 0)
             return;
         /* usuwamy podana ilosc przedmiotow - zmien dla zwiekszenia stopnia mutacji */
@@ -305,7 +296,6 @@ class ZawartoscPlecaka : public Chromosome
     /*wykonuje kopie chromosomu*/ 
     ChromosomePtr clone( ) const
     {
-        std::cout << "clone" << std::endl;
         ChromosomePtr toReturn( new ZawartoscPlecaka() );
         for( auto entry : this->przedmioty )
         {
@@ -382,7 +372,7 @@ class WartoscPlecaka : FitnessFunction
     /* tworzy prototypowa wartosc do ktorej bedziemy dazyc*/
     WartoscPlecaka()
     {
-        this->wartosc = 7000 ;
+        this->wartosc = 4000 ;
     }
 
     WartoscPlecaka( int wartosc ) : wartosc(wartosc)
@@ -428,8 +418,8 @@ int main()
 
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
     Population populacja( ( FitnessFunction& ) goal, plecak, 10 );
-    CyclesCounter *populationCyclesCounter = new CyclesCounter();
-    populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
+//    CyclesCounter *populationCyclesCounter = new CyclesCounter();
+//    populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
     Plecak *wynik;
     try
     {
