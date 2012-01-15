@@ -39,6 +39,10 @@ class PrzedmiotComparator
     public:
     bool operator()( const PrzedmiotPtr first, const PrzedmiotPtr second )
     {    
+        std::cout << "Operator() called "<<fist << " " << second;
+        std::cout << " with result " << ( first->getWaga() < second->getWaga() ||
+                 first->getWaga() == second->getWaga() && !(first==second) );
+ 
         return ( first->getWaga() < second->getWaga() ||
                  first->getWaga() == second->getWaga() && !(first==second) );
     }
