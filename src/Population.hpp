@@ -32,6 +32,7 @@ class Population
      */
     const FitnessFunction &goal; 
     FFPtr currentBestFF;
+    bool stop;
     unsigned int bestId;
     double crossFactor;
     unsigned int populationSize;
@@ -86,6 +87,11 @@ class Population
      * @param toRegister - observer object pointer to be register.
      */
     void registerObserver( CObserverPtr toRegister );
+
+    /*
+     * Method stops main loop of algorithm.
+     */
+    void stopLoop( );
    
     protected:
     

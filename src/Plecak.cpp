@@ -6,6 +6,7 @@
 #include <math.h>
 #include <iostream>
 #include <algorithm>
+#include "Observer.hpp"
 
 #define ptrCast(typ, nazwa) ((typ*)(&(*(nazwa))))
 
@@ -16,6 +17,30 @@ class Skarbiec;
 
 typedef std::shared_ptr< Przedmiot > PrzedmiotPtr;
 
+class CyclesCounter : public CrossoverObserver
+{
+    unsigned int cycleCounter;
+    constexpr static unsigned int cyclesToBeDone = 10;
+
+    public:
+
+    CyclesCounter() : cycleCounter(0) {}
+
+    void update(Population& population)
+    {
+        ++cycleCounter;
+        if(cycleCounter == CyclesCounter::cyclesToBeDone)
+        {
+            // przerwij dzialanie algorytmu
+            population.stopLoop();
+        }
+    }
+
+    unsigned int getCycleCount()
+    {
+        return cycleCounter;
+    }
+};
 
 class Przedmiot 
 {
@@ -375,7 +400,9 @@ int main()
     plecak->setInitialValue();
 
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
-    Population populacja( ( FitnessFunction& ) goal, plecak, 10 );
+    Population populacja( ( FitnessFunction& ) goal, plecak, 100 );
+    CyclesCounter *populationCyclesCounter = new CyclesCounter();
+    populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
     Plecak *wynik;
     try
     {
