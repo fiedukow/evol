@@ -80,15 +80,22 @@ void Population::pickStartGeneration()
 void Population::selectSubjects()
 {
     notifySelection();
-    SubjectComparator comparator( goal );
-    std::sort (this->subjects.begin(), this->subjects.end(), comparator );
-    this->subjects.erase( this->subjects.begin() + this->populationSize,
-                          this->subjects.end() );
+
     for( SubjectPtr sub : subjects )
     {
         std::shared_ptr<FitnessFunction> wynik = goal.clone();
         wynik->calculate( *sub );
     }
+
+    SubjectComparator comparator( goal );
+    std::sort (this->subjects.begin(), this->subjects.end(), comparator );
+    this->subjects.erase( this->subjects.begin() + this->populationSize,
+                          this->subjects.end() );
+    
+    for( SubjectPtr sub : subjects )
+    {
+        sub->drukuj();
+    }        
 }
 
 void Population::mutateSubjects()
@@ -184,7 +191,6 @@ SubjectComparator::SubjectComparator( const FitnessFunction& goal ) : prototype(
 
 bool SubjectComparator::operator() ( const SubjectPtr first, const SubjectPtr second )
 {
-    M("Cos sie porownuje");
     std::unique_ptr< FitnessFunction > firstResult  = this->prototype.clone();
     firstResult->calculate( *first ); 
     #ifdef DEBUG
@@ -194,7 +200,6 @@ bool SubjectComparator::operator() ( const SubjectPtr first, const SubjectPtr se
     secondResult->calculate( *second );
     #ifdef DEBUG
     secondResult->drukuj();
-    std::cout <<  "koniec porownania wynik " <<  (((*firstResult) > (*secondResult)) ? "brak zmian" : "zmiana" << std::endl;
     #endif
     return (*firstResult) > (*secondResult);
 }

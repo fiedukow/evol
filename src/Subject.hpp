@@ -82,9 +82,7 @@ class Subject
      */
     virtual SubjectPtr clone() const = 0;
 
-    #ifdef DEBUG2
     virtual void drukuj() const = 0;
-    #endif
 
     protected: 
     /**

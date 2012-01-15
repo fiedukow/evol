@@ -259,6 +259,13 @@ class ZawartoscPlecaka : public Chromosome
         return toReturn;
     }
 
+    void drukuj()
+    {
+        std::cout << "W plecaku znajduje sie: " << std::endl;
+        for( PrzedmiotPtr entry : this->przedmioty )
+            std::cout << entry->getWaga() << "kg. " << entry->getWartosc() << "$" << std::endl ;
+    }
+
     private:
     ZawartoscPlecaka()
     {}
@@ -298,12 +305,10 @@ class Plecak : public Subject
         return ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna();
     }
 
-    #ifdef DEBUG2
-    void drukuj() const 
+    void drukuj() const     
     {
-        /*@FIXME if u need me :-) */        
+        ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->drukuj();
     }    
-    #endif
 };
 
 
@@ -349,12 +354,10 @@ class WartoscPlecaka : FitnessFunction
         return std::unique_ptr< FitnessFunction >( new WartoscPlecaka( this->wartosc ) );  
     }
 
-    #ifdef DEBUG2
     void drukuj()
     {
         /*@FIXME if u need me :-) */
     }
-    #endif
 };
 
 int main()

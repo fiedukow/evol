@@ -207,9 +207,7 @@ class FitnessFunction
     virtual bool operator <= ( const FitnessFunction& toCompare ) const;    
     virtual bool operator != ( const FitnessFunction& toCompare ) const;    
     
-    #ifdef DEBUG2
     virtual void drukuj() = 0;
-    #endif
 
     /**
      * Prepare FF object to compare using Subject object which provides necessary informations. 
