@@ -57,7 +57,7 @@ class Skarbiec
     {
         /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
           ale mogla by byc wczytana np. z pliku lub bazy danych) */
-        DP( 2.4,   300   );
+        DP( 2.4,   300   ); 
         DP( 4.4,   100   );
         DP( 9.4,   1200  );
         DP( 2.0,   100   );
@@ -79,6 +79,7 @@ class Skarbiec
     {        
         this->przedmioty = przedmioty;        
         this->sortuj();
+        std::cout << "ILE: " << this->przedmioty.size() << std::endl;
     }
         
     /*wybiera losowy przedmiot spośród takiego podzbioru przedmiotów 
@@ -89,12 +90,13 @@ class Skarbiec
         int i = -1;
         for( PrzedmiotPtr przedmiot : przedmioty )
         {
-           if( przedmiot->getWaga()>maksWaga )
+           if( przedmiot->getWaga() <= maksWaga )
                 ++i;
            else 
                 break;          
-        }
-        if( i < 0 ) return PrzedmiotPtr(NULL);
+        }      
+        if( i < 0 ) return PrzedmiotPtr();
+        std::cout << "Wybieram z: " << i << std::endl; 
         int wybor = EvolFunctions::random( 0, i );
         PrzedmiotPtr rezultat = przedmioty[wybor];
         this->przedmioty.erase(przedmioty.begin()+wybor);
@@ -132,10 +134,11 @@ class ZawartoscPlecaka : public Chromosome
     {
         std::unique_ptr<Skarbiec> SkarbPtr = skad.clone();
         PrzedmiotPtr przedmiot;
-        while(
-                (przedmiot = SkarbPtr->wybierzLosowy(
-                                this->pobierzPozostalaPojemnosc()
-                                )) != NULL)
+        /*TODO ugly code*/
+        for( przedmiot = SkarbPtr->wybierzLosowy( this->pobierzPozostalaPojemnosc() ) ; 
+             przedmiot != PrzedmiotPtr() ; 
+             przedmiot = SkarbPtr->wybierzLosowy( this->pobierzPozostalaPojemnosc() )
+            ) 
         {
             przedmioty.push_back(przedmiot);
         }
@@ -261,9 +264,11 @@ class ZawartoscPlecaka : public Chromosome
 
     void drukuj()
     {
-        std::cout << "W plecaku znajduje sie: " << std::endl;
+        std::cout << "W plecaku znajduje sie " << this->przedmioty.size() << ": " << std::endl;
         for( PrzedmiotPtr entry : this->przedmioty )
             std::cout << entry->getWaga() << "kg. " << entry->getWartosc() << "$" << std::endl ;
+        std::cout << "Suma wag " << this->getWagaSumaryczna() << "\t";
+        std::cout << "Suma wartosci " << this->getWartoscSumaryczna() <<std::endl;
     }
 
     private:
@@ -286,9 +291,11 @@ class Plecak : public Subject
     /*tworzy plecak wypelniony losowa choc dopuszczalna zawartoscia*/
     void setInitialValue()
     {
+        std::cout << "Ustawiam nowa zawartosc plecalka: ";
         this->clearChromosomes();
         ChromosomePtr zawartosc = ChromosomePtr(new ZawartoscPlecaka( SKARBIEC_OGOLNY ));
         this->addChromosome( zawartosc );       
+        drukuj();;
     }
 
     /*wykonuje kopie plecaka*/
