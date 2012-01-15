@@ -1,0 +1,66 @@
+# 7c42c3c8efd3b00bfe6f2f50c449722d
+CC=gcc
+CXX=g++
+CFLAGS=$(O) 
+CXXFLAGS=$(CFLAGS) --std=c++0x
+O=-O2
+LFLAGS=
+OBJS=objs/Population.o objs/EvolFunctions.o objs/EvolException.o objs/Subject.o objs/Plecak.o
+
+
+.PHONY: all
+all: objs Plecak
+
+./Plecak: $(OBJS)
+	@ echo "    LINK ./Plecak"
+	@ $(CXX) $(OBJS) -o "./Plecak" $(LFLAGS)
+
+objs/Population.o: src/Population.cpp src/Population.hpp src/Subject.hpp \
+ src/EvolException.hpp src/Chromosome.hpp src/debug.h src/Observer.hpp \
+ src/EvolFunctions.hpp
+	@ echo "    CXX  src/Population.cpp"
+	@ $(CXX) $(CXXFLAGS) -c "src/Population.cpp" -o $@
+objs/EvolFunctions.o: src/EvolFunctions.cpp src/EvolFunctions.hpp
+	@ echo "    CXX  src/EvolFunctions.cpp"
+	@ $(CXX) $(CXXFLAGS) -c "src/EvolFunctions.cpp" -o $@
+objs/EvolException.o: src/EvolException.cpp src/EvolException.hpp
+	@ echo "    CXX  src/EvolException.cpp"
+	@ $(CXX) $(CXXFLAGS) -c "src/EvolException.cpp" -o $@
+objs/Subject.o: src/Subject.cpp src/Subject.hpp src/EvolException.hpp \
+ src/Chromosome.hpp src/debug.h
+	@ echo "    CXX  src/Subject.cpp"
+	@ $(CXX) $(CXXFLAGS) -c "src/Subject.cpp" -o $@
+objs/Plecak.o: src/Plecak.cpp src/debug.h src/Population.hpp src/Subject.hpp \
+ src/EvolException.hpp src/Chromosome.hpp src/Observer.hpp \
+ src/EvolFunctions.hpp
+	@ echo "    CXX  src/Plecak.cpp"
+	@ $(CXX) $(CXXFLAGS) -c "src/Plecak.cpp" -o $@
+
+objs:
+	@ mkdir "objs"
+.PHONY: c clean
+c: clean
+clean:
+	@ if [ -d "objs" ]; then rm -r "objs"; fi
+	@ rm -f "./Plecak"
+	@ echo "    CLEAN"
+.PHONY: f fresh
+f: fresh
+fresh: clean
+	@ make all --no-print-directory
+.PHONY: r run
+r: run
+run: all
+	@ ././Plecak
+
+.PHONY: d debug
+d: debug
+debug: CFLAGS += -DDEBUG -g -Wall -Wextra
+debug: O=-O0
+debug: CC=gcc
+debug: CXX=g++
+debug: all
+
+.PHONY: check-syntax
+check-syntax:
+	g++ $(CXXFLAGS) -fsyntax-only -Wall -o /dev/null -S $(CHK_SOURCES)
