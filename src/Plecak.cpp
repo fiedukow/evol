@@ -117,7 +117,7 @@ Skarbiec SKARBIEC_OGOLNY;
 class ZawartoscPlecaka : public Chromosome
 {
     std::vector< PrzedmiotPtr > przedmioty;
-    static double udzwig;
+    constexpr static double udzwig = 50.0;
 
     public: 
     /* tworzy losowy plecak
@@ -129,7 +129,7 @@ class ZawartoscPlecaka : public Chromosome
         PrzedmiotPtr przedmiot;
         while(
                 (przedmiot = SkarbPtr->wybierzLosowy(
-                                ZawartoscPlecaka::udzwig-getWagaSumaryczna() 
+                                this->pobierzPozostalaPojemnosc()
                                 )) != NULL)
         {
             przedmioty.push_back(przedmiot);
@@ -167,12 +167,6 @@ class ZawartoscPlecaka : public Chromosome
     double getUdzwig()
     {
         return ZawartoscPlecaka::udzwig;
-    }
-    
-    /*ustawia udzwig*/
-    void setUdzwig( double doUstawienia )
-    {
-        ZawartoscPlecaka::udzwig = doUstawienia;
     }
 
     /*dodaje okreslony przedmiot do plecaka*/
