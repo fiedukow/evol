@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <set>
 #include "Observer.hpp"
+#include <fstream>
 
 #define ptrCast(typ, nazwa) ((typ*)(&(*(nazwa))))
 
@@ -99,9 +100,13 @@ class Skarbiec
     #define DP(waga,wartosc) this->przedmioty.insert( PrzedmiotPtr ( new Przedmiot(waga,wartosc ) ) );
     Skarbiec()
     {
+        for( std::pair<double,unsigned int> entry : *getSafeData("dane.txt") )
+        {
+            DP(entry.first, entry.second);
+        }
         /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
           ale mogla by byc wczytana np. z pliku lub bazy danych) */
-        DP( 2.4,   300   ); 
+/*        DP( 2.4,   300   ); 
         DP( 4.4,   100   );
         DP( 9.4,   1200  );
         DP( 2.0,   100   );
@@ -114,7 +119,7 @@ class Skarbiec
         DP( 2.2,   200   );
         DP( 120.0, 203   );
         DP( 0.1,   223   );
-        DP( 0.1,   233   );
+        DP( 0.1,   233   );*/
         this->sortuj();
     }
 
@@ -155,6 +160,31 @@ class Skarbiec
     }
 
     private:
+    std::shared_ptr< std::vector< std::pair<double,unsigned int> > > getSafeData(std::string filePath)
+    {
+        typedef std::vector< std::pair<double,unsigned int> > pairVector;
+
+        pairVector *toReturn = new std::vector< std::pair<double,unsigned int> >();
+        std::shared_ptr< pairVector > ptrToReturn(toReturn);
+        std::ifstream fh;
+        fh.open(filePath, std::ios::in);
+        if(fh.is_open())
+        {
+            while( fh.good() )
+            {
+                double waga = 0;
+                int wartosc = 0;
+                fh >> waga >> wartosc;
+                toReturn->push_back(std::make_pair(waga,wartosc));
+            }
+            fh.close();
+        }
+        else
+        {
+            throw CannotOpenFileException();
+        }
+        return ptrToReturn;
+    }
     void sortuj()
     {
         PrzedmiotComparator comparator;

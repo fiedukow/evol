@@ -223,6 +223,16 @@ class ChromosomeCrossException : public CrossException
     virtual const char* what() const throw();
 };
 
+class FileException : public EvolException
+{
+/* @TODO: add specific data fields */
+};
+
+class CannotOpenFileException : public FileException
+{
+/* @TODO: add specific behavior */
+};
+
 
 } /* end of evol namespace */
 
