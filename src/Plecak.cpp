@@ -224,6 +224,8 @@ class ZawartoscPlecaka : public Chromosome
      */
     void mutate( )
     {
+        if(this->przedmioty.size() == 0)
+            return;
         /* usuwamy podana ilosc przedmiotow - zmien dla zwiekszenia stopnia mutacji */
         for(unsigned int i = 0; i<1; ++i)
         {
