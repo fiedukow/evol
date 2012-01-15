@@ -12,7 +12,7 @@ Population::Population( const FitnessFunction &goal_,
                         const SubjectPtr prototype_, 
                         unsigned int populationSize_ ) 
                         : goal(goal_), populationSize(populationSize_),
-                          subjectPrototype( prototype_->clone() )
+                          subjectPrototype( prototype_->clone() ), stop(false)
 {
     M("Obiekt klasy Population jest tworzony");
 }
@@ -36,7 +36,7 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
         throw SubjectOutOfBoundException(e);
     }
         
-    while( !isGoalAchieved() )
+    while( !isGoalAchieved() && !stop )
     {
         T( "Obecna populacja", this->subjects );       
         C( goal > *currentBestFF );
@@ -118,6 +118,11 @@ void Population::crossoverSubjects()
         if( second == first ) ++second;
         this->addSubject( subjects[first]->crossWith( this->subjects[second] ) );
     }
+}
+
+void Population::stopLoop()
+{
+    this->stop = true;
 }
 
 void Population::addSubject( SubjectPtr toAdd )
