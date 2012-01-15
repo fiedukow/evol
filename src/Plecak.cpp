@@ -57,15 +57,20 @@ class Skarbiec
     {
         /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
           ale mogla by byc wczytana np. z pliku lub bazy danych) */
-        DP(2.4, 300);
-        DP(2.4, 300);
-        DP(2.4, 300);
-        DP(2.4, 300);
-        DP(2.4, 300);
-        DP(2.4, 300);
-        DP(2.4, 300);
-        DP(2.4, 300);
-        DP(2.4, 300);
+        DP( 2.4,   300   );
+        DP( 4.4,   100   );
+        DP( 9.4,   1200  );
+        DP( 2.0,   100   );
+        DP( 1.2,   400   );
+        DP( 0.3,   20    );
+        DP( 0.01,  10    );
+        DP( 2,     23    );
+        DP( 23.2,  1200  );
+        DP( 12.3,  290   );
+        DP( 2.2,   200   );
+        DP( 120.0, 203   );
+        DP( 0.01,  223   );
+        DP( 0.1,   233   );
         this->sortuj();
     }
 
