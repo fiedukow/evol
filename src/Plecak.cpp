@@ -191,7 +191,7 @@ class ZawartoscPlecaka : public Chromosome
         double randomFactor = EvolFunctions::random();
         ChromosomePtr nowaZawartoscPlecaka( new ZawartoscPlecaka() );
         {
-                std::unique_ptr<Skarbiec> biezacePrzedmiotyPtr( new Skarbiec(przedmioty) );
+                std::unique_ptr<Skarbiec> biezacePrzedmiotyPtr( new Skarbiec(this->przedmioty) );
                 // wez wylosowana ilosc przedmiotow ze starego plecaka
                 for(unsigned int i = 0;i<randomFactor*przedmioty.size();++i)
                 {
@@ -228,7 +228,20 @@ class ZawartoscPlecaka : public Chromosome
      */
     void mutate( )
     {
-        /*@FIXME*/
+        /* usuwamy podana ilosc przedmiotow - zmien dla zwiekszenia stopnia mutacji */
+        for(unsigned int i = 0; i<1; ++i)
+        {
+            unsigned int randomIndex = EvolFunctions::random()*(this->przedmioty.size()-1);
+            this->przedmioty.erase(this->przedmioty.begin()+randomIndex);
+        }
+        /* dodajemy tyle przedmiotow ze skarbca glownego ile sie da na miejsce usunietych */
+        std::unique_ptr<Skarbiec> cloneOfSkarbiec = SKARBIEC_OGOLNY.clone();
+        PrzedmiotPtr przedmiot;
+
+        while( (przedmiot = cloneOfSkarbiec->wybierzLosowy( this->pobierzPozostalaPojemnosc() )) != NULL )
+        {
+            this->dodajDoPlecaka(przedmiot);
+        }
     }
 
     /*wykonuje kopie chromosomu*/ 
