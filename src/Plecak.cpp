@@ -220,6 +220,8 @@ class ZawartoscPlecaka : public Chromosome
             }
         }
 
+        return nowaZawartoscPlecaka;
+
     }
     
     /* mutuje plecak w taki sposob ze
@@ -281,11 +283,13 @@ class Plecak : public Subject
     {
         SubjectPtr nowyPlecak = SubjectPtr(new Plecak()); 
         nowyPlecak->addChromosome( this->chromosomes[0]->clone() );
+
+        return nowyPlecak;
     }
 
     int getWartoscSumaryczna()
     {
-        ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna();
+        return ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna();
     }
 
     #ifdef DEBUG2
@@ -355,7 +359,7 @@ int main()
 
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
     Population populacja( ( FitnessFunction& ) goal, plecak, 100 );
-    Plecak* wynik;
+    Plecak *wynik;
     try
     {
         wynik = ptrCast(Plecak, populacja.start( ));
