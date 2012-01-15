@@ -267,7 +267,7 @@ class Plecak : public Subject
     SubjectPtr clone() const 
     {
         SubjectPtr nowyPlecak = SubjectPtr(new Plecak()); 
-        nowyPlecak->addChromosome( this->chromosomes[0] );
+        nowyPlecak->addChromosome( this->chromosomes[0]->clone() );
     }
 
     int getWartoscSumaryczna()
