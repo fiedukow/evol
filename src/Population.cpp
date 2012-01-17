@@ -57,12 +57,10 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
             throw SubjectOutOfBoundException(e);
         }   
 
-        #ifdef DEBUG2
         std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
         subjects[0]->drukuj();
         currentBestFF->drukuj();
         std::cout << std::endl;
-        #endif
     }
     return this->subjects[this->bestId];
 }
@@ -92,10 +90,10 @@ void Population::selectSubjects()
     this->subjects.erase( this->subjects.begin() + this->populationSize,
                           this->subjects.end() );
     
-    for( SubjectPtr sub : subjects )
+/*    for( SubjectPtr sub : subjects )
     {
         sub->drukuj();
-    }        
+    }        */
 }
 
 void Population::mutateSubjects()
@@ -198,14 +196,8 @@ bool SubjectComparator::operator() ( const SubjectPtr first, const SubjectPtr se
 {
     std::unique_ptr< FitnessFunction > firstResult  = this->prototype.clone();
     firstResult->calculate( *first ); 
-    #ifdef DEBUG
-    firstResult->drukuj();
-    #endif
     std::unique_ptr< FitnessFunction > secondResult = this->prototype.clone();
     secondResult->calculate( *second );
-    #ifdef DEBUG
-    secondResult->drukuj();
-    #endif
     return (*firstResult) > (*secondResult);
 }
 
