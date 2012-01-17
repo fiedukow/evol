@@ -355,7 +355,6 @@ class ZawartoscPlecaka : public Chromosome
     {
         return ZawartoscPlecaka::udzwig - this->getWagaSumaryczna();
     }
-
 };
 
 
@@ -369,8 +368,12 @@ class Plecak : public Subject
     {
         std::cout << "Ustawiam nowa zawartosc plecalka: ";
         this->clearChromosomes();
-        ChromosomePtr zawartosc = ChromosomePtr(new ZawartoscPlecaka( SKARBIEC_OGOLNY ));
-        this->addChromosome( zawartosc );       
+        ChromosomePtr zawartosc_f = ChromosomePtr(new ZawartoscPlecaka( SKARBIEC_OGOLNY ));
+        ChromosomePtr zawartosc_s = ChromosomePtr(new ZawartoscPlecaka( SKARBIEC_OGOLNY ));
+
+        this->addChromosome( zawartosc_f );       
+        this->addChromosome( zawartosc_s );       
+
         drukuj();;
     }
 
@@ -379,18 +382,20 @@ class Plecak : public Subject
     {
         SubjectPtr nowyPlecak = SubjectPtr(new Plecak()); 
         nowyPlecak->addChromosome( ptrCast( ZawartoscPlecaka, this->chromosomes[0])->clone()  );
-
+        nowyPlecak->addChromosome( ptrCast( ZawartoscPlecaka, this->chromosomes[1])->clone()  );
         return nowyPlecak;
     }
 
     int getWartoscSumaryczna()
     {
-        return ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna();
+        return ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna()
+               +ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna();
     }
 
     void drukuj() const     
     {
-        ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->drukuj();
+         ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->drukuj();
+         ptrCast( ZawartoscPlecaka, this->chromosomes[1] )->drukuj();
     }    
 };
 
@@ -453,6 +458,7 @@ int main()
     Population populacja( ( FitnessFunction& ) goal, plecak, 10 );
     //CyclesCounter *populationCyclesCounter = new CyclesCounter();
     //populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
+    
     Plecak *wynik;
     try
     {
