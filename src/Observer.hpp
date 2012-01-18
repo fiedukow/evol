@@ -8,13 +8,33 @@ namespace evol
 
 class Population;
 
+class NewGenerationObserver;
 class SelectionObserver;
 class MutateObserver;
 class CrossoverObserver;
 
+typedef std::shared_ptr<NewGenerationObserver> NObserverPtr;
 typedef std::shared_ptr<SelectionObserver> SObserverPtr;
 typedef std::shared_ptr<MutateObserver> MObserverPtr;
 typedef std::shared_ptr<CrossoverObserver> CObserverPtr;
+
+/**
+ * Abstract class (interface) for Selection observer,
+ * which is fired (notified) at the beginning of selection process in Population.
+ *
+ *  @author Andrzej 'Yester' Fieudkowicz
+ *  @author Maciej 'mac' Grzybek
+ */
+class NewGenerationObserver
+{
+    public:
+    /**
+     * Method called by population, which notifies observer of action.
+     * @param population Population reference, which notifies observer.
+     * @return void Nothing is returned.
+     */
+    virtual void update(Population& population) = 0;
+};
 
 /**
  * Abstract class (interface) for Selection observer,

@@ -63,10 +63,11 @@ class MySet : public std::set<PrzedmiotPtr, PrzedmiotComparator >
     }
 };
 
-class CyclesCounter : public CrossoverObserver
+class CyclesCounter : public NewGenerationObserver
 {
     unsigned int cycleCounter;
     constexpr static unsigned int cyclesToBeDone = 1000;
+    constexpr static unsigned int cyclesToUnpair = 10;
 
     public:
 
@@ -81,6 +82,15 @@ class CyclesCounter : public CrossoverObserver
             // przerwij dzialanie algorytmu
             population.stopLoop();
         }
+        if(cycleCounter%cyclesToUnpair == 0)
+        {
+           //@FIXME handle depairing
+           std::vector< SubjectPtr > subjects = population.getSubjects();
+           for( auto& entry : subjects )
+           {
+
+           }
+        }
     }
 
     unsigned int getCycleCount()
@@ -88,6 +98,7 @@ class CyclesCounter : public CrossoverObserver
         return cycleCounter;
     }
 };
+
 /**
  *  Skarbiec przechowuje przedmioty do wyboru
  *  Skarbiec potrafi wylosować element do wyjęcia, który ma conajwyżej zadaną wagę.
@@ -102,26 +113,10 @@ class Skarbiec
     Skarbiec()
     {
         std::vector< std::pair<double,unsigned int> > data = *getSafeData("dane.txt");
-        for( auto& entry : data )
+        for( auto& entry : data ) /* read from file default values for safe */
         {
             DP(entry.first, entry.second);
         }
-        /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
-          ale mogla by byc wczytana np. z pliku lub bazy danych) */
-/*        DP( 2.4,   300   ); 
-        DP( 4.4,   100   );
-        DP( 9.4,   1200  );
-        DP( 2.0,   100   );
-        DP( 1.2,   400   );
-        DP( 0.3,   20    );
-        DP( 0.01,  10    );
-        DP( 2,     23    );
-        DP( 23.2,  1201  );
-        DP( 12.3,  290   );
-        DP( 2.2,   200   );
-        DP( 120.0, 203   );
-        DP( 0.1,   223   );
-        DP( 0.1,   233   );*/
         this->sortuj();
     }
 
@@ -458,8 +453,8 @@ int main()
 
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
     Population populacja( ( FitnessFunction& ) goal, plecak, 10, 0.2 );
-    //CyclesCounter *populationCyclesCounter = new CyclesCounter();
-    //populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
+    CyclesCounter *populationCyclesCounter = new CyclesCounter();
+    populacja.registerObserver( NObserverPtr(populationCyclesCounter) );
     
     Plecak *wynik;
     try
