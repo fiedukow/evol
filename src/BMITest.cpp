@@ -236,7 +236,7 @@ class BMI : FitnessFunction
         return result;
     }
 
-    void drukuj()
+    void print()
     {
         std::cout << "BMI: " << bmiValue << std::endl ;
     }

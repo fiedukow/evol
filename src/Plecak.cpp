@@ -437,7 +437,7 @@ class WartoscPlecaka : FitnessFunction
         return std::unique_ptr< FitnessFunction >( new WartoscPlecaka( this->wartosc ) );  
     }
 
-    void drukuj()
+    void print()
     {
         /*@FIXME if u need me :-) */
     }

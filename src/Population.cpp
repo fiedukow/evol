@@ -56,10 +56,10 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
             M("out_of_range exception occured. Throwing SubjectOutOfBoundException.");
             throw SubjectOutOfBoundException(e);
         }   
-
+        /*TODO: PRINT - observer?*/
         std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
         subjects[0]->drukuj();
-        currentBestFF->drukuj();
+        currentBestFF->print();
         std::cout << std::endl;
     }
     return this->subjects[this->bestId];

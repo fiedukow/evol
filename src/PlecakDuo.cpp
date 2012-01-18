@@ -374,7 +374,7 @@ class Plecak : public Subject
         this->addChromosome( zawartosc_f );       
         this->addChromosome( zawartosc_s );       
 
-        drukuj();;
+        drukuj();
     }
 
     /*wykonuje kopie plecaka*/
@@ -444,7 +444,7 @@ class WartoscPlecaka : FitnessFunction
         return std::unique_ptr< FitnessFunction >( new WartoscPlecaka( this->wartosc ) );  
     }
 
-    void drukuj()
+    void print()
     {
         /*@FIXME if u need me :-) */
     }

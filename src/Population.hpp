@@ -31,16 +31,45 @@ class Population
      * Reference value to compare with.
      */
     const FitnessFunction &goal; 
+    /*
+     * The best FitnessFunction value for now
+     */
     FFPtr currentBestFF;
+    /*
+     * If you want you can modyfi this field to use other then first element
+     * of population vector as the place for best element
+     */
     unsigned int bestId;
+    /*
+     * How much pairs in any generation should be created (each pair give one child)
+     * eg. The 1.0 value (means 100%) implies that there will be exacly as much children 
+     *      in any population as they parrents number.
+     */
     double crossFactor;
+    /*
+     *  Size of population after selection. Between crossover and selection it can
+     *  much more (1+crossFactor)*populationSize - to be correct.
+     */
     unsigned int populationSize;
+    /*
+     *  Prototype of subject - used to create new "random" elements. 
+     *  It provides possibilty of creation element of the same derieved 
+     *      type it was at the beginning.  
+     *  See informations about prototype design pattern
+     */
     const SubjectPtr subjectPrototype;    
+    /*
+     * Containt all current subjects.
+     */
     std::vector< SubjectPtr > subjects;
+    /*
+     * If this variable is true the main loop will break even if the 
+     * goal wasnt achieved yet. Can be used in observers for example.
+     */
     bool stop;
 
-    /* observers piece of code */
 
+    /* observers piece of code */
     /* container for selection observers */
     std::vector< SObserverPtr > selectionObservers;
     /* container for mutate observers */
@@ -90,6 +119,7 @@ class Population
 
     /*
      * Method stops main loop of algorithm.
+     * It set stop variable.
      */
     void stopLoop( );
    
@@ -151,12 +181,16 @@ class Population
 
 
 /*
- * @FIXME - isnt any better place for that?
+ * This class allow to sort subjects using std::algorithm (sort)
+ * This is functor witch can compare two subject ptr's using proper FF. 
  */
 class SubjectComparator
 {
 friend class Population;
 private:
+    /*
+     * Contains prototype of FF witch will be used to compare subjects
+     */
     const FitnessFunction& prototype;
 
     /*
@@ -167,7 +201,7 @@ private:
 public:
 
     /*
-     * Compare pair of Subjects
+     * Compare pair of SubjectsPtr (but it comapres VALUES not just pointers)
      *
      * @param SubjectPtr first
      * @param SubjectPtr second
@@ -212,8 +246,11 @@ class FitnessFunction
     virtual bool operator <  ( const FitnessFunction& toCompare ) const;    
     virtual bool operator <= ( const FitnessFunction& toCompare ) const;    
     virtual bool operator != ( const FitnessFunction& toCompare ) const;    
-    
-    virtual void drukuj() = 0;
+   
+    /*
+     * It prints the result - whatever that means
+     */
+    virtual void print() = 0;    
 
     /**
      * Prepare FF object to compare using Subject object which provides necessary informations. 
