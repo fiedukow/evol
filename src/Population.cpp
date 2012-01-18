@@ -25,7 +25,6 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
 {
     /*default values*/
     this->bestId = 0;
-    this->crossFactor = 1.0; 
 
     pickStartGeneration();
     currentBestFF = this->goal.clone();
