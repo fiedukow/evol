@@ -100,7 +100,7 @@ class FunctionSubject : public Subject
         return Subject::crossWith(subject);
     }
 
-    void drukuj() const
+    void print() const
     {
         std::cout << EvolFunctions::ptr_cast<ChromosomePtr,FunctionX>(this->getChromosome(0))->getValue() << std::endl;
     }
