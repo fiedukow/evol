@@ -1,0 +1,9 @@
+#!/bin/sh
+
+IFS=","
+
+while read x y z 
+do
+    echo "$y.0 $z"
+done < ./testPlecak.txt
+

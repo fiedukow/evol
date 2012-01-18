@@ -7,18 +7,24 @@ namespace evol
 
 bool EvolFunctions::isInitialized = false;
 
-double EvolFunctions::random()
+void EvolFunctions::initialize()
 {
     if(!EvolFunctions::isInitialized)
     {
         srand(time( NULL ));
         EvolFunctions::isInitialized = true;
     }
+}
+
+double EvolFunctions::random()
+{
+    EvolFunctions::initialize();
     return (double)rand()/RAND_MAX;
 }
 
 int EvolFunctions::random( int begin, int end )
 {
+    EvolFunctions::initialize();
     return rand()%(end-begin+1)+begin;
 }
 

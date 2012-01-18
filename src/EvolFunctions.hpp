@@ -15,6 +15,12 @@ struct EvolFunctions
     static bool isInitialized;
 
     /*     
+     * Initialize seed - if needed
+     */
+    static void initialize();
+
+
+    /*     
      * @return random value between 0 and 1
      */
     static double random();

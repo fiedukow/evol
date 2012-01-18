@@ -53,8 +53,7 @@ class Wzrost : Chromosome
     
     void mutate( )
     {
-        /*@note: wylaczona mutacja*/
-        this->addCm( EvolFunctions::random( -5, 5 ) );
+        this->addCm( EvolFunctions::random( -2, 2 ) );
         return;
     }
  
@@ -116,7 +115,7 @@ class Waga : Chromosome
 
     void mutate( )
     {
-        this->addKg( EvolFunctions::random( -2, 2 ) );
+        this->addKg( EvolFunctions::random( -1, 1 ) );
         return;
     }
 
@@ -191,13 +190,11 @@ class Czlowiek : Subject
         return result;
     }
 
-    #ifdef DEBUG2
     void drukuj() const 
     {
         std::cout << "" << this->getCm() << "cm. " << this->getKg() << "kg.\n";
                 
     }    
-    #endif
 };
 
 
@@ -210,19 +207,13 @@ class BMI : FitnessFunction
 
     BMI()
     {
-        this->bmiValue = 20.9;
+        this->bmiValue = 20.0;
     }
     
     /* const static double perfectBMI; jk */
     #define perfectBMI 21.0
     bool operator > ( const FitnessFunction& toCompare ) const
     {
-        #ifdef DEBUG
-        std::cout << "Wolam > " << std::endl;
-        std::cout << "Wynik " << (EvolFunctions::abs( perfectBMI - this->bmiValue      ) < 
-               EvolFunctions::abs( perfectBMI - ((BMI&) toCompare).bmiValue ));
-        #endif
- 
         return EvolFunctions::abs( perfectBMI - this->bmiValue      ) < 
                EvolFunctions::abs( perfectBMI - ((BMI&) toCompare).bmiValue );
     }
@@ -245,17 +236,14 @@ class BMI : FitnessFunction
         return result;
     }
 
-    #ifdef DEBUG2
     void drukuj()
     {
         std::cout << "BMI: " << bmiValue << std::endl ;
     }
-    #endif
 };
 
 int main()
 {
-    M("POCZATEK PROGRAMU.");
     const BMI goal;
     SubjectPtr czlowiekSubject( (Subject*) new Czlowiek() );
     czlowiekSubject->setInitialValue();
@@ -273,8 +261,6 @@ int main()
     {
         std::cerr << e.what() << std::endl ;
     }
-    #ifdef DEBUG2
     wynik->drukuj();
-    #endif
     return 0;
 }

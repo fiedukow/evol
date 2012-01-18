@@ -386,16 +386,17 @@ class Plecak : public Subject
         return nowyPlecak;
     }
 
-    int getWartoscSumaryczna()
+    int getWartoscSumaryczna() const
     {
         return ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna()
-               +ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna();
+               +ptrCast( ZawartoscPlecaka, this->chromosomes[1] )->getWartoscSumaryczna();
     }
 
     void drukuj() const     
     {
          ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->drukuj();
          ptrCast( ZawartoscPlecaka, this->chromosomes[1] )->drukuj();
+         std::cout << "WARTOSC CALKOWITA: " << getWartoscSumaryczna() << std::endl ;
     }    
 };
 
@@ -410,7 +411,8 @@ class WartoscPlecaka : FitnessFunction
     /* tworzy prototypowa wartosc do ktorej bedziemy dazyc*/
     WartoscPlecaka()
     {
-        this->wartosc = 7145 ;
+        /*this->wartosc = 7145 ; reference*/
+        this->wartosc = 6900; /*good hit*/
     }
 
     WartoscPlecaka( int wartosc ) : wartosc(wartosc)
@@ -433,7 +435,7 @@ class WartoscPlecaka : FitnessFunction
     void calculate( const Subject& toCalculate )
     {
         Plecak& doOceny = (Plecak&) toCalculate;
-        this->wartosc = doOceny.getWartoscSumaryczna();
+        this->wartosc = doOceny.getWartoscSumaryczna()/2;
     }
     
     /*tworzy kopie funckji celu*/
