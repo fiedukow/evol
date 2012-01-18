@@ -286,7 +286,7 @@ class ZawartoscPlecaka : public Chromosome
                 {
                     PrzedmiotPtr wybranyPrzedmiot;
                     int pojemnosc = nowaZawartoscPlecaka->pobierzPozostalaPojemnosc();
-                    biezacySkarbiec->wybierzLosowy( pojemnosc );
+                    wybranyPrzedmiot = biezacySkarbiec->wybierzLosowy( pojemnosc );
                                         
                     if(wybranyPrzedmiot == NULL)
                         break;
@@ -461,7 +461,7 @@ int main()
     SubjectPtr plecak( (Subject*) new Plecak() );
     plecak->setInitialValue();
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
-    Population populacja( ( FitnessFunction& ) goal, plecak, 3000, 0.2, 4.0 );
+    Population populacja( ( FitnessFunction& ) goal, plecak, 1000, 0.2, 4.0 );
     //CyclesCounter *populationCyclesCounter = new CyclesCounter();
     //populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
     Plecak *wynik;
