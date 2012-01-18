@@ -72,5 +72,23 @@ const char* ChromosomeCrossException::what() const throw()
     return "Chromosome crossover exception: chromosomes' types mismatch.";
 }
 
+FileException::FileException(const std::string filePath) : filePath(filePath) {}
+FileException::~FileException() throw() {}
+const char* FileException::what() const throw()
+{
+    std::string temporaryString = "File exception occured on file ";
+    temporaryString += filePath;
+    return temporaryString.c_str();
+}
+
+CannotOpenFileException::CannotOpenFileException(const std::string filePath) : FileException(filePath) {}
+CannotOpenFileException::~CannotOpenFileException() throw() {}
+
+const char* CannotOpenFileException::what() const throw()
+{
+    std::string temporaryString = "File exception: cannot open file ";
+    temporaryString += FileException::filePath;
+    return temporaryString.c_str();
+}
 
 } /* end of evol namespace */

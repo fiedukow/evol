@@ -225,12 +225,31 @@ class ChromosomeCrossException : public CrossException
 
 class FileException : public EvolException
 {
-/* @TODO: add specific data fields */
+    protected:
+    const std::string filePath;
+    public:
+    FileException(const std::string filePath);
+    virtual ~FileException() throw();
+
+    /*
+     * what() method returns message with exception details
+     * @return const char* null terminated string with exception details
+     */
+    virtual const char* what() const throw();
+
 };
 
 class CannotOpenFileException : public FileException
 {
-/* @TODO: add specific behavior */
+    public:
+    CannotOpenFileException(const std::string filePath);
+    virtual ~CannotOpenFileException() throw();
+
+    /*
+     * what() method returns message with exception details
+     * @return const char* null terminated string with exception details
+     */
+    virtual const char* what() const throw();
 };
 
 
