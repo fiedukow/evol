@@ -62,8 +62,8 @@ objs/PlecakDuo.o: src/PlecakDuo.cpp src/debug.h src/Population.hpp src/Subject.h
 
 objs/Test.o: tests/Test.cpp src/debug.h src/Population.hpp src/Subject.hpp \
  src/EvolException.hpp src/Chromosome.hpp src/Observer.hpp src/EvolFunctions.hpp
-	@ echo "    CXX  ./tests/Test.cpp"
-	@ $(CXX) $(CXXFLAGS) -c "./tests/Test.cpp" -o $@
+	@ echo "    CXX -DDEBUG ./tests/Test.cpp"
+	@ $(CXX) $(CXXFLAGS) -c "./tests/Test.cpp" -DDEBUG -o $@
 
 
 
