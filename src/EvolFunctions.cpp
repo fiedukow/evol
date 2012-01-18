@@ -16,6 +16,15 @@ void EvolFunctions::initialize()
     }
 }
 
+void EvolFunctions::initialize(int seed)
+{
+    if(!EvolFunctions::isInitialized)
+    {
+        srand(seed);
+        EvolFunctions::isInitialized = true;
+    }
+}
+
 double EvolFunctions::random()
 {
     EvolFunctions::initialize();

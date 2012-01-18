@@ -1,4 +1,5 @@
 #include <boost/test/minimal.hpp>
+#include <boost/test/detail/enable_warnings.hpp>
 #include <iostream>
 
 #include "../src/Population.hpp"
@@ -95,11 +96,16 @@ class testFF : public FitnessFunction
 
 int test_main( int argc, char* argv[] ) //uwaga - zmieniona nazwa funkcji main
 {
+    EvolFunctions::initialize(1234);
     testFF ff(100);
     SubjectPtr subjectPrototype( (Subject*) new testSubject() );
     Population populacja( ( FitnessFunction &)ff, subjectPrototype, 100, 0.2, 1.0 );
-    BOOST_REQUIRE(populacja.getMutationChange() == 0.2);
-    BOOST_REQUIRE(populacja.getCrossFactor() == 1.0);
+    std::cout << EvolFunctions::random() << std::endl;
+    std::cout << EvolFunctions::random() << std::endl;
+    std::cout << EvolFunctions::random() << std::endl;
+
+    BOOST_CHECK(populacja.getMutationChance() == 0.2);
+    BOOST_CHECK(populacja.getCrossFactor() == 1.0);
 
     //w monitorowanym srodowisku uzyskujemy dostep do makr testujacych o wiele mowiacych nazwach
     //makro BOOST_REQUIRE przerywa testowanie w przypadku niespelnienia podanego mu warunku

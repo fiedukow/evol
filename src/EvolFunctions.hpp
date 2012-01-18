@@ -23,6 +23,11 @@ struct EvolFunctions
     static void initialize();
 
     /**
+     * Initialize seed by given number
+     */
+    static void initialize(int);
+
+    /**
      * @return random value between 0 and 1
      */
     static double random();
