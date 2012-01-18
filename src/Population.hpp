@@ -76,6 +76,9 @@ class Population
 
 
     /* observers piece of code */
+
+    /* container for new generation observers */
+    std::vector< NObserverPtr > newGenerationObservers;
     /* container for selection observers */
     std::vector< SObserverPtr > selectionObservers;
     /* container for mutate observers */
@@ -102,6 +105,12 @@ class Population
      */
     virtual SubjectPtr start() throw ( SubjectOutOfBoundException );
 
+    /*
+     * Register observer which will be notified at the beginning of new generation cycle
+     *
+     * @param toRegister - observer object pointer to be registered.
+     */
+    void registerObserver( NObserverPtr toRegister );
 
     /*
      * Register observer which will be notify at the begining of Selection phase
@@ -154,6 +163,14 @@ class Population
      */
     void setCrossFactor   ( double newCrossFactor    );
    
+    /*
+     * Getter for subjects vector.
+     */
+    std::vector< SubjectPtr > getSubjects()
+    {
+        return this->subjects;
+    }
+
     protected:
     
     /** 
@@ -182,6 +199,13 @@ class Population
      * @return true if FitnessFunction condition is achived
      */
     virtual bool isGoalAchieved();
+
+    /**
+     * Notify all New Generation observers that New Generation starts.
+     * It SHOULD be called at the beginnig of new generation cycle
+     * or observer system will not work as it was designed.
+     */
+    void notifyNewGeneration();
 
     /**
      * Notify all Selection observers that Selection Phase starts.

@@ -44,6 +44,7 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
         currentBestFF->print();
         std::cout << std::endl;
 
+        notifyNewGeneration();
         crossoverSubjects();
         mutateSubjects();
         selectSubjects();        
@@ -150,22 +151,35 @@ bool Population::isGoalAchieved()
 
 /* observers part */
 
+void Population::registerObserver( NObserverPtr toRegister )
+{
+    newGenerationObservers.push_back(toRegister);
+}
+
 void Population::registerObserver( SObserverPtr toRegister )
 {
-    M("Population::registerObserver() called.");
     selectionObservers.push_back(toRegister);
 }
 
 void Population::registerObserver( MObserverPtr toRegister )
 {
-    M("Population::registerObserver() called.");
     mutateObservers.push_back(toRegister);
 }
 
 void Population::registerObserver( CObserverPtr toRegister )
 {
-    M("Population::registerObserver() called.");
     crossoverObservers.push_back(toRegister);
+}
+
+void Population::notifyNewGeneration()
+{
+    std::vector<NObserverPtr>::const_iterator iter = newGenerationObservers.begin();
+    std::vector<NObserverPtr>::const_iterator endIterator = newGenerationObservers.end();
+
+    for(;iter != endIterator;++iter)
+    {
+        (*iter)->update(*this);
+    }
 }
 
 void Population::notifySelection()
