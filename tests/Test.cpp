@@ -328,12 +328,16 @@ int test_main( int argc, char* argv[] ) //uwaga - zmieniona nazwa funkcji main
      * dla referencyjnych danych, przy zadanym ziarnie (1234), wynik powinien zostac odnaleziony po correctStepCountToResult (3) iteracjach 
      */
     M("Test obserwatorow i poprawnosci wykonania algorytmu.");
+    M("Testowanie ilosci wywolan obserwatora krzyzowania (crossoverObserver).");
     BOOST_CHECK( coInvok == correctStepCountToResult );
     C( coInvok == correctStepCountToResult );
+    M("Testowanie ilosci wywolan obserwatora mutacji (mutateObserver).");
     BOOST_CHECK( moInvok == correctStepCountToResult );
     C( moInvok == correctStepCountToResult );
+    M("Testowanie ilosci wywolan obserwatora selekcji (selectionObserver).");
     BOOST_CHECK( soInvok == correctStepCountToResult );
     C( soInvok == correctStepCountToResult );
+    M("Testowanie ilosci wywolan obserwatora nowej generacji (ilosc przebiegow petli glownej).");
     BOOST_CHECK( generations == correctStepCountToResult );
     C( generations == correctStepCountToResult );
 
