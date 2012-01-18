@@ -95,7 +95,7 @@ class ResultPrinter : NewGenerationObserver
     void update(Population& population)
     {
         std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
-        population.getSubjects().at(0)->drukuj();
+        population.getSubjects().at( population.getBestId() )->drukuj();
         population.getCurrentBestFF()->print();
         std::cout << std::endl;
     }
