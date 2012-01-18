@@ -332,7 +332,7 @@ class ZawartoscPlecaka : public Chromosome
         ChromosomePtr toReturn( new ZawartoscPlecaka() );
         for( auto entry : this->przedmioty )
         {
-            ptrCast(ZawartoscPlecaka, toReturn)->dodajDoPlecaka( entry );
+            EvolFunctions::ptr_cast<ChromosomePtr, ZawartoscPlecaka>(toReturn)->dodajDoPlecaka( entry );
         }
 
         return toReturn;
@@ -405,7 +405,7 @@ class WartoscPlecaka : FitnessFunction
     /* tworzy prototypowa wartosc do ktorej bedziemy dazyc*/
     WartoscPlecaka()
     {
-        this->wartosc = 6750 ;
+        this->wartosc = 6400 ;
     }
 
     WartoscPlecaka( int wartosc ) : wartosc(wartosc)
