@@ -6,9 +6,9 @@ O=-O2
 LFLAGS=-lm
 OBJS=objs/Population.o objs/EvolFunctions.o objs/EvolException.o objs/Subject.o
 
-all: Plecak PlecakDuo BMITest 
+all: Plecak BMITest PlecakDuo
 
-BMITest: $(OBJS) objs/BMITest.o
+BMITest: $(OBJS) objs/BMITest.o 
 	@ echo "    LINK ./BMI"
 	@ $(CXX) $(LFLAGS) $(OBJS) objs/BMITest.o -o "./BMI"
 
@@ -19,6 +19,15 @@ Plecak: $(OBJS) objs/Plecak.o
 PlecakDuo: $(OBJS) objs/PlecakDuo.o
 	@ echo "    LINK ./PlecakDuo"
 	@ $(CXX) $(LFLAGS) $(OBJS) objs/PlecakDuo.o -o "./PlecakDuo"
+
+test: Test
+	@ ./Test    
+
+
+Test: $(OBJS) objs/Test.o
+	@ echo "    LINK ./Test"
+	@ $(CXX) $(LFLAGS) $(OBJS) objs/Test.o -o "./Test"
+
 
 objs/Population.o: src/Population.cpp src/Population.hpp src/Subject.hpp src/EvolException.hpp src/Chromosome.hpp src/debug.h src/Observer.hpp src/EvolFunctions.hpp
 	@ echo "    CXX  ./src/Population.cpp"
@@ -50,6 +59,13 @@ objs/PlecakDuo.o: src/PlecakDuo.cpp src/debug.h src/Population.hpp src/Subject.h
  src/EvolException.hpp src/Chromosome.hpp src/Observer.hpp src/EvolFunctions.hpp
 	@ echo "    CXX  ./src/PlecakDuo.cpp"
 	@ $(CXX) $(CXXFLAGS) -c "./src/PlecakDuo.cpp" -o $@
+
+objs/Test.o: tests/Test.cpp src/debug.h src/Population.hpp src/Subject.hpp \
+ src/EvolException.hpp src/Chromosome.hpp src/Observer.hpp src/EvolFunctions.hpp
+	@ echo "    CXX  ./tests/Test.cpp"
+	@ $(CXX) $(CXXFLAGS) -c "./tests/Test.cpp" -o $@
+
+
 
 clean:
 	@ rm objs/*.o
