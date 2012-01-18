@@ -7,23 +7,12 @@ namespace evol
 
 SubjectPtr Subject::crossWith(SubjectPtr &subject) const throw (SubjectCrossException)
 {
-    M("Subject::crossWith called.");
     SubjectPtr returnSubject;
-    /* not tested yet */
-    #ifdef DEBUG
-    M("Lacze ze soba");
-    this->drukuj();
-    M("oraz");
-    subject->drukuj();
-    M("wychodzi z tego ");
-    #endif
     if(this->chromosomes.size() != subject->chromosomes.size())
     {
-        M("Chromosomes containers size mismatch.");
         throw SubjectCrossException(this->chromosomes.size(),subject->chromosomes.size());
     }
 
-    M("Clonning subject.");
     returnSubject = SubjectPtr(subject->clone());
     returnSubject->clearChromosomes();
 
@@ -35,22 +24,15 @@ SubjectPtr Subject::crossWith(SubjectPtr &subject) const throw (SubjectCrossExce
     {
         if(typeid(*iter) != typeid(*iter2))
         {
-            M("Chromosomes types mismatch.");
             throw ChromosomeCrossException(typeid(*iter).name(),typeid(*iter2).name());
         }
-        M("Adding chromosome (product of crossover)");
-        returnSubject->addChromosome(((*iter)->crossWith(*iter2))); /* test it */
+        returnSubject->addChromosome(((*iter)->crossWith(*iter2))); 
     }
-    #ifdef DEBUG
-    returnSubject->drukuj();
-    std::cout << std::endl << std::endl;
-    #endif
     return returnSubject;
 }
 
 void Subject::mutate()
 {
-    M("Subject::mutate called.");
     std::vector< ChromosomePtr >::const_iterator iter = this->chromosomes.begin();
 
     std::vector< ChromosomePtr >::const_iterator endIterator = this->chromosomes.end();
@@ -62,21 +44,18 @@ void Subject::mutate()
 
 void Subject::addChromosome(ChromosomePtr chromosome) throw(ChromosomeAllocationException)
 {
-    M("Subject::addChromosome() called.");
     try
     {
         this->chromosomes.push_back(chromosome);
     }
     catch(const std::bad_alloc &e)
     {
-        M("std::bad_alloc occured. Throwing ChromosomeAllocationException.");
         throw ChromosomeAllocationException(e);
     }
 }
 
 ChromosomePtr Subject::getChromosome(unsigned int id) const throw(ChromosomeOutOfBoundException)
 {
-    M("Subject::getChromosome() called.");
     try
     {
         return ChromosomePtr(this->chromosomes.at(id));
@@ -89,7 +68,6 @@ ChromosomePtr Subject::getChromosome(unsigned int id) const throw(ChromosomeOutO
 
 void Subject::replaceChromosomes(std::vector< ChromosomePtr > &chromosomes)
 {
-    M("Subject::replaceChromosomes called.");
     /* swap content of current chromosomes vector with given one */
     this->chromosomes.swap(chromosomes);
 

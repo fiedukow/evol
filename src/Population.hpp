@@ -27,48 +27,48 @@ typedef std::shared_ptr<FitnessFunction> FFPtr;
 class Population
 {
     private:
-    /*
+    /**
      * Reference value to compare with.
      */
     const FitnessFunction &goal; 
-    /*
+    /**
      * The best FitnessFunction value for now
      */
     FFPtr currentBestFF;
-    /*
+    /**
      * If you want you can modyfi this field to use other then first element
      * of population vector as the place for best element
      */
     unsigned int bestId;
-    /*
+    /**
      * How much pairs in any generation should be created (each pair give one child)
      * eg. The 1.0 value (means 100%) implies that there will be exacly as much children 
      *      in any population as they parrents number.
      */
     double crossFactor;
-    /*
+    /**
      * What is the chance for mutation of every single Subject in every single generation
      * (0 to 1 is proper value but everything more then 1
      * is 100% and below zero is 0% chance)    
      */
     double mutationChance;
-    /*
+    /**
      *  Size of population after selection. Between crossover and selection it can
      *  much more (1+crossFactor)*populationSize - to be correct.
      */
     unsigned int populationSize;
-    /*
+    /**
      *  Prototype of subject - used to create new "random" elements. 
      *  It provides possibilty of creation element of the same derieved 
      *      type it was at the beginning.  
      *  See informations about prototype design pattern
      */
     const SubjectPtr subjectPrototype;    
-    /*
+    /**
      * Containt all current subjects.
      */
     std::vector< SubjectPtr > subjects;
-    /*
+    /**
      * If this variable is true the main loop will break even if the 
      * goal wasnt achieved yet. Can be used in observers for example.
      */
@@ -77,13 +77,24 @@ class Population
 
     /* observers piece of code */
 
-    /* container for new generation observers */
+    /**
+     * container for new generation observers 
+     */
     std::vector< NObserverPtr > newGenerationObservers;
-    /* container for selection observers */
+
+    /*
+     * container for selection observers 
+     */
     std::vector< SObserverPtr > selectionObservers;
-    /* container for mutate observers */
+
+    /* 
+     * container for mutate observers 
+     */
     std::vector< MObserverPtr > mutateObservers;
-    /* container for crossover observers */
+
+    /*
+     *  container for crossover observers 
+     */
     std::vector< CObserverPtr > crossoverObservers;
 
     public:
@@ -107,28 +118,28 @@ class Population
      */
     virtual SubjectPtr start() throw ( SubjectOutOfBoundException );
 
-    /*
+    /**
      * Register observer which will be notified at the beginning of new generation cycle
      *
      * @param toRegister - observer object pointer to be registered.
      */
     void registerObserver( NObserverPtr toRegister );
 
-    /*
+    /**
      * Register observer which will be notify at the begining of Selection phase
      *
      * @param toRegister - observer object pointer to be register.
      */
     void registerObserver( SObserverPtr toRegister );
 
-    /*
+    /**
      * Register observer which will be notify at the begining of Mutate phase
      *
      * @param toRegister - observer object pointer to be register.
      */
     void registerObserver( MObserverPtr toRegister );
 
-    /*
+    /**
      * Register observer which will be notify at the begining of Crossover phase
      * 
      * @param toRegister - observer object pointer to be register.
@@ -170,12 +181,12 @@ class Population
      */
     std::vector< SubjectPtr >& getSubjects();
 
-    /*
+    /**
      * Getter for currentBestFF.
      */
     FFPtr getCurrentBestFF();
 
-    /*
+    /**
      * Getter for bestId.
      */
     unsigned int getBestId();
@@ -252,19 +263,19 @@ class SubjectComparator
 {
 friend class Population;
 private:
-    /*
+    /**
      * Contains prototype of FF witch will be used to compare subjects
      */
     const FitnessFunction& prototype;
 
-    /*
+    /**
      * Create comparator with given FF prototype
      */
     SubjectComparator( const FitnessFunction& goal );
 
 public:
 
-    /*
+    /**
      * Compare pair of SubjectsPtr (but it comapres VALUES not just pointers)
      *
      * @param SubjectPtr first
@@ -311,7 +322,7 @@ class FitnessFunction
     virtual bool operator <= ( const FitnessFunction& toCompare ) const;    
     virtual bool operator != ( const FitnessFunction& toCompare ) const;    
    
-    /*
+    /**
      * It prints the result - whatever that means
      */
     virtual void print() = 0;    
