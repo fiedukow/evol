@@ -54,9 +54,9 @@
  * Chceck condition but dont do asssert :-)
  */
 #ifndef C
-#define C(a) std::cerr<< "(Check)  Testuje warunek " << #a;                     \
-             if(!(a)) std::cerr << "\t\t[FAIL]\n";                              \
-             else  std::cerr << "\t\t[OK]\n";                                
+#define C(a) std::cerr<< "(Check)  Testuje warunek\n " << #a;                     \
+             if(!(a)) std::cerr << "\n[FAIL]\n";                              \
+             else  std::cerr << "\n\t\t[OK]\n";                                
 #endif
 #else
 #define V(a,b)
