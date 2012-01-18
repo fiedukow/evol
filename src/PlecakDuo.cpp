@@ -412,7 +412,7 @@ class WartoscPlecaka : FitnessFunction
     WartoscPlecaka()
     {
         /*this->wartosc = 7145 ; reference*/
-        this->wartosc = 6900; /*good hit*/
+        this->wartosc = 6750; /*good hit*/
     }
 
     WartoscPlecaka( int wartosc ) : wartosc(wartosc)

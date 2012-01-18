@@ -405,7 +405,7 @@ class WartoscPlecaka : FitnessFunction
     /* tworzy prototypowa wartosc do ktorej bedziemy dazyc*/
     WartoscPlecaka()
     {
-        this->wartosc = 7145 ;
+        this->wartosc = 6750 ;
     }
 
     WartoscPlecaka( int wartosc ) : wartosc(wartosc)
