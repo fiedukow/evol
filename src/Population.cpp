@@ -37,7 +37,7 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
     }
         
     while( !isGoalAchieved() && !stop )
-    {  
+    {
         /*TODO: PRINT - observer?*/
         std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
         subjects[0]->drukuj();
@@ -74,6 +74,16 @@ double Population::getMutationChance()
 double Population::getCrossFactor()
 {
     return this->crossFactor;
+}
+
+std::vector< SubjectPtr >& Population::getSubjects()
+{
+    return this->subjects;
+}
+
+FFPtr Population::getCurrentBestFF()
+{
+    return this->currentBestFF;
 }
 
 void Population::setMutationChance( double newMutationChance )

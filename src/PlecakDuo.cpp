@@ -106,6 +106,18 @@ class CyclesCounter : public NewGenerationObserver
     }
 };
 
+class ResultPrinter : NewGenerationObserver
+{
+    void update(Population& population)
+    {
+        std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
+        population.getSubjects().at(0)->drukuj();
+        population.getCurrentBestFF()->print();
+        std::cout << std::endl;
+    }
+};
+
+
 /**
  *  Skarbiec przechowuje przedmioty do wyboru
  *  Skarbiec potrafi wylosować element do wyjęcia, który ma conajwyżej zadaną wagę.

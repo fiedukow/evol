@@ -166,10 +166,12 @@ class Population
     /*
      * Getter for subjects vector.
      */
-    std::vector< SubjectPtr > getSubjects()
-    {
-        return this->subjects;
-    }
+    std::vector< SubjectPtr >& getSubjects();
+
+    /*
+     * Getter for currentBestFF.
+     */
+    FFPtr getCurrentBestFF();
 
     protected:
     
