@@ -45,7 +45,7 @@ struct EvolFunctions
      * Use only when you are sure you know class of the object
      */
     template< class fromClass, class targetClass >
-    static targetClass* ptr_cast( fromClass& what ) 
+    static targetClass* ptr_cast( fromClass what ) 
     {
         return ((targetClass*) (&(*(what))));
     }

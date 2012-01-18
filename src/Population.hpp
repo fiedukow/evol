@@ -93,11 +93,13 @@ class Population
      * @param goal - FitnessFunction object reference beeing reference value to compre with.
      * @param prototype - Prototype of function which is used to create all subjects.
      * @param populationSize - maximal populaion size after selection phase
+     * @param mutationChance - chance for mutation of every single Subject in any genartion.
      */
    Population(const FitnessFunction &goal_, 
               const SubjectPtr prototype_, 
               unsigned int populationSize_, 
-              double mutationChance_ );
+              double mutationChance_, 
+              double crossFactor_ );
 
 
     /**

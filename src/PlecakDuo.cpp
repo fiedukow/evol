@@ -379,7 +379,6 @@ class Plecak : public Subject
     /*tworzy plecak wypelniony losowa choc dopuszczalna zawartoscia*/
     void setInitialValue()
     {
-        std::cout << "Ustawiam nowa zawartosc plecalka: ";
         this->clearChromosomes();
         ChromosomePtr zawartosc_f = ChromosomePtr(new ZawartoscPlecaka( SKARBIEC_OGOLNY ));
         ChromosomePtr zawartosc_s = ChromosomePtr(new ZawartoscPlecaka( SKARBIEC_OGOLNY ));
@@ -387,7 +386,6 @@ class Plecak : public Subject
         this->addChromosome( zawartosc_f );       
         this->addChromosome( zawartosc_s );       
 
-        drukuj();
     }
 
     /*wykonuje kopie plecaka*/
@@ -470,7 +468,7 @@ int main()
     plecak->setInitialValue();
 
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
-    Population populacja( ( FitnessFunction& ) goal, plecak, 10, 0.2 );
+    Population populacja( ( FitnessFunction& ) goal, plecak, 150, 0.01, 3.0 );
     CyclesCounter *populationCyclesCounter = new CyclesCounter();
     populacja.registerObserver( NObserverPtr(populationCyclesCounter) );
     

@@ -11,10 +11,12 @@ namespace evol
 Population::Population( const FitnessFunction &goal_, 
                         const SubjectPtr prototype_, 
                         unsigned int populationSize_,
-                        double mutationChance_ ) 
+                        double mutationChance_,
+                        double crossFactor_ ) 
                         : goal(goal_), populationSize(populationSize_),
                           subjectPrototype( prototype_->clone() ), stop(false),
-                          mutationChance(mutationChance_)
+                          mutationChance(mutationChance_),
+                          crossFactor(crossFactor_)
 {
     /*nothign to be done*/
 }
@@ -86,7 +88,7 @@ FFPtr Population::getCurrentBestFF()
     return this->currentBestFF;
 }
 
-unsigned int getBestId()
+unsigned int Population::getBestId()
 {
     return this->bestId;
 }
@@ -105,7 +107,7 @@ void Population::pickStartGeneration()
 {
     for( unsigned int i = 0; i < populationSize; ++i )
     {
-        SubjectPtr currentSubject = subjectPrototype->clone();        
+        SubjectPtr currentSubject = subjectPrototype->clone();
         currentSubject->setInitialValue();
         subjects.push_back(currentSubject);        
     }
@@ -140,11 +142,12 @@ void Population::mutateSubjects()
 void Population::crossoverSubjects()
 {
     notifyCrossover();
+    if( populationSize == 1 ) return; 
     for( int i = 0; i < this->crossFactor*populationSize; ++i )
     {
         unsigned int first  = EvolFunctions::random( 0, subjects.size()-1 );
-        unsigned int second = EvolFunctions::random( 0, subjects.size()-2 );
-        if( second == first ) ++second;
+        unsigned int second = EvolFunctions::random( 0, subjects.size()-1 );
+        if( second == first ) second = EvolFunctions::random( 0, subjects.size()-1 );
         this->addSubject( subjects[first]->crossWith( this->subjects[second] ) );
     }
 }

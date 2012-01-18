@@ -248,7 +248,7 @@ int main()
     SubjectPtr czlowiekSubject( (Subject*) new Czlowiek() );
     czlowiekSubject->setInitialValue();
     /*@FIXME naruszenie ochrony pamieci dla populacji wielkosci 1*/
-    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 10, 0.2 );
+    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 1, 0.1, 3.0 );
     MyMutateObserver *mObserver = new MyMutateObserver();
     MObserverPtr mObsPtr(mObserver);
     Czlowiek* wynik;

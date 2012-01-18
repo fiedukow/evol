@@ -19,6 +19,7 @@ class Skarbiec;
 
 
 typedef std::shared_ptr< Przedmiot > PrzedmiotPtr;
+typedef std::unique_ptr< Skarbiec > SkarbiecUPtr;
 
 class Przedmiot 
 {
@@ -120,20 +121,6 @@ class Skarbiec
         }
         /*tworzenie domyslnego sejfu (w zasadzie zawartosc statyczna
           ale mogla by byc wczytana np. z pliku lub bazy danych) */
-/*        DP( 2.4,   300   ); 
-        DP( 4.4,   100   );
-        DP( 9.4,   1200  );
-        DP( 2.0,   100   );
-        DP( 1.2,   400   );
-        DP( 0.3,   20    );
-        DP( 0.01,  10    );
-        DP( 2,     23    );
-        DP( 23.2,  1201  );
-        DP( 12.3,  290   );
-        DP( 2.2,   200   );
-        DP( 120.0, 203   );
-        DP( 0.1,   223   );
-        DP( 0.1,   233   );*/
         this->sortuj();
     }
 
@@ -280,19 +267,24 @@ class ZawartoscPlecaka : public Chromosome
     ChromosomePtr crossWith( ChromosomePtr toCross ) const
     {
         double randomFactor = EvolFunctions::random();
-        ChromosomePtr nowaZawartoscPlecaka( new ZawartoscPlecaka() );
+        std::shared_ptr< ZawartoscPlecaka > nowaZawartoscPlecaka( new ZawartoscPlecaka() );
+
         {
-                std::unique_ptr<Skarbiec> biezacePrzedmiotyPtr( new Skarbiec(this->przedmioty) );
+                SkarbiecUPtr biezacySkarbiec ( new Skarbiec(this->przedmioty) );
                 // wez wylosowana ilosc przedmiotow ze starego plecaka
                 for(unsigned int i = 0;i<randomFactor*przedmioty.size();++i)
                 {
-                    PrzedmiotPtr wybranyPrzedmiot = ptrCast(Skarbiec,biezacePrzedmiotyPtr)->wybierzLosowy( ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->pobierzPozostalaPojemnosc() );
+                    PrzedmiotPtr wybranyPrzedmiot;
+                    int pojemnosc = nowaZawartoscPlecaka->pobierzPozostalaPojemnosc();
+                    biezacySkarbiec->wybierzLosowy( pojemnosc );
+                                        
                     if(wybranyPrzedmiot == NULL)
                         break;
                     else
                         ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->dodajDoPlecaka(wybranyPrzedmiot);
                 }
         }
+
         // dopoki to mozliwe, losuj ze skarbca drugiego plecaka przedmiotu
         {
                 std::unique_ptr<Skarbiec> drugiePrzedmiotyPtr( new Skarbiec(ptrCast(ZawartoscPlecaka,toCross)->przedmioty) );
@@ -310,7 +302,7 @@ class ZawartoscPlecaka : public Chromosome
                 ptrCast(ZawartoscPlecaka,nowaZawartoscPlecaka)->dodajDoPlecaka(przedmiot);
             }
         }
-        return nowaZawartoscPlecaka;
+        return ChromosomePtr(nowaZawartoscPlecaka);
 
     }
     
@@ -379,11 +371,9 @@ class Plecak : public Subject
     /*tworzy plecak wypelniony losowa choc dopuszczalna zawartoscia*/
     void setInitialValue()
     {
-        std::cout << "Ustawiam nowa zawartosc plecalka: ";
         this->clearChromosomes();
         ChromosomePtr zawartosc = ChromosomePtr(new ZawartoscPlecaka( SKARBIEC_OGOLNY ));
         this->addChromosome( zawartosc );       
-        drukuj();;
     }
 
     /*wykonuje kopie plecaka*/
@@ -417,7 +407,7 @@ class WartoscPlecaka : FitnessFunction
     /* tworzy prototypowa wartosc do ktorej bedziemy dazyc*/
     WartoscPlecaka()
     {
-        this->wartosc = 6400 ;
+        this->wartosc = 7500 ;
     }
 
     WartoscPlecaka( int wartosc ) : wartosc(wartosc)
@@ -460,15 +450,14 @@ int main()
     WartoscPlecaka goal;
     SubjectPtr plecak( (Subject*) new Plecak() );
     plecak->setInitialValue();
-
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
-    Population populacja( ( FitnessFunction& ) goal, plecak, 10, 0.2 );
+    Population populacja( ( FitnessFunction& ) goal, plecak, 3000, 0.2, 4.0 );
     //CyclesCounter *populationCyclesCounter = new CyclesCounter();
     //populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
     Plecak *wynik;
     try
     {
-        wynik = ptrCast(Plecak, populacja.start( ));
+        wynik = EvolFunctions::ptr_cast< SubjectPtr , Plecak >(populacja.start( ));
     }
     catch ( OutOfBoundException &e )
     {
