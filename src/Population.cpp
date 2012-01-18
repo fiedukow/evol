@@ -86,6 +86,11 @@ FFPtr Population::getCurrentBestFF()
     return this->currentBestFF;
 }
 
+unsigned int getBestId()
+{
+    return this->bestId;
+}
+
 void Population::setMutationChance( double newMutationChance )
 {
     this->mutationChance = newMutationChance;

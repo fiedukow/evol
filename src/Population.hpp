@@ -173,6 +173,11 @@ class Population
      */
     FFPtr getCurrentBestFF();
 
+    /*
+     * Getter for bestId.
+     */
+    unsigned int getBestId();
+
     protected:
     
     /** 
