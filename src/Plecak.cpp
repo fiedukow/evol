@@ -461,7 +461,7 @@ int main()
     SubjectPtr plecak( (Subject*) new Plecak() );
     plecak->setInitialValue();
     /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
-    Population populacja( ( FitnessFunction& ) goal, plecak, 1000, 0.2, 1.0 );
+    Population populacja( ( FitnessFunction& ) goal, plecak, 1000, 0.1, 1.5 );
     //CyclesCounter *populationCyclesCounter = new CyclesCounter();
     //populacja.registerObserver( CObserverPtr(populationCyclesCounter) );
     Plecak *wynik;
