@@ -7,6 +7,7 @@
 #include "../src/Subject.hpp"
 #include "../src/EvolFunctions.hpp"
 #include "../src/Observer.hpp"
+#include "../src/debug.h"
 
 using namespace evol;
 
@@ -148,7 +149,9 @@ class ResultPrinter : public NewGenerationObserver
         /*
          * sprawdzenie czy w danym kroku algorytmu (danej generacji) wynik posredni jest poprawny, tj. zgodny z reczna symulacja
          */
+        M("Sprawdzanie wynikow czastkowych dzialania algorytmu.");
         BOOST_CHECK(toCheck->getValue() == correctPartialResults[generations]);
+        C(toCheck->getValue() == correctPartialResults[generations]);
         population.getCurrentBestFF()->print();
 
         ++generations;
@@ -158,7 +161,9 @@ class ResultPrinter : public NewGenerationObserver
         /*
          * testowanie czy na poczatku (przed kazdym obiegiem petli glownej) istnieje poprawna ilosc osobnikow (obiektow)
          */
+        M("Sprawdzanie ilosci osobnikow w populacji przed krokiem petli algorytmu.");
         BOOST_CHECK(populationSubjectsVector.size() == populationSize);
+        C(populationSubjectsVector.size() == populationSize);
     }
 };
 
@@ -186,8 +191,9 @@ class soObserver : public SelectionObserver
     {
         ++soInvok;
         std::vector< SubjectPtr >& populationSubjectsVector = population.getSubjects();
-
+        M("Sprawdzanie wielkosci populacji przed selekcja.");
         BOOST_CHECK(populationSubjectsVector.size() == (1+patternCrossFactor)*populationSize);
+        C(populationSubjectsVector.size() == (1+patternCrossFactor)*populationSize);
     }
 };
 
@@ -258,9 +264,11 @@ int test_main( int argc, char* argv[] ) //uwaga - zmieniona nazwa funkcji main
     int pierwsza = EvolFunctions::random(0,100000);
     int druga = EvolFunctions::random(0,100000);
     int trzecia = EvolFunctions::random(0,100000);
+    M("Sprawdzenie generatora liczb pseudolosowych.");
     BOOST_CHECK(pierwsza == 37623);
     BOOST_CHECK(druga == 61684);
     BOOST_CHECK(trzecia == 16544);
+    C(pierwsza == 37623 && druga == 61684 && trzecia == 16544);
     testFF ff(0);
     SubjectPtr subjectPrototype( (Subject*) new FunctionSubject() );
     Population populacja( ( FitnessFunction &)ff, subjectPrototype, populationSize, mutationChance, patternCrossFactor );
@@ -271,7 +279,9 @@ int test_main( int argc, char* argv[] ) //uwaga - zmieniona nazwa funkcji main
 
     /* sprawdzenie poprawnego ustawienia zadanych parametrow w konstruktorze i test dzialania getterow */
     BOOST_CHECK(populacja.getMutationChance() == mutationChance);
+    C(populacja.getMutationChance() == mutationChance);
     BOOST_CHECK(populacja.getCrossFactor() == patternCrossFactor);
+    C(populacja.getCrossFactor() == patternCrossFactor);
 
     testObservers.registerObservers(); // rejestrujemy obserwatorow w populacji
     populacja.registerObserver(cCounter);
@@ -287,43 +297,71 @@ int test_main( int argc, char* argv[] ) //uwaga - zmieniona nazwa funkcji main
      */
     testFF firstFitnessFunction(10);
     testFF secondFitnessFunction(7);
+    M("Sprawdzanie fitness functions (first = 10, second = 7).");
     BOOST_CHECK(firstFitnessFunction<secondFitnessFunction);
+    C(firstFitnessFunction<secondFitnessFunction);
     BOOST_CHECK(firstFitnessFunction<=secondFitnessFunction);
+    C(firstFitnessFunction<=secondFitnessFunction);
     BOOST_CHECK(secondFitnessFunction>=firstFitnessFunction);
+    C(secondFitnessFunction>=firstFitnessFunction);
     BOOST_CHECK(secondFitnessFunction>firstFitnessFunction);
+    C(secondFitnessFunction>firstFitnessFunction);
     BOOST_CHECK(secondFitnessFunction!=firstFitnessFunction);
+    C(secondFitnessFunction!=firstFitnessFunction);
+    M("Porownywanie dwoch fitnessfunction o takich samych wartosciach.");
     testFF thirdFitnessFunction(8);
     testFF fourthFitnessFunction(8);
     BOOST_CHECK(thirdFitnessFunction==fourthFitnessFunction);
+    C(thirdFitnessFunction==fourthFitnessFunction);
     BOOST_CHECK(thirdFitnessFunction>=fourthFitnessFunction);
+    C(thirdFitnessFunction>=fourthFitnessFunction);
     BOOST_CHECK(thirdFitnessFunction<=fourthFitnessFunction);
+    C(thirdFitnessFunction<=fourthFitnessFunction);
     BOOST_CHECK(!(thirdFitnessFunction>fourthFitnessFunction));
+    C(!(thirdFitnessFunction>fourthFitnessFunction));
     BOOST_CHECK(!(thirdFitnessFunction<fourthFitnessFunction));
+    C(!(thirdFitnessFunction<fourthFitnessFunction));
 
     /*
      * test obserwatorow i poprawnosci wykonania algorytmu
      * sprawdzamy ilosc wolan odpowiednich obserwatorow w klasie pochodnej:
      * dla referencyjnych danych, przy zadanym ziarnie (1234), wynik powinien zostac odnaleziony po correctStepCountToResult (3) iteracjach 
      */
+    M("Test obserwatorow i poprawnosci wykonania algorytmu.");
     BOOST_CHECK( coInvok == correctStepCountToResult );
+    C( coInvok == correctStepCountToResult );
     BOOST_CHECK( moInvok == correctStepCountToResult );
+    C( moInvok == correctStepCountToResult );
     BOOST_CHECK( soInvok == correctStepCountToResult );
+    C( soInvok == correctStepCountToResult );
     BOOST_CHECK( generations == correctStepCountToResult );
+    C( generations == correctStepCountToResult );
 
+    M("Sprawdzanie ilosci krzyzowan chromosomow.");
     BOOST_CHECK( chromosomeCrossovers == 1*populationSize*correctStepCountToResult ); // ilosc krzyzowan chromosomow. 1 - ilosc chromosomow w obiekcie (argument funkcji - X)
+    C( chromosomeCrossovers == 1*populationSize*correctStepCountToResult ); // ilosc krzyzowan chromosomow. 1 - ilosc chromosomow w obiekcie (argument funkcji - X)
+    M("Sprawdzanie ilosci wykonanych krzyzowan.");
     BOOST_CHECK( crossovers == populationSize*correctStepCountToResult ); // ilosc krzyzowan obiektow
+    C( crossovers == populationSize*correctStepCountToResult );
 
+    M("Sprawdzanie ilosci mutacji chromosomow.");
     BOOST_CHECK( chromosomeMutations == patternChromosomeMutations ); // wyznaczona symulacyjnie wartosc mutacji chromosomow, dla zadanego mutationChance = 0.2
+    C( chromosomeMutations == patternChromosomeMutations ); // wyznaczona symulacyjnie wartosc mutacji chromosomow, dla zadanego mutationChance = 0.2
     
     /*
      * czy po zakonczeniu dzialania algorytmu ustawione poczatkowo wspolczynniki sa nadal niezmienione i ustawione na zadane wartosci (niezmiennosc wybranych parametrow)
      */
+    M("Sprawdzanie niezmiennosci parametrow poczatkowych.");
     BOOST_CHECK(populacja.getMutationChance() == mutationChance);
+    C(populacja.getMutationChance() == mutationChance);
     BOOST_CHECK(populacja.getCrossFactor() == patternCrossFactor);
+    C(populacja.getCrossFactor() == patternCrossFactor);
 
     FunctionSubject *resultSubject = EvolFunctions::ptr_cast<SubjectPtr,FunctionSubject>(wynik);
     
+    M("Sprawdzanie osiagniecia przez algorytm oczekiwanej wartosci referencyjnej jako wyniku.");
     BOOST_CHECK(resultSubject->getValue() == referenceValue);
+    C(resultSubject->getValue() == referenceValue);
 
     return 0;
 }
