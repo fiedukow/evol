@@ -17,7 +17,6 @@ using namespace evol;
 class Przedmiot;
 class Skarbiec;
 
-
 typedef std::shared_ptr< Przedmiot > PrzedmiotPtr;
 
 class Przedmiot 
@@ -85,10 +84,18 @@ class CyclesCounter : public NewGenerationObserver
         if(cycleCounter%cyclesToUnpair == 0)
         {
            //@FIXME handle depairing
+           std::vector< ChromosomePtr > freeChromosomes;
            std::vector< SubjectPtr > subjects = population.getSubjects();
            for( auto& entry : subjects )
            {
-
+                freeChromosomes.push_back(entry->getChromosome(1));
+           }
+           std::random_shuffle( freeChromosomes.begin(), freeChromosomes.end() );
+           auto iter = freeChromosomes.begin();
+           for( auto& entry : subjects )
+           {
+                entry->getChromosome(1) = *(iter++);
+                freeChromosomes.push_back(entry->getChromosome(1));
            }
         }
     }
@@ -351,7 +358,6 @@ class ZawartoscPlecaka : public Chromosome
         return ZawartoscPlecaka::udzwig - this->getWagaSumaryczna();
     }
 };
-
 
 
 class Plecak : public Subject
