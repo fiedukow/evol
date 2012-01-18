@@ -39,12 +39,6 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
         
     while( !isGoalAchieved() && !stop )
     {
-        /*TODO: PRINT - observer?*/
-        std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
-        subjects[0]->drukuj();
-        currentBestFF->print();
-        std::cout << std::endl;
-
         notifyNewGeneration();
         crossoverSubjects();
         mutateSubjects();
@@ -259,7 +253,7 @@ bool FitnessFunction::operator >= ( const FitnessFunction& toCompare ) const
 
 bool FitnessFunction::operator <  ( const FitnessFunction& toCompare ) const
 {
-    return ( *this < toCompare || *this == toCompare );
+    return !( *this >= toCompare);
 }
 
 bool FitnessFunction::operator <= ( const FitnessFunction& toCompare ) const

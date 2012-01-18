@@ -1,6 +1,7 @@
 #include "EvolFunctions.hpp"
 #include <time.h>
 #include <cstdlib>
+#include <iostream>
 
 namespace evol
 {
@@ -28,6 +29,9 @@ void EvolFunctions::initialize(int seed)
 double EvolFunctions::random()
 {
     EvolFunctions::initialize();
+    //double dupa = (double)rand()/RAND_MAX;
+    //std::cout << "dupa = " << dupa << std::endl;
+    //return dupa;
     return (double)rand()/RAND_MAX;
 }
 
