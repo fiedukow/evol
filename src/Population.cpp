@@ -62,6 +62,29 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
     return this->subjects[this->bestId];
 }
 
+double Population::getMutationChance()
+{
+    double result = this->mutationChance;
+    if( result > 1 ) result = 1;
+    if( result < 0 ) result = 0;
+    return result;
+}
+
+double Population::getCrossFactor()
+{
+    return this->crossFactor;
+}
+
+void Population::setMutationChance( double newMutationChance )
+{
+    this->mutationChance = newMutationChance;
+}
+
+void Population::setCrossFactor( double newCrossFactor )
+{
+    this->crossFactor = newCrossFactor;
+}
+
 void Population::pickStartGeneration()
 {
     for( unsigned int i = 0; i < populationSize; ++i )

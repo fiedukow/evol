@@ -47,8 +47,9 @@ class Population
      */
     double crossFactor;
     /*
-     * What is the chance for mutation (0 to 1 is proper value but everything more then 1
-     * is 100% and below zero is 0% chance)
+     * What is the chance for mutation of every single Subject in every single generation
+     * (0 to 1 is proper value but everything more then 1
+     * is 100% and below zero is 0% chance)    
      */
     double mutationChance;
     /*
@@ -123,11 +124,35 @@ class Population
      */
     void registerObserver( CObserverPtr toRegister );
 
-    /*
+    /**
      * Method stops main loop of algorithm.
      * It set stop variable.
      */
     void stopLoop( );
+
+    /**
+     *  Simple mutationChance getter
+     *  @return - mutation chance (value between 0 - 1 )
+     */
+    double getMutationChance();
+
+    /**
+     *  Simple CrossFactor getter
+     *  @return - crossFactor
+     */
+    double getCrossFactor();
+   
+    /**
+     *  Simple mutationChance setter
+     *  @param double newMutationChance - new possibilty of mutation     
+     */ 
+    void setMutationChance( double newMutationChance );
+
+    /**
+     *  Simple crossFactor setter
+     *  @param newCorssFactor - new crossFactor value
+     */
+    void setCrossFactor   ( double newCrossFactor    );
    
     protected:
     
