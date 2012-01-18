@@ -83,7 +83,6 @@ class CyclesCounter : public NewGenerationObserver
         }
         if(cycleCounter%cyclesToUnpair == 0)
         {
-           //@FIXME handle depairing
            std::vector< ChromosomePtr > freeChromosomes;
            std::vector< SubjectPtr > subjects = population.getSubjects();
            for( auto& entry : subjects )
@@ -111,7 +110,7 @@ class ResultPrinter : NewGenerationObserver
     void update(Population& population)
     {
         std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
-        population.getSubjects().at( population.getBestId() )->drukuj();
+        population.getSubjects().at( population.getBestId() )->print();
         population.getCurrentBestFF()->print();
         std::cout << std::endl;
     }
@@ -362,7 +361,7 @@ class ZawartoscPlecaka : public Chromosome
         return toReturn;
     }
 
-    void drukuj()
+    void print()
     {
         std::cout << "W plecaku znajduje sie " << this->przedmioty.size() << ": " << std::endl;
         for( PrzedmiotPtr entry : this->przedmioty )
@@ -413,10 +412,10 @@ class Plecak : public Subject
                +ptrCast( ZawartoscPlecaka, this->chromosomes[1] )->getWartoscSumaryczna();
     }
 
-    void drukuj() const     
+    void print() const     
     {
-         ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->drukuj();
-         ptrCast( ZawartoscPlecaka, this->chromosomes[1] )->drukuj();
+         ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->print();
+         ptrCast( ZawartoscPlecaka, this->chromosomes[1] )->print();
          std::cout << "WARTOSC CALKOWITA: " << getWartoscSumaryczna() << std::endl ;
     }    
 };
@@ -477,7 +476,6 @@ int main()
     SubjectPtr plecak( (Subject*) new Plecak() );
     plecak->setInitialValue();
 
-    /*@FIXME naruszenia ochrony pamieci dla populacji wielkosci 1 */
     Population populacja( ( FitnessFunction& ) goal, plecak, 150, 0.01, 3.0 );
     CyclesCounter *populationCyclesCounter = new CyclesCounter();
     populacja.registerObserver( NObserverPtr(populationCyclesCounter) );
@@ -492,6 +490,6 @@ int main()
         std::cerr << e.what() << std::endl ;
     }
     std::cout << "\n\nNajlepszy wynik " <<std::endl;
-    wynik->drukuj();
+    wynik->print();
     return 0;
 }

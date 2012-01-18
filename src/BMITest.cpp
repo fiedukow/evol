@@ -190,7 +190,7 @@ class Czlowiek : Subject
         return result;
     }
 
-    void drukuj() const 
+    void print() const 
     {
         std::cout << "" << this->getCm() << "cm. " << this->getKg() << "kg.\n";
                 
@@ -260,6 +260,6 @@ int main()
     {
         std::cerr << e.what() << std::endl ;
     }
-    wynik->drukuj();
+    wynik->print();
     return 0;
 }

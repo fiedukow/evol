@@ -82,7 +82,7 @@ class Subject
      */
     virtual SubjectPtr clone() const = 0;
 
-    virtual void drukuj() const = 0;
+    virtual void print() const = 0;
 
     protected: 
     /**

@@ -95,7 +95,7 @@ class ResultPrinter : public NewGenerationObserver
     void update(Population& population)
     {
         std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
-        population.getSubjects().at( population.getBestId() )->drukuj();
+        population.getSubjects().at( population.getBestId() )->print();
         population.getCurrentBestFF()->print();
         std::cout << std::endl;
     }
@@ -352,7 +352,7 @@ class ZawartoscPlecaka : public Chromosome
         return toReturn;
     }
 
-    void drukuj()
+    void print()
     {
         std::cout << "W plecaku znajduje sie " << this->przedmioty.size() << ": " << std::endl;
         for( PrzedmiotPtr entry : this->przedmioty )
@@ -400,9 +400,9 @@ class Plecak : public Subject
         return ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->getWartoscSumaryczna();
     }
 
-    void drukuj() const     
+    void print() const     
     {
-        ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->drukuj();
+        ptrCast( ZawartoscPlecaka, this->chromosomes[0] )->print();
     }    
 };
 
@@ -417,7 +417,7 @@ class WartoscPlecaka : FitnessFunction
     /* tworzy prototypowa wartosc do ktorej bedziemy dazyc*/
     WartoscPlecaka()
     {
-        this->wartosc = 7200 ;
+        this->wartosc = 7150 ;
     }
 
     WartoscPlecaka( int wartosc ) : wartosc(wartosc)
@@ -475,6 +475,6 @@ int main()
         std::cerr << e.what() << std::endl ;
     }
     std::cout << "\n\nNajlepszy wynik " <<std::endl;
-    wynik->drukuj();
+    wynik->print();
     return 0;
 }
