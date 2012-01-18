@@ -463,7 +463,7 @@ int main()
     Population populacja( ( FitnessFunction& ) goal, plecak, 1000, 0.1, 1.5 );
     CyclesCounter *populationCyclesCounter = new CyclesCounter();
     populacja.registerObserver( NObserverPtr(populationCyclesCounter) );
-    ResultPrinter rp();
+    ResultPrinter *rp = new ResultPrinter();
     populacja.registerObserver( NObserverPtr(rp) );
     Plecak *wynik;
     try
