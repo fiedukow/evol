@@ -9,7 +9,7 @@ OBJS=objs/Population.o objs/EvolFunctions.o objs/EvolException.o objs/Subject.o
 all: Plecak PlecakDuo BMITest 
 
 BMITest: $(OBJS) objs/BMITest.o
-	@ echo "    LINK ./BMIT"
+	@ echo "    LINK ./BMI"
 	@ $(CXX) $(LFLAGS) $(OBJS) objs/BMITest.o -o "./BMI"
 
 Plecak: $(OBJS) objs/Plecak.o
