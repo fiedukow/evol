@@ -47,6 +47,11 @@ class Population
      */
     double crossFactor;
     /*
+     * What is the chance for mutation (0 to 1 is proper value but everything more then 1
+     * is 100% and below zero is 0% chance)
+     */
+    double mutationChance;
+    /*
      *  Size of population after selection. Between crossover and selection it can
      *  much more (1+crossFactor)*populationSize - to be correct.
      */
@@ -87,7 +92,8 @@ class Population
      */
    Population(const FitnessFunction &goal_, 
               const SubjectPtr prototype_, 
-              unsigned int populationSize_ );
+              unsigned int populationSize_, 
+              double mutationChance_ );
 
 
     /**

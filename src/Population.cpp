@@ -10,16 +10,17 @@ namespace evol
 
 Population::Population( const FitnessFunction &goal_, 
                         const SubjectPtr prototype_, 
-                        unsigned int populationSize_ ) 
+                        unsigned int populationSize_,
+                        double mutationChance_ ) 
                         : goal(goal_), populationSize(populationSize_),
-                          subjectPrototype( prototype_->clone() ), stop(false)
+                          subjectPrototype( prototype_->clone() ), stop(false),
+                          mutationChance(mutationChance_)
 {
-    M("Obiekt klasy Population jest tworzony");
+    /*nothign to be done*/
 }
 
 SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
 {
-    M("Population::start() called.");
     /*default values*/
     this->bestId = 0;
     this->crossFactor = 1.0; 
@@ -32,15 +33,17 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
     }
     catch( const std::out_of_range &e )
     {
-        M("out_of_range exception occured. Throwing SubjectOutOfBoundException.");
         throw SubjectOutOfBoundException(e);
     }
         
     while( !isGoalAchieved() && !stop )
-    {
-        T( "Obecna populacja", this->subjects );       
-        C( goal > *currentBestFF );
-        C( subjects.size() == populationSize );
+    {  
+        /*TODO: PRINT - observer?*/
+        std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
+        subjects[0]->drukuj();
+        currentBestFF->print();
+        std::cout << std::endl;
+
         crossoverSubjects();
         mutateSubjects();
         selectSubjects();        
@@ -53,14 +56,8 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
         }
         catch( const std::out_of_range &e )
         {
-            M("out_of_range exception occured. Throwing SubjectOutOfBoundException.");
             throw SubjectOutOfBoundException(e);
         }   
-        /*TODO: PRINT - observer?*/
-        std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
-        subjects[0]->drukuj();
-        currentBestFF->print();
-        std::cout << std::endl;
     }
     return this->subjects[this->bestId];
 }
@@ -89,11 +86,6 @@ void Population::selectSubjects()
     std::sort (this->subjects.begin(), this->subjects.end(), comparator );
     this->subjects.erase( this->subjects.begin() + this->populationSize,
                           this->subjects.end() );
-    
-/*    for( SubjectPtr sub : subjects )
-    {
-        sub->drukuj();
-    }        */
 }
 
 void Population::mutateSubjects()
@@ -101,7 +93,7 @@ void Population::mutateSubjects()
     notifyMutate();
     for( SubjectPtr currentSubject : this->subjects )
     {
-        if( EvolFunctions::random() < 0.2 ) /*20% chance*/
+        if( EvolFunctions::random() < this->mutationChance ) 
             currentSubject->mutate();
     }
 }
