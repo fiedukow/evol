@@ -209,7 +209,7 @@ Skarbiec SKARBIEC_OGOLNY;
 class ZawartoscPlecaka : public Chromosome
 {
     MySet przedmioty;
-    constexpr static double udzwig = 2500000.0;
+    constexpr static double udzwig = 431.0;
 
     public: 
     /* tworzy losowy plecak
@@ -417,7 +417,7 @@ class WartoscPlecaka : FitnessFunction
     /* tworzy prototypowa wartosc do ktorej bedziemy dazyc*/
     WartoscPlecaka()
     {
-        this->wartosc = 9127806 ;
+        this->wartosc = 7200 ;
     }
 
     WartoscPlecaka( int wartosc ) : wartosc(wartosc)

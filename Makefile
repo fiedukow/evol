@@ -6,9 +6,9 @@ O=-O2
 LFLAGS=-lm
 OBJS=objs/Population.o objs/EvolFunctions.o objs/EvolException.o objs/Subject.o
 
-all: Plecak BMITest PlecakDuo
+all: Plecak BMI PlecakDuo
 
-BMITest: $(OBJS) objs/BMITest.o 
+BMI: $(OBJS) objs/BMITest.o 
 	@ echo "    LINK ./BMI"
 	@ $(CXX) $(LFLAGS) $(OBJS) objs/BMITest.o -o "./BMI"
 
