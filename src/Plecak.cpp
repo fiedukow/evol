@@ -113,7 +113,17 @@ class Skarbiec
     #define DP(waga,wartosc) this->przedmioty.insert( PrzedmiotPtr ( new Przedmiot(waga,wartosc ) ) );
     Skarbiec()
     {
-        std::vector< std::pair<double,unsigned int> > data = *getSafeData("dane.txt");
+        std::vector< std::pair<double,unsigned int> > data;
+        try
+        {
+           data = *getSafeData("dane.txt");
+        }
+        catch(FileException &e)
+        {
+            std::cout << e.what() << std::endl;
+            exit(1);
+        }
+
         for( auto& entry : data )
         {
             DP(entry.first, entry.second);
@@ -196,7 +206,7 @@ class Skarbiec
         }
         else
         {
-            throw CannotOpenFileException();
+            throw CannotOpenFileException(filePath);
         }
         return ptrToReturn;
     }
@@ -281,6 +291,7 @@ class ZawartoscPlecaka : public Chromosome
     {
         double randomFactor = EvolFunctions::random();
         ChromosomePtr nowaZawartoscPlecaka( new ZawartoscPlecaka() );
+
         {
                 std::unique_ptr<Skarbiec> biezacePrzedmiotyPtr( new Skarbiec(this->przedmioty) );
                 // wez wylosowana ilosc przedmiotow ze starego plecaka

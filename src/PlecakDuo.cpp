@@ -131,7 +131,17 @@ class Skarbiec
     #define DP(waga,wartosc) this->przedmioty.insert( PrzedmiotPtr ( new Przedmiot(waga,wartosc ) ) );
     Skarbiec()
     {
-        std::vector< std::pair<double,unsigned int> > data = *getSafeData("dane.txt");
+        std::vector< std::pair<double,unsigned int> > data;
+        try
+        {
+            data = *getSafeData("dane.txt");
+        }
+        catch(FileException &e)
+        {
+            std::cout << e.what() << std::endl;
+            exit(1); 
+        }
+
         for( auto& entry : data ) /* read from file default values for safe */
         {
             DP(entry.first, entry.second);
@@ -198,7 +208,7 @@ class Skarbiec
         }
         else
         {
-            throw CannotOpenFileException();
+            throw CannotOpenFileException(filePath);
         }
         return ptrToReturn;
     }

@@ -86,7 +86,7 @@ FFPtr Population::getCurrentBestFF()
     return this->currentBestFF;
 }
 
-unsigned int getBestId()
+unsigned int Population::getBestId()
 {
     return this->bestId;
 }
