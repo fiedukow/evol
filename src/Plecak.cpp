@@ -63,7 +63,7 @@ class MySet : public std::set<PrzedmiotPtr, PrzedmiotComparator >
     }
 };
 
-class CyclesCounter : public CrossoverObserver
+class CyclesCounter : public NewGenerationObserver
 {
     unsigned int cycleCounter;
     constexpr static unsigned int cyclesToBeDone = 1000;
@@ -88,6 +88,18 @@ class CyclesCounter : public CrossoverObserver
         return cycleCounter;
     }
 };
+
+class ResultPrinter : NewGenerationObserver
+{
+    void update(Population& population)
+    {
+        std::cout << "W tym pokoleniu najlepszy wynik to "<<std::endl;
+        population.getSubjects().at(0)->drukuj();
+        population.getCurrentBestFF()->print();
+        std::cout << std::endl;
+    }
+};
+
 /**
  *  Skarbiec przechowuje przedmioty do wyboru
  *  Skarbiec potrafi wylosować element do wyjęcia, który ma conajwyżej zadaną wagę.
