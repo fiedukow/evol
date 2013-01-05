@@ -1,7 +1,9 @@
 #ifndef _EVOL_FUNCTIONS_H_
 #define _EVOL_FUNCTIONS_H_
 #include <memory>
+#include <gsl/gsl_rng.h>
 #include "Chromosome.hpp" 
+
 namespace evol
 {
 /*
@@ -17,6 +19,18 @@ struct EvolFunctions
      */
     static bool isInitialized;
 
+#ifdef GSL_AVAILABLE
+    /**
+     * True if GSL random generator is created
+     */
+    static bool isGSLInitialized;
+
+    /**
+     * Random number generator for GSL
+     */
+    static gsl_rng* glsRandomNumberGenerator;
+#endif
+
     /** 
      * Initialize seed - if needed
      */
@@ -26,6 +40,20 @@ struct EvolFunctions
      * Initialize seed by given number
      */
     static void initialize(int);
+
+#ifdef GSL_AVAILABLE
+    /**
+     * Creates GSL random number generator 
+     * using time(NULL) as seed
+     */
+    static void initializeGSL();
+
+    /**
+     * Creates GSL random number generator
+     * using argument as seed
+     */
+    static void initializeGSL(int);
+#endif
 
     /**
      * @return random value between 0 and 1
@@ -43,7 +71,19 @@ struct EvolFunctions
      * @param valueToAbs
      * @return ABS of given double value
      */
-    static double abs( double valueToAbs );
+    template<class numericType>
+    numericType abs(numericType valueToAbs)
+    {
+      return valueToAbs > 0 ? valueToAbs : -valueToAbs;
+    }
+
+#ifdef GSL_AVAILABLE
+    /**
+     * @param EX - expected value
+     * @param sigma - standard deviation
+     */
+    static double gaussRandom(double EX, double sigma);
+#endif //GSL_AVAILABLE
 
     /**
      * Cast shared_ptr of base class to concret derieved class
