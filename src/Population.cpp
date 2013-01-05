@@ -13,10 +13,12 @@ Population::Population( const FitnessFunction &goal_,
                         unsigned int populationSize_,
                         double mutationChance_,
                         double crossFactor_ ) 
-                        : goal(goal_), populationSize(populationSize_),
-                          subjectPrototype( prototype_->clone() ), stop(false),
+                        : goal(goal_),
+                          crossFactor(crossFactor_),
                           mutationChance(mutationChance_),
-                          crossFactor(crossFactor_)
+                          populationSize(populationSize_),
+                          subjectPrototype( prototype_->clone() ),
+                          stop(false)
 {
     /*nothign to be done*/
 }
