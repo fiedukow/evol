@@ -28,7 +28,7 @@ struct EvolFunctions
     /**
      * Random number generator for GSL
      */
-    static gsl_rng* glsRandomNumberGenerator;
+    static gsl_rng* gslRandomNumberGenerator;
 #endif
 
     /** 

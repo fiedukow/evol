@@ -15,7 +15,7 @@ bool EvolFunctions::isInitialized = false;
 
 #ifdef GSL_AVAILABLE
 bool EvolFunctions::isGSLInitialized = false;
-gsl_rng* EvolFunctions::glsRandomNumberGenerator = NULL;
+gsl_rng* EvolFunctions::gslRandomNumberGenerator = NULL;
 #endif
 
 void EvolFunctions::initialize()
@@ -36,8 +36,9 @@ void EvolFunctions::initializeGSL(int seed)
       const gsl_rng_type* generatorType;
       gsl_rng_env_setup();
       generatorType = gsl_rng_default;
-      glsRandomNumberGenerator = gsl_rng_alloc(generatorType);
+      gslRandomNumberGenerator = gsl_rng_alloc(generatorType);
       //TODO - const memory leak here gsl_rng_free should be called somwhere
+      gsl_rng_set(gslRandomNumberGenerator, seed);
       isGSLInitialized = true;
     }
 }
@@ -68,7 +69,7 @@ int EvolFunctions::random(int begin, int end)
 double EvolFunctions::gaussRandom(double EX, double sigma)
 {
   initializeGSL();
-  return gsl_ran_gaussian(glsRandomNumberGenerator, sigma) + EX;
+  return gsl_ran_gaussian(gslRandomNumberGenerator, sigma) + EX;
 }
 #endif //GSL_AVAILABLE
 
