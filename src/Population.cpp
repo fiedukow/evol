@@ -42,10 +42,11 @@ SubjectPtr Population::start() throw ( SubjectOutOfBoundException )
     while( !isGoalAchieved() && !stop )
     {
         notifyNewGeneration();
+        duplicateSubjects();
         crossoverSubjects();
         mutateSubjects();
-        selectSubjects();        
-        
+
+        selectSubjects();
 
         /*current best*/
         try
@@ -147,6 +148,11 @@ void Population::crossoverSubjects()
     }
 }
 
+void Population::duplicateSubjects()
+{
+  notifyDuplication();
+}
+
 void Population::stopLoop()
 {
     this->stop = true;
@@ -182,6 +188,11 @@ void Population::registerObserver( MObserverPtr toRegister )
 void Population::registerObserver( CObserverPtr toRegister )
 {
     crossoverObservers.push_back(toRegister);
+}
+
+void Population::registerObserver( DObserverPtr toRegister )
+{
+    duplicateObservers.push_back(toRegister);
 }
 
 void Population::notifyNewGeneration()
@@ -226,6 +237,17 @@ void Population::notifyCrossover()
     {
         (*iter)->update(*this);
     }
+}
+
+void Population::notifyDuplication()
+{
+  std::vector<DObserverPtr>::const_iterator iter = duplicateObservers.begin();
+  std::vector<DObserverPtr>::const_iterator endIterator = duplicateObservers.end();
+
+  for(;iter != endIterator;++iter)
+  {
+      (*iter)->update(*this);
+  }
 }
 
 /*

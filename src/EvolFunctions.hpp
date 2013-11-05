@@ -1,7 +1,9 @@
 #ifndef _EVOL_FUNCTIONS_H_
 #define _EVOL_FUNCTIONS_H_
 #include <memory>
+#ifdef GSL_AVAILABLE
 #include <gsl/gsl_rng.h>
+#endif
 #include "Chromosome.hpp" 
 
 namespace evol

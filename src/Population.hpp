@@ -82,20 +82,25 @@ class Population
      */
     std::vector< NObserverPtr > newGenerationObservers;
 
-    /*
+    /**
      * container for selection observers 
      */
     std::vector< SObserverPtr > selectionObservers;
 
-    /* 
+    /**
      * container for mutate observers 
      */
     std::vector< MObserverPtr > mutateObservers;
 
-    /*
+    /**
      *  container for crossover observers 
      */
     std::vector< CObserverPtr > crossoverObservers;
+
+    /**
+     *  container for duplicate observers
+     */
+    std::vector< DObserverPtr > duplicateObservers;
 
     public:
     
@@ -141,10 +146,17 @@ class Population
 
     /**
      * Register observer which will be notify at the begining of Crossover phase
-     * 
+     *
      * @param toRegister - observer object pointer to be register.
      */
     void registerObserver( CObserverPtr toRegister );
+
+    /**
+     * Register observer which will be notify at the begining of Duplicate phase
+     *
+     * @param toRegister - observer object pointer to be register.
+     */
+    void registerObserver( DObserverPtr toRegister );
 
     /**
      * Method stops main loop of algorithm.
@@ -212,6 +224,11 @@ class Population
      * Crossover phase - each chromosome can be crossover 
      */
     virtual void crossoverSubjects();
+
+    /**
+     * Duplicate phase - creating clones of some elements in current population
+     */
+    virtual void duplicateSubjects();
     
     /**
      * Check if the algoritm should end because of goal achived.
@@ -247,6 +264,13 @@ class Population
      * or observer system will not work as it was designed.
      */
     void notifyCrossover(); 
+
+    /**
+     * Notify all Duplication observers that Duplication Phase starts.
+     * It SHOULD be called at the begining of Duplication Phase
+     * or observer system will not work as it was designed.
+     */
+    void notifyDuplication();
 
     /**
      * Adds another subject to collection

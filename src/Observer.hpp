@@ -17,6 +17,7 @@ typedef std::shared_ptr<NewGenerationObserver> NObserverPtr;
 typedef std::shared_ptr<SelectionObserver> SObserverPtr;
 typedef std::shared_ptr<MutateObserver> MObserverPtr;
 typedef std::shared_ptr<CrossoverObserver> CObserverPtr;
+typedef std::shared_ptr<DuplicateObserver> DObserverPtr;
 
 /**
  * Abstract class (interface) for Selection observer,
@@ -86,6 +87,24 @@ class CrossoverObserver
      * Method called by population, which notifies observer of action.
      * @param population Population reference, which notifies observer.
      * @return void Nothing is returned.
+     */
+    virtual void update(Population& population) = 0;
+};
+
+/**
+ * Abstract class (interface) for Duplicate observer,
+ * which is fired (notified) at the beginning of duplicate process in Population.
+ *
+ *  @author Andrzej 'Yester' Fieudkowicz
+ *  @author Maciej 'mac' Grzybek
+ */
+class DuplicateObserver
+{
+    public:
+    /**
+     * Method called by population, which notifies observer of action.
+     * @param population Population reference, which notifies observer.
+     * @return void Nothing is returned
      */
     virtual void update(Population& population) = 0;
 };
