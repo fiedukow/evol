@@ -12,9 +12,11 @@ Population::Population( const FitnessFunction &goal_,
                         const SubjectPtr prototype_, 
                         unsigned int populationSize_,
                         double mutationChance_,
-                        double crossFactor_ ) 
+                        double crossFactor_,
+                        double duplicationRate_ )
                         : goal(goal_),
                           crossFactor(crossFactor_),
+                          duplicationRate(duplicationRate_),
                           mutationChance(mutationChance_),
                           populationSize(populationSize_),
                           subjectPrototype( prototype_->clone() ),
@@ -151,6 +153,12 @@ void Population::crossoverSubjects()
 void Population::duplicateSubjects()
 {
   notifyDuplication();
+
+  for( int i = 0; i < this->duplicationRate*populationSize; ++i )
+  {
+      unsigned int toClone = EvolFunctions::random( 0, subjects.size()-1 );
+      this->addSubject( subjects[toClone]->clone() );
+  }
 }
 
 void Population::stopLoop()

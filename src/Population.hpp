@@ -47,6 +47,12 @@ class Population
      */
     double crossFactor;
     /**
+     * How much elements should be duplicated in duplication phase related to base size.
+     * eg. The 1.0 value (means 100%) implies that there will be populationSize clones
+     *     added to population.
+     */
+    double duplicationRate;
+    /**
      * What is the chance for mutation of every single Subject in every single generation
      * (0 to 1 is proper value but everything more then 1
      * is 100% and below zero is 0% chance)    
@@ -115,7 +121,8 @@ class Population
               const SubjectPtr prototype_, 
               unsigned int populationSize_, 
               double mutationChance_, 
-              double crossFactor_ );
+              double crossFactor_,
+              double duplicationRate_);
 
 
     /**
