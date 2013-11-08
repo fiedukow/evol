@@ -3,7 +3,8 @@
 #include "Chromosome.hpp"
 #include "EvolFunctions.hpp"
 #include "EvolException.hpp"
-#include <math.h>
+#include <cmath>
+#include <cassert>
 #include <iostream>
 
 #include "Observer.hpp"
@@ -185,7 +186,7 @@ class Czlowiek : Subject
         catch(ChromosomeOutOfBoundException &e)
         {
             std::cout << e.what() << std::endl;
-            exit(0);
+            assert(false);
         }
         return result;
     }
@@ -214,14 +215,14 @@ class BMI : FitnessFunction
     #define perfectBMI 21.0
     bool operator > ( const FitnessFunction& toCompare ) const
     {
-        return EvolFunctions::abs( perfectBMI - this->bmiValue      ) < 
-               EvolFunctions::abs( perfectBMI - ((BMI&) toCompare).bmiValue );
+        return std::abs( perfectBMI - this->bmiValue      ) <
+               std::abs( perfectBMI - ((BMI&) toCompare).bmiValue );
     }
     
     bool operator == ( const FitnessFunction& toCompare ) const
     {
-        return EvolFunctions::abs( perfectBMI - this->bmiValue      ) ==
-               EvolFunctions::abs( perfectBMI - ((BMI&) toCompare).bmiValue );
+        return std::abs( perfectBMI - this->bmiValue      ) ==
+               std::abs( perfectBMI - ((BMI&) toCompare).bmiValue );
     }
 
     void calculate( const Subject& toCalculate )
@@ -247,7 +248,7 @@ int main()
     const BMI goal;
     SubjectPtr czlowiekSubject( (Subject*) new Czlowiek() );
     czlowiekSubject->setInitialValue();
-    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 5, 0.1, 3.0 );
+    Population populacja( ( FitnessFunction& ) goal, czlowiekSubject, 5, 0.1, 3.0, 0.0 );
     MyMutateObserver *mObserver = new MyMutateObserver();
     MObserverPtr mObsPtr(mObserver);
     Czlowiek* wynik;

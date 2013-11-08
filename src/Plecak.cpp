@@ -460,7 +460,7 @@ int main()
     WartoscPlecaka goal;
     SubjectPtr plecak( (Subject*) new Plecak() );
     plecak->setInitialValue();
-    Population populacja( ( FitnessFunction& ) goal, plecak, 1000, 0.1, 1.5 );
+    Population populacja( ( FitnessFunction& ) goal, plecak, 1000, 0.1, 1.5, 0 );
     CyclesCounter *populationCyclesCounter = new CyclesCounter();
     populacja.registerObserver( NObserverPtr(populationCyclesCounter) );
     ResultPrinter *rp = new ResultPrinter();

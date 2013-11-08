@@ -12,6 +12,7 @@ class NewGenerationObserver;
 class SelectionObserver;
 class MutateObserver;
 class CrossoverObserver;
+class DuplicateObserver;
 
 typedef std::shared_ptr<NewGenerationObserver> NObserverPtr;
 typedef std::shared_ptr<SelectionObserver> SObserverPtr;
